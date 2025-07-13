@@ -29,8 +29,10 @@ import {
 } from "lucide-react"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import LocaleDropdown from "@/commons/LocaleDropdown"
+import { useTranslations } from "next-intl"
 
 export default function IDSStakingPlatform() {
+  const t = useTranslations("home")
   ;<style jsx>{`
   @keyframes marquee {
     0% { transform: translateX(100%); }
@@ -69,13 +71,11 @@ export default function IDSStakingPlatform() {
   }
 
   const tooltips = {
-    tvl: "Tổng giá trị USD của tất cả IDS coin đang được khóa trong hệ thống. TVL cao thể hiện độ tin cậy của platform.",
-    apy: "Lợi suất trung bình hàng năm khi bạn stake IDS coin. Ví dụ: stake 100 IDS sẽ nhận thêm 13.5 IDS sau 1 năm.",
-    users: "Tổng số người dùng đã tham gia vào platform. Số lượng lớn cho thấy cộng đồng tin tưởng và sử dụng.",
-    locked:
-      "Tổng số IDS coin đang được stake/khóa bởi tất cả người dùng. Càng nhiều coin bị khóa càng thể hiện niềm tin dài hạn.",
-    stakeProgress:
-      "Tỷ lệ phần trăm IDS coin đã được stake so với tổng số dư. Tính bằng: (IDS đã stake / Tổng số dư) × 100%",
+    tvl: t('tooltips.tvl'),
+    apy: t('tooltips.apy'),
+    users: t('tooltips.users'),
+    locked: t('tooltips.locked'),
+    stakeProgress: t('tooltips.stakeProgress'),
   }
 
   const calculateTooltipPosition = (tooltipId: string, iconElement: HTMLElement) => {
@@ -205,10 +205,10 @@ export default function IDSStakingPlatform() {
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2">
               <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-sm">IDS</span>
+                <span className="text-white font-bold text-sm">{t('header.ids')}</span>
               </div>
               <h1 className="text-xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
-                IDS Coin
+                {t('header.idsCoin')}
               </h1>
             </div>
             <div className="flex items-right space-x-4">
@@ -233,7 +233,7 @@ export default function IDSStakingPlatform() {
                 </div>
                 <div className="overflow-hidden whitespace-nowrap">
                   <div className="animate-marquee inline-block text-white font-bold text-lg">
-                    🌟 Khám phá IDS - Intelligent Decentralized Solution | Nobody Chain Ecosystem 🌟
+                    {t('announcement.discovery')}
                   </div>
                 </div>
                 <div className="animate-bounce ml-3">
@@ -251,7 +251,7 @@ export default function IDSStakingPlatform() {
               <div className="flex items-center justify-between">
                 <div>
                   <div className="flex items-center gap-1 mb-1">
-                    <p className="text-gray-400 text-sm">Tổng TVL</p>
+                    <p className="text-gray-400 text-sm">{t('stats.totalTvl')}</p>
                     <div className="relative">
                       <div
                         className="p-1 -m-1 cursor-help transition-colors rounded"
@@ -290,7 +290,7 @@ export default function IDSStakingPlatform() {
               <div className="flex items-center justify-between">
                 <div>
                   <div className="flex items-center gap-1 mb-1">
-                    <p className="text-gray-400 text-sm">APY Trung bình</p>
+                    <p className="text-gray-400 text-sm">{t('stats.averageApy')}</p>
                     <div className="relative">
                       <div
                         className="p-1 -m-1 cursor-help transition-colors rounded"
@@ -329,7 +329,7 @@ export default function IDSStakingPlatform() {
               <div className="flex items-center justify-between">
                 <div>
                   <div className="flex items-center gap-1 mb-1">
-                    <p className="text-gray-400 text-sm">Người dùng</p>
+                    <p className="text-gray-400 text-sm">{t('stats.users')}</p>
                     <div className="relative">
                       <div
                         className="p-1 -m-1 cursor-help transition-colors rounded"
@@ -368,7 +368,7 @@ export default function IDSStakingPlatform() {
               <div className="flex items-center justify-between">
                 <div>
                   <div className="flex items-center gap-1 mb-1">
-                    <p className="text-gray-400 text-sm">IDS đã khóa</p>
+                    <p className="text-gray-400 text-sm">{t('stats.locked')}</p>
                     <div className="relative">
                       <div
                         className="p-1 -m-1 cursor-help transition-colors rounded"
@@ -410,10 +410,10 @@ export default function IDSStakingPlatform() {
               <CardHeader>
                 <CardTitle className="flex items-center text-gray-900 font-bold text-lg">
                   <Zap className="w-5 h-5 mr-2 text-gray-900" />
-                  Stake IDS Coin
+                  {t('staking.stake')}
                 </CardTitle>
                 <CardDescription className="text-gray-800 font-medium">
-                  Mua và khóa IDS coin để nhận hoa hồng hàng ngày
+                  {t('staking.buy')}
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -423,13 +423,13 @@ export default function IDSStakingPlatform() {
                       value="stake"
                       className="data-[state=active]:bg-gray-900 data-[state=active]:text-white data-[state=active]:font-semibold data-[state=active]:hover:bg-gray-900 data-[state=inactive]:bg-orange-700/60 data-[state=inactive]:text-orange-100 data-[state=inactive]:hover:bg-orange-600/70 data-[state=inactive]:hover:text-white"
                     >
-                      Stake IDS
+                      {t('staking.stake')}
                     </TabsTrigger>
                     <TabsTrigger
                       value="buy"
                       className="data-[state=active]:bg-gray-900 data-[state=active]:text-white data-[state=active]:font-semibold data-[state=active]:hover:bg-gray-900 data-[state=inactive]:bg-orange-700/60 data-[state=inactive]:text-orange-100 data-[state=inactive]:hover:bg-orange-600/70 data-[state=inactive]:hover:text-white"
                     >
-                      USDT → IDS
+                      {t('staking.usdtToIds')}
                     </TabsTrigger>
                   </TabsList>
 
@@ -437,7 +437,7 @@ export default function IDSStakingPlatform() {
                     <div className="space-y-4">
                       <div>
                         <Label htmlFor="amount" className="text-gray-900 font-semibold">
-                          Số lượng IDS
+                          {t('staking.amount')}
                         </Label>
                         <div className="relative">
                           <Input
@@ -457,17 +457,17 @@ export default function IDSStakingPlatform() {
                             >
                               Max
                             </Button>
-                            <span className="text-sm text-gray-700 font-medium">IDS</span>
+                            <span className="text-sm text-gray-700 font-medium">{t('staking.ids')}</span>
                           </div>
                         </div>
                         <div className="flex justify-between text-sm mt-1">
-                          <p className="text-gray-800 font-medium">Số dư khả dụng: 1,250.00 IDS</p>
-                          <p className="text-gray-800 font-medium">Min: 100 IDS</p>
+                          <p className="text-gray-800 font-medium">{t('staking.availableBalance')}: 1,250.00 {t('staking.ids')}</p>
+                          <p className="text-gray-800 font-medium">{t('staking.min')}: 100 {t('staking.ids')}</p>
                         </div>
                       </div>
 
                       <div>
-                        <Label className="text-gray-900 font-semibold">Thời gian khóa</Label>
+                        <Label className="text-gray-900 font-semibold">{t('staking.lockPeriod')}</Label>
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mt-2">
                           {["30", "90", "180", "360"].map((days) => (
                             <Button
@@ -481,9 +481,9 @@ export default function IDSStakingPlatform() {
                               }`}
                             >
                               <div className="text-center">
-                                <div className="font-semibold">{days} ngày</div>
+                                <div className="font-semibold">{days} {t('staking.days')}</div>
                                 <div className="text-xs opacity-80">
-                                  {days === "30" ? "5%" : days === "90" ? "8%" : days === "180" ? "15%" : "25%"} APY
+                                  {days === "30" ? "5%" : days === "90" ? "8%" : days === "180" ? "15%" : "25%"} {t('staking.apy')}
                                 </div>
                               </div>
                             </Button>
@@ -493,13 +493,13 @@ export default function IDSStakingPlatform() {
 
                       <div className="bg-white/20 backdrop-blur-sm p-4 rounded-lg border border-gray-800">
                         <div className="flex items-center justify-between text-sm">
-                          <span className="text-gray-900 font-semibold">Phần thưởng ước tính/ngày:</span>
+                          <span className="text-gray-900 font-semibold">{t('staking.estimatedReward')}:</span>
                           <span className="font-bold text-gray-900">
-                            {stakeAmount ? (Number.parseFloat(stakeAmount) * 0.0007).toFixed(4) : "0.0000"} IDS
+                            {stakeAmount ? (Number.parseFloat(stakeAmount) * 0.0007).toFixed(4) : "0.0000"} {t('staking.ids')}
                           </span>
                         </div>
                         <div className="flex items-center justify-between text-sm mt-1">
-                          <span className="text-gray-900 font-semibold">APY:</span>
+                          <span className="text-gray-900 font-semibold">{t('staking.apy')}:</span>
                           <span className="font-bold text-gray-900">
                             {lockPeriod === "30"
                               ? "5%"
@@ -514,7 +514,7 @@ export default function IDSStakingPlatform() {
 
                       <Button className="w-full bg-gray-900 hover:bg-gray-800 text-white font-bold shadow-lg" size="lg">
                         <Lock className="w-4 h-4 mr-2" />
-                        Stake IDS Coin
+                        {t('staking.stake')}
                       </Button>
                     </div>
                   </TabsContent>
@@ -523,18 +523,18 @@ export default function IDSStakingPlatform() {
                     <div className="space-y-4">
                       {/* Chain Selection */}
                       <div>
-                        <Label className="text-gray-900 font-semibold">Chọn blockchain</Label>
+                        <Label className="text-gray-900 font-semibold">{t('staking.selectChain')}</Label>
                         <Select value={selectedChain} onValueChange={setSelectedChain}>
                           <SelectTrigger className="w-full mt-2 bg-white/90 border-gray-800 text-gray-900 focus:border-gray-900 font-medium">
-                            <SelectValue placeholder="Chọn blockchain" />
+                            <SelectValue placeholder={t('staking.selectChain')} />
                           </SelectTrigger>
                           <SelectContent className="bg-white border-gray-800">
                             <SelectItem value="ethereum" className="flex items-center">
                               <div className="flex items-center gap-2">
                                 <span className="text-lg">⟠</span>
                                 <div>
-                                  <div className="font-semibold">Ethereum</div>
-                                  <div className="text-xs text-gray-500">ETH</div>
+                                  <div className="font-semibold">{t('staking.ethereum')}</div>
+                                  <div className="text-xs text-gray-500">{t('staking.eth')}</div>
                                 </div>
                               </div>
                             </SelectItem>
@@ -542,8 +542,8 @@ export default function IDSStakingPlatform() {
                               <div className="flex items-center gap-2">
                                 <span className="text-lg">🟡</span>
                                 <div>
-                                  <div className="font-semibold">BSC</div>
-                                  <div className="text-xs text-gray-500">BNB</div>
+                                  <div className="font-semibold">{t('staking.bsc')}</div>
+                                  <div className="text-xs text-gray-500">{t('staking.bnb')}</div>
                                 </div>
                               </div>
                             </SelectItem>
@@ -551,8 +551,8 @@ export default function IDSStakingPlatform() {
                               <div className="flex items-center gap-2">
                                 <span className="text-lg">🟣</span>
                                 <div>
-                                  <div className="font-semibold">Polygon</div>
-                                  <div className="text-xs text-gray-500">MATIC</div>
+                                  <div className="font-semibold">{t('staking.polygon')}</div>
+                                  <div className="text-xs text-gray-500">{t('staking.matic')}</div>
                                 </div>
                               </div>
                             </SelectItem>
@@ -560,8 +560,8 @@ export default function IDSStakingPlatform() {
                               <div className="flex items-center gap-2">
                                 <span className="text-lg">🔵</span>
                                 <div>
-                                  <div className="font-semibold">Arbitrum</div>
-                                  <div className="text-xs text-gray-500">ARB</div>
+                                  <div className="font-semibold">{t('staking.arbitrum')}</div>
+                                  <div className="text-xs text-gray-500">{t('staking.arb')}</div>
                                 </div>
                               </div>
                             </SelectItem>
@@ -572,7 +572,7 @@ export default function IDSStakingPlatform() {
                       {/* Swap Amount */}
                       <div>
                         <Label htmlFor="swapAmount" className="text-gray-900 font-semibold">
-                          Số lượng USDT muốn swap
+                          {t('staking.usdtAmount')}
                         </Label>
                         <div className="relative">
                           <Input
@@ -592,32 +592,32 @@ export default function IDSStakingPlatform() {
                             >
                               Max
                             </Button>
-                            <span className="text-sm text-gray-700 font-medium">USDT</span>
+                            <span className="text-sm text-gray-700 font-medium">{t('staking.usdt')}</span>
                           </div>
                         </div>
                         <div className="flex justify-between text-sm mt-1">
-                          <p className="text-gray-800 font-medium">Số dư khả dụng: 500.00 USDT</p>
-                          <p className="text-gray-800 font-medium">Min: 10 USDT</p>
+                          <p className="text-gray-800 font-medium">{t('staking.availableBalance')}: 500.00 {t('staking.usdt')}</p>
+                          <p className="text-gray-800 font-medium">{t('staking.min')}: 10 {t('staking.usdt')}</p>
                         </div>
                       </div>
 
                       {/* Swap Details */}
                       <div className="bg-white/20 backdrop-blur-sm p-4 rounded-lg border border-gray-800 space-y-3">
                         <div className="flex items-center justify-between text-sm">
-                          <span className="text-gray-900 font-semibold">Tỷ giá IDS:</span>
-                          <span className="font-bold text-gray-900">1 USDT = 1.00 IDS</span>
+                          <span className="text-gray-900 font-semibold">{t('staking.exchangeRate')}:</span>
+                          <span className="font-bold text-gray-900">1 {t('staking.usdt')} = 1.00 {t('staking.ids')}</span>
                         </div>
                         <div className="flex items-center justify-between text-sm">
-                          <span className="text-gray-900 font-semibold">Phí giao dịch:</span>
-                          <span className="font-bold text-emerald-700">Miễn phí</span>
+                          <span className="text-gray-900 font-semibold">{t('staking.transactionFee')}:</span>
+                          <span className="font-bold text-emerald-700">{t('staking.free')}</span>
                         </div>
                         <div className="flex items-center justify-between text-sm">
-                          <span className="text-gray-900 font-semibold">Số IDS nhận được:</span>
-                          <span className="font-bold text-gray-900">~0.00 IDS</span>
+                          <span className="text-gray-900 font-semibold">{t('staking.receivedIds')}:</span>
+                          <span className="font-bold text-gray-900">~0.00 {t('staking.ids')}</span>
                         </div>
                         <div className="flex items-center justify-between text-sm border-t border-gray-800 pt-2">
-                          <span className="text-gray-900 font-semibold">Thời gian xử lý:</span>
-                          <span className="font-bold text-gray-900">5-10 giây</span>
+                          <span className="text-gray-900 font-semibold">{t('staking.processingTime')}:</span>
+                          <span className="font-bold text-gray-900">5-10 {t('staking.seconds')}</span>
                         </div>
                       </div>
 
@@ -626,14 +626,14 @@ export default function IDSStakingPlatform() {
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-2">
                             <div className="w-2 h-2 bg-red-500 rounded-full"></div>
-                            <span className="text-sm text-gray-900 font-medium">Chưa kết nối ví</span>
+                            <span className="text-sm text-gray-900 font-medium">{t('staking.notConnected')}</span>
                           </div>
                           <Button
                             size="sm"
                             variant="outline"
                             className="border-gray-800 text-gray-900 hover:bg-gray-900 hover:text-white bg-white/60"
                           >
-                            Kết nối ví
+                            {t('staking.connectWallet')}
                           </Button>
                         </div>
                       </div>
@@ -641,19 +641,19 @@ export default function IDSStakingPlatform() {
                       {/* Swap Instructions */}
                       <div className="bg-blue-900/20 backdrop-blur-sm p-4 rounded-lg border border-blue-700/50">
                         <div className="text-sm text-gray-900 space-y-2">
-                          <div className="font-semibold text-blue-900 mb-2">📋 Hướng dẫn swap:</div>
+                          <div className="font-semibold text-blue-900 mb-2">{t('staking.swapInstructions')}:</div>
                           <div className="space-y-1 text-gray-800">
-                            <div>1. Chọn blockchain và kết nối ví</div>
-                            <div>2. Nhập số USDT muốn swap</div>
-                            <div>3. Gửi USDT đến địa chỉ được cung cấp</div>
-                            <div>4. Chờ 5-10 giây để nhận IDS về ví</div>
+                            <div>{t('staking.step1')}</div>
+                            <div>{t('staking.step2')}</div>
+                            <div>{t('staking.step3')}</div>
+                            <div>{t('staking.step4')}</div>
                           </div>
                         </div>
                       </div>
 
                       <Button className="w-full bg-gray-900 hover:bg-gray-800 text-white font-bold shadow-lg" size="lg">
                         <DollarSign className="w-4 h-4 mr-2" />
-                        Swap USDT → IDS
+                        {t('staking.swap')}
                       </Button>
                     </div>
                   </TabsContent>
@@ -666,7 +666,7 @@ export default function IDSStakingPlatform() {
                 <div className="flex items-center justify-between">
                   <CardTitle className="flex items-center text-white">
                     <Share2 className="w-5 h-5 mr-2 text-blue-400" />
-                    Giới thiệu bạn bè
+                    {t('referral.introduce')}
                   </CardTitle>
                   <Badge
                     variant={membershipType === "vip" ? "default" : "secondary"}
@@ -681,8 +681,8 @@ export default function IDSStakingPlatform() {
                 </div>
                 <CardDescription className="text-gray-400">
                   {membershipType === "free"
-                    ? "Nhận hoa hồng 5% USDT khi F1 nâng cấp VIP"
-                    : "Nhận hoa hồng 50% USDT khi F1 nâng cấp VIP"}
+                    ? t('referral.earn5')
+                    : t('referral.earn50')}
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
@@ -690,15 +690,15 @@ export default function IDSStakingPlatform() {
                   <div className="p-4 bg-gray-800 rounded-lg border border-blue-700/50">
                     <div className="flex items-center justify-between">
                       <div>
-                        <div className="font-semibold text-blue-300">Nâng cấp VIP</div>
-                        <div className="text-sm text-blue-400/80">Nhận 50% hoa hồng thay vì 5%</div>
+                        <div className="font-semibold text-blue-300">{t('vip.upgrade')}</div>
+                        <div className="text-sm text-blue-400/80">{t('vip.upgrade50')}</div>
                       </div>
                       <Button
                         size="sm"
                         className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
                         onClick={() => setShowVipModal(true)}
                       >
-                        Nâng cấp $100
+                        {t('vip.upgrade100')}
                       </Button>
                     </div>
                   </div>
@@ -707,9 +707,9 @@ export default function IDSStakingPlatform() {
                 <div className="p-4 bg-gray-800 rounded-lg border-2 border-dashed border-blue-600/50">
                   <div className="text-center mb-3">
                     <UserPlus className="w-8 h-8 mx-auto text-blue-400 mb-2" />
-                    <div className="text-sm font-medium text-blue-300">Link giới thiệu của bạn</div>
+                    <div className="text-sm font-medium text-blue-300">{t('referral.yourLink')}</div>
                     <div className="text-xs text-gray-400">
-                      Hoa hồng: {membershipType === "free" ? "5%" : "50%"} USDT
+                      {t('referral.earn')}
                     </div>
                   </div>
 
@@ -727,12 +727,12 @@ export default function IDSStakingPlatform() {
                       {copied ? (
                         <>
                           <Shield className="w-4 h-4 mr-1" />
-                          Đã copy
+                          {t('referral.copied')}
                         </>
                       ) : (
                         <>
                           <Copy className="w-4 h-4 mr-1" />
-                          Copy
+                          {t('referral.copy')}
                         </>
                       )}
                     </Button>
@@ -742,23 +742,23 @@ export default function IDSStakingPlatform() {
                 <div className="grid grid-cols-2 gap-3">
                   <div className="text-center p-3 bg-gray-800 rounded-lg border border-gray-700">
                     <div className="text-lg font-bold text-blue-400">12</div>
-                    <div className="text-xs text-gray-400">Bạn bè đã tham gia</div>
+                    <div className="text-xs text-gray-400">{t('referral.friendsJoined')}</div>
                   </div>
                   <div className="text-center p-3 bg-gray-800 rounded-lg border border-gray-700">
                     <div className="text-lg font-bold text-emerald-400">
                       ${membershipType === "free" ? "22.84" : "228.35"}
                     </div>
-                    <div className="text-xs text-gray-400">USDT hoa hồng</div>
+                    <div className="text-xs text-gray-400">{t('referral.usdtEarnings')}</div>
                   </div>
                 </div>
 
                 <div className="space-y-2">
                   <div className="flex justify-between text-sm">
-                    <span className="text-gray-300">Hoa hồng hôm nay:</span>
+                    <span className="text-gray-300">{t('referral.todayEarnings')}:</span>
                     <span className="text-emerald-400">+${membershipType === "free" ? "0.62" : "6.15"}</span>
                   </div>
                   <div className="flex justify-between text-sm">
-                    <span className="text-gray-300">Hoa hồng tháng này:</span>
+                    <span className="text-gray-300">{t('referral.monthlyEarnings')}:</span>
                     <span className="text-emerald-400">+${membershipType === "free" ? "14.23" : "142.25"}</span>
                   </div>
                 </div>
@@ -771,7 +771,7 @@ export default function IDSStakingPlatform() {
                     onClick={() => setShowCommissionModal(true)}
                   >
                     <Gift className="w-4 h-4 mr-2" />
-                    Xem chi tiết hoa hồng
+                    {t('referral.viewDetails')}
                   </Button>
                 </div>
               </CardContent>
@@ -784,34 +784,34 @@ export default function IDSStakingPlatform() {
               <CardHeader>
                 <CardTitle className="flex items-center text-white">
                   <Wallet className="w-5 h-5 mr-2 text-blue-400" />
-                  Tổng quan tài khoản
+                  {t('overview.totalAccount')}
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="space-y-3">
                   <div className="flex justify-between">
-                    <span className="text-gray-400">Tổng số dư:</span>
-                    <span className="font-semibold text-white">1,250.00 IDS</span>
+                    <span className="text-gray-400">{t('overview.totalBalance')}:</span>
+                    <span className="font-semibold text-white">1,250.00 {t('staking.ids')}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-400">Đã stake:</span>
-                    <span className="font-semibold text-blue-400">850.00 IDS</span>
+                    <span className="text-gray-400">{t('overview.staked')}:</span>
+                    <span className="font-semibold text-blue-400">850.00 {t('staking.ids')}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-400">Khả dụng:</span>
-                    <span className="font-semibold text-white">400.00 IDS</span>
+                    <span className="text-gray-400">{t('overview.available')}:</span>
+                    <span className="font-semibold text-white">400.00 {t('staking.ids')}</span>
                   </div>
                   <Separator className="bg-gray-700" />
                   <div className="flex justify-between">
-                    <span className="text-gray-400">Tổng phần thưởng:</span>
-                    <span className="font-semibold text-cyan-400">127.45 IDS</span>
+                    <span className="text-gray-400">{t('overview.totalRewards')}:</span>
+                    <span className="font-semibold text-cyan-400">127.45 {t('staking.ids')}</span>
                   </div>
                 </div>
 
                 <div className="pt-2">
                   <div className="flex justify-between text-sm mb-2">
                     <div className="flex items-center gap-1">
-                      <span className="text-gray-300">Tiến độ stake</span>
+                      <span className="text-gray-300">{t('overview.stakeProgress')}:</span>
                       <div className="relative">
                         <div
                           className="p-1 -m-1 cursor-help transition-colors rounded"
@@ -832,8 +832,7 @@ export default function IDSStakingPlatform() {
                             ref={(el) => (tooltipRefs.current.stakeProgress = el)}
                             className={`${getTooltipClasses("stakeProgress")} z-[60]`}
                           >
-                            Tỷ lệ phần trăm IDS coin đã được stake so với tổng số dư. Tính bằng: (IDS đã stake / Tổng số
-                            dư) × 100%
+                            {t('overview.stakeProgressDescription')}
                             <div className={getArrowClasses("stakeProgress")}></div>
                           </div>
                         )}
@@ -850,27 +849,27 @@ export default function IDSStakingPlatform() {
               <CardHeader>
                 <CardTitle className="flex items-center text-white">
                   <Gift className="w-5 h-5 mr-2 text-cyan-400" />
-                  Phần thưởng
+                  {t('rewards.rewards')}
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="text-center p-4 bg-gray-800 rounded-lg border border-gray-700">
-                  <div className="text-2xl font-bold text-blue-400">12.34 IDS</div>
-                  <div className="text-sm text-gray-400">Phần thưởng chờ nhận</div>
+                  <div className="text-2xl font-bold text-blue-400">12.34 {t('staking.ids')}</div>
+                  <div className="text-sm text-gray-400">{t('rewards.pending')}</div>
                 </div>
 
                 <div className="space-y-2">
                   <div className="flex justify-between text-sm">
-                    <span className="text-gray-300">Hôm nay:</span>
-                    <span className="text-blue-400">+2.45 IDS</span>
+                    <span className="text-gray-300">{t('rewards.today')}:</span>
+                    <span className="text-blue-400">+2.45 {t('staking.ids')}</span>
                   </div>
                   <div className="flex justify-between text-sm">
-                    <span className="text-gray-300">7 ngày qua:</span>
-                    <span className="text-blue-400">+17.23 IDS</span>
+                    <span className="text-gray-300">{t('rewards.last7Days')}:</span>
+                    <span className="text-blue-400">+17.23 {t('staking.ids')}</span>
                   </div>
                   <div className="flex justify-between text-sm">
-                    <span className="text-gray-300">30 ngày qua:</span>
-                    <span className="text-blue-400">+73.89 IDS</span>
+                    <span className="text-gray-300">{t('rewards.last30Days')}:</span>
+                    <span className="text-blue-400">+73.89 {t('staking.ids')}</span>
                   </div>
                 </div>
 
@@ -880,7 +879,7 @@ export default function IDSStakingPlatform() {
                   onClick={() => setShowRewardsModal(true)}
                 >
                   <Gift className="w-4 h-4 mr-2" />
-                  Nhận phần thưởng
+                  {t('rewards.claimRewards')}
                 </Button>
               </CardContent>
             </Card>
@@ -889,30 +888,29 @@ export default function IDSStakingPlatform() {
               <CardHeader>
                 <CardTitle className="flex items-center text-white">
                   <Clock className="w-5 h-5 mr-2 text-cyan-400" />
-                  Lịch sử Stake
+                  {t('history.stakeHistory')}
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="space-y-3">
                   <div className="flex items-center justify-between p-3 bg-gray-800 rounded-lg border border-gray-700">
                     <div>
-                      <div className="font-medium text-white">500 IDS</div>
-                      <div className="text-sm text-gray-400">90 ngày - 25% APY</div>
+                      <div className="font-medium text-white">500 {t('staking.ids')}</div>
+                      <div className="text-sm text-gray-400">{t('history.90DaysApy')}</div>
                     </div>
                     <Badge variant="secondary" className="bg-gray-700 text-gray-300 hover:bg-gray-600 hover:text-white">
                       <Shield className="w-3 h-3 mr-1" />
-                      Đã khóa
+                      {t('history.locked')}
                     </Badge>
                   </div>
 
                   <div className="flex items-center justify-between p-3 bg-gray-800 rounded-lg border border-gray-700">
                     <div>
-                      <div className="font-medium text-white">350 IDS</div>
-                      <div className="text-sm text-gray-400">30 ngày - 15% APY</div>
+                      <div className="font-medium text-white">350 {t('staking.ids')}</div>
+                      <div className="text-sm text-gray-400">{t('history.30DaysApy')}</div>
                     </div>
                     <Badge variant="outline" className="border-blue-600 text-blue-400">
-                      <Clock className="w-3 h-3 mr-1" />5 ngày còn lại
-                    </Badge>
+                      <Clock className="w-3 h-3 mr-1" />{t('history.5DaysLeft')}</Badge>
                   </div>
                 </div>
               </CardContent>
@@ -932,9 +930,9 @@ export default function IDSStakingPlatform() {
               rel="noopener noreferrer"
               className="text-blue-400 hover:text-blue-300 underline transition-colors"
             >
-              Nobody Network
+              {t('footer.nobodyNetwork')}
             </a>
-            . All rights reserved.
+            . {t('footer.allRightsReserved')}
           </div>
         </div>
       </footer>
@@ -949,33 +947,33 @@ export default function IDSStakingPlatform() {
             <CardHeader>
               <CardTitle className="flex items-center text-white">
                 <div className="w-6 h-6 bg-gradient-to-r from-blue-600 to-purple-600 rounded mr-2"></div>
-                Nâng cấp VIP
+                {t('vip.upgrade')}
               </CardTitle>
               <CardDescription className="text-gray-400">
-                Trở thành thành viên VIP để nhận hoa hồng cao hơn
+                {t('vip.becomeVip')}
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="bg-gray-800 p-4 rounded-lg border border-blue-700/50">
                 <div className="text-center">
-                  <div className="text-2xl font-bold text-blue-400 mb-2">$100</div>
-                  <div className="text-sm text-gray-400">Phí nâng cấp một lần</div>
+                  <div className="text-2xl font-bold text-blue-400 mb-2">{t('vip.upgradeCost')}</div>
+                  <div className="text-sm text-gray-400">{t('vip.upgradeOneTime')}</div>
                 </div>
               </div>
 
               <div>
-                <Label className="text-white font-semibold">Chọn blockchain để thanh toán</Label>
+                <Label className="text-white font-semibold">{t('vip.selectChain')}</Label>
                 <Select value={vipSelectedChain} onValueChange={setVipSelectedChain}>
                   <SelectTrigger className="w-full mt-2 bg-gray-800 border-gray-700 text-white focus:border-blue-500">
-                    <SelectValue placeholder="Chọn blockchain" />
+                    <SelectValue placeholder={t('vip.selectChain')} />
                   </SelectTrigger>
                   <SelectContent className="bg-gray-800 border-gray-700 text-white">
                     <SelectItem value="ethereum" className="text-white hover:bg-gray-700 focus:bg-gray-700">
                       <div className="flex items-center gap-2">
                         <span className="text-lg">⟠</span>
                         <div>
-                          <div className="font-semibold text-white">Ethereum</div>
-                          <div className="text-xs text-gray-400">ETH Network</div>
+                          <div className="font-semibold text-white">{t('staking.ethereum')}</div>
+                          <div className="text-xs text-gray-400">{t('staking.ethNetwork')}</div>
                         </div>
                       </div>
                     </SelectItem>
@@ -983,8 +981,8 @@ export default function IDSStakingPlatform() {
                       <div className="flex items-center gap-2">
                         <span className="text-lg">🟡</span>
                         <div>
-                          <div className="font-semibold text-white">BSC</div>
-                          <div className="text-xs text-gray-400">BNB Network</div>
+                          <div className="font-semibold text-white">{t('staking.bsc')}</div>
+                          <div className="text-xs text-gray-400">{t('staking.bnbNetwork')}</div>
                         </div>
                       </div>
                     </SelectItem>
@@ -992,8 +990,8 @@ export default function IDSStakingPlatform() {
                       <div className="flex items-center gap-2">
                         <span className="text-lg">🟣</span>
                         <div>
-                          <div className="font-semibold text-white">Polygon</div>
-                          <div className="text-xs text-gray-400">MATIC Network</div>
+                          <div className="font-semibold text-white">{t('staking.polygon')}</div>
+                          <div className="text-xs text-gray-400">{t('staking.maticNetwork')}</div>
                         </div>
                       </div>
                     </SelectItem>
@@ -1001,8 +999,8 @@ export default function IDSStakingPlatform() {
                       <div className="flex items-center gap-2">
                         <span className="text-lg">🔵</span>
                         <div>
-                          <div className="font-semibold text-white">Arbitrum</div>
-                          <div className="text-xs text-gray-400">ARB Network</div>
+                          <div className="font-semibold text-white">{t('staking.arbitrum')}</div>
+                          <div className="text-xs text-gray-400">{t('staking.arbNetwork')}</div>
                         </div>
                       </div>
                     </SelectItem>
@@ -1012,20 +1010,20 @@ export default function IDSStakingPlatform() {
 
               <div className="space-y-3">
                 <div className="flex items-center justify-between p-3 bg-gray-800 rounded-lg border border-gray-700">
-                  <span className="text-sm text-gray-300">Hoa hồng hiện tại:</span>
+                  <span className="text-sm text-gray-300">{t('vip.currentEarnings')}:</span>
                   <span className="font-semibold text-red-400">5%</span>
                 </div>
                 <div className="flex items-center justify-between p-3 bg-gray-800 rounded-lg border border-gray-700">
-                  <span className="text-sm text-gray-300">Hoa hồng VIP:</span>
+                  <span className="text-sm text-gray-300">{t('vip.vipEarnings')}:</span>
                   <span className="font-semibold text-blue-400">50%</span>
                 </div>
                 <div className="flex items-center justify-between p-3 bg-gray-800 rounded-lg border border-gray-700">
-                  <span className="text-sm text-gray-300">Tăng thu nhập:</span>
+                  <span className="text-sm text-gray-300">{t('vip.increaseEarnings')}:</span>
                   <span className="font-semibold text-cyan-400">10x</span>
                 </div>
               </div>
 
-              <div className="text-xs text-gray-400 text-center">* Phí nâng cấp sẽ được thanh toán bằng USDT</div>
+              <div className="text-xs text-gray-400 text-center">{t('vip.upgradePayment')}</div>
 
               <div className="flex space-x-3">
                 <Button
@@ -1033,7 +1031,7 @@ export default function IDSStakingPlatform() {
                   className="flex-1 border-gray-700 text-gray-300 hover:bg-gray-800 hover:text-gray-200 bg-transparent"
                   onClick={() => setShowVipModal(false)}
                 >
-                  Hủy
+                  {t('vip.cancel')}
                 </Button>
                 <Button
                   className="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
@@ -1043,7 +1041,7 @@ export default function IDSStakingPlatform() {
                   }}
                 >
                   <DollarSign className="w-4 h-4 mr-2" />
-                  Thanh toán $100
+                  {t('vip.upgrade100')}
                 </Button>
               </div>
             </CardContent>
@@ -1064,17 +1062,17 @@ export default function IDSStakingPlatform() {
             <CardHeader>
               <CardTitle className="flex items-center text-white">
                 <Gift className="w-5 h-5 mr-2 text-cyan-400" />
-                Chi tiết hoa hồng giới thiệu
+                {t('referral.details')}
               </CardTitle>
               <CardDescription className="text-gray-400">
-                Thống kê chi tiết về hoa hồng USDT từ việc F1 nâng cấp VIP
+                {t('referral.detailsDescription')}
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
               {/* Current Status */}
               <div className="p-4 bg-gray-800 rounded-lg border border-gray-700">
                 <div className="flex items-center justify-between mb-3">
-                  <h3 className="font-semibold text-white">Trạng thái hiện tại</h3>
+                  <h3 className="font-semibold text-white">{t('referral.currentStatus')}</h3>
                   <Badge
                     variant={membershipType === "vip" ? "default" : "secondary"}
                     className={
@@ -1091,66 +1089,66 @@ export default function IDSStakingPlatform() {
                     <div className="text-2xl font-bold text-emerald-400">
                       {membershipType === "free" ? "5%" : "50%"}
                     </div>
-                    <div className="text-sm text-gray-400">Tỷ lệ hoa hồng USDT</div>
+                    <div className="text-sm text-gray-400">{t('referral.usdtRate')}</div>
                   </div>
                   <div className="text-center">
                     <div className="text-2xl font-bold text-cyan-400">12</div>
-                    <div className="text-sm text-gray-400">F1 đã nâng cấp VIP</div>
+                    <div className="text-sm text-gray-400">{t('referral.vipUpgrades')}</div>
                   </div>
                 </div>
               </div>
 
               {/* Commission History */}
               <div>
-                <h3 className="font-semibold text-white mb-3">Lịch sử hoa hồng USDT</h3>
+                <h3 className="font-semibold text-white mb-3">{t('referral.commissionHistory')}</h3>
                 <div className="space-y-3">
                   <div className="flex items-center justify-between p-3 bg-gray-800 rounded-lg border border-gray-700">
                     <div>
-                      <div className="font-medium text-white">Hôm nay</div>
-                      <div className="text-sm text-gray-400">1 F1 nâng cấp VIP</div>
+                      <div className="font-medium text-white">{t('referral.today')}</div>
+                      <div className="text-sm text-gray-400">{t('referral.1F1Upgrade')}</div>
                     </div>
                     <div className="text-right">
                       <div className="font-bold text-emerald-400">+${membershipType === "free" ? "5.00" : "50.00"}</div>
-                      <div className="text-xs text-gray-500">Từ phí nâng cấp $100</div>
+                      <div className="text-xs text-gray-500">{t('referral.fromUpgrade100')}</div>
                     </div>
                   </div>
 
                   <div className="flex items-center justify-between p-3 bg-gray-800 rounded-lg border border-gray-700">
                     <div>
-                      <div className="font-medium text-white">7 ngày qua</div>
-                      <div className="text-sm text-gray-400">3 F1 nâng cấp VIP</div>
+                      <div className="font-medium text-white">{t('referral.last7Days')}</div>
+                      <div className="text-sm text-gray-400">{t('referral.3F1Upgrade')}</div>
                     </div>
                     <div className="text-right">
                       <div className="font-bold text-emerald-400">
                         +${membershipType === "free" ? "15.00" : "150.00"}
                       </div>
-                      <div className="text-xs text-gray-500">Từ phí nâng cấp $300</div>
+                      <div className="text-xs text-gray-500">{t('referral.fromUpgrade300')}</div>
                     </div>
                   </div>
 
                   <div className="flex items-center justify-between p-3 bg-gray-800 rounded-lg border border-gray-700">
                     <div>
-                      <div className="font-medium text-white">30 ngày qua</div>
-                      <div className="text-sm text-gray-400">8 F1 nâng cấp VIP</div>
+                      <div className="font-medium text-white">{t('referral.last30Days')}</div>
+                      <div className="text-sm text-gray-400">{t('referral.8F1Upgrade')}</div>
                     </div>
                     <div className="text-right">
                       <div className="font-bold text-emerald-400">
                         +${membershipType === "free" ? "40.00" : "400.00"}
                       </div>
-                      <div className="text-xs text-gray-500">Từ phí nâng cấp $800</div>
+                      <div className="text-xs text-gray-500">{t('referral.fromUpgrade800')}</div>
                     </div>
                   </div>
 
                   <div className="flex items-center justify-between p-3 bg-gray-800 rounded-lg border border-gray-700">
                     <div>
-                      <div className="font-medium text-white">Tổng cộng</div>
-                      <div className="text-sm text-gray-400">12 F1 nâng cấp VIP</div>
+                      <div className="font-medium text-white">{t('referral.total')}</div>
+                      <div className="text-sm text-gray-400">{t('referral.12F1Upgrade')}</div>
                     </div>
                     <div className="text-right">
                       <div className="font-bold text-emerald-400">
                         +${membershipType === "free" ? "60.00" : "600.00"}
                       </div>
-                      <div className="text-xs text-gray-500">Từ phí nâng cấp $1,200</div>
+                      <div className="text-xs text-gray-500">{t('referral.fromUpgrade1200')}</div>
                     </div>
                   </div>
                 </div>
@@ -1158,7 +1156,7 @@ export default function IDSStakingPlatform() {
 
               {/* Top Referrals */}
               <div>
-                <h3 className="font-semibold text-white mb-3">Top F1 đóng góp hoa hồng</h3>
+                <h3 className="font-semibold text-white mb-3">{t('referral.topReferrals')}</h3>
                 <div className="space-y-2">
                   <div className="flex items-center justify-between p-3 bg-gray-800 rounded-lg border border-gray-700">
                     <div className="flex items-center gap-3">
@@ -1167,7 +1165,7 @@ export default function IDSStakingPlatform() {
                       </div>
                       <div>
                         <div className="font-medium text-white">User***123</div>
-                        <div className="text-sm text-gray-400">5 lần nâng cấp VIP</div>
+                        <div className="text-sm text-gray-400">{t('referral.5VipUpgrades')}</div>
                       </div>
                     </div>
                     <div className="text-right">
@@ -1184,7 +1182,7 @@ export default function IDSStakingPlatform() {
                       </div>
                       <div>
                         <div className="font-medium text-white">User***456</div>
-                        <div className="text-sm text-gray-400">4 lần nâng cấp VIP</div>
+                        <div className="text-sm text-gray-400">{t('referral.4VipUpgrades')}</div>
                       </div>
                     </div>
                     <div className="text-right">
@@ -1201,7 +1199,7 @@ export default function IDSStakingPlatform() {
                       </div>
                       <div>
                         <div className="font-medium text-white">User***789</div>
-                        <div className="text-sm text-gray-400">3 lần nâng cấp VIP</div>
+                        <div className="text-sm text-gray-400">{t('referral.3VipUpgrades')}</div>
                       </div>
                     </div>
                     <div className="text-right">
@@ -1216,9 +1214,9 @@ export default function IDSStakingPlatform() {
               {membershipType === "free" && (
                 <div className="p-4 bg-blue-900/20 rounded-lg border border-blue-700/50">
                   <div className="text-center">
-                    <div className="text-blue-300 font-semibold mb-2">💡 Mẹo tăng thu nhập</div>
+                    <div className="text-blue-300 font-semibold mb-2">{t('vip.tip')}</div>
                     <div className="text-sm text-blue-200 mb-3">
-                      Nâng cấp VIP để nhận 50% hoa hồng USDT thay vì 5%. Thu nhập sẽ tăng gấp 10 lần!
+                      {t('vip.upgrade50Tip')}
                     </div>
                     <Button
                       size="sm"
@@ -1228,7 +1226,7 @@ export default function IDSStakingPlatform() {
                         setShowVipModal(true)
                       }}
                     >
-                      Nâng cấp VIP ngay
+                      {t('vip.upgradeVipNow')}
                     </Button>
                   </div>
                 </div>
@@ -1240,7 +1238,7 @@ export default function IDSStakingPlatform() {
                   className="border-gray-700 text-gray-300 hover:bg-gray-800 hover:text-gray-200 bg-transparent"
                   onClick={() => setShowCommissionModal(false)}
                 >
-                  Đóng
+                  {t('referral.close')}
                 </Button>
               </div>
             </CardContent>
@@ -1261,80 +1259,80 @@ export default function IDSStakingPlatform() {
             <CardHeader>
               <CardTitle className="flex items-center text-white">
                 <Gift className="w-5 h-5 mr-2 text-cyan-400" />
-                Chi tiết phần thưởng Stake
+                {t('rewards.rewardsDetails')}
               </CardTitle>
               <CardDescription className="text-gray-400">
-                Thống kê chi tiết về phần thưởng IDS từ việc stake coin
+                {t('rewards.rewardsDescription')}
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
               {/* Current Rewards Status */}
               <div className="p-4 bg-gray-800 rounded-lg border border-gray-700">
                 <div className="flex items-center justify-between mb-3">
-                  <h3 className="font-semibold text-white">Phần thưởng hiện tại</h3>
+                  <h3 className="font-semibold text-white">{t('rewards.currentRewards')}</h3>
                   <Badge
                     variant="secondary"
                     className="bg-cyan-700 text-cyan-300 hover:bg-cyan-600 hover:text-cyan-200"
                   >
-                    Đang tích lũy
+                    {t('rewards.earning')}
                   </Badge>
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div className="text-center">
-                    <div className="text-2xl font-bold text-cyan-400">12.34 IDS</div>
-                    <div className="text-sm text-gray-400">Chờ nhận</div>
+                    <div className="text-2xl font-bold text-cyan-400">12.34 {t('staking.ids')}</div>
+                    <div className="text-sm text-gray-400">{t('rewards.pending')}</div>
                   </div>
                   <div className="text-center">
-                    <div className="text-2xl font-bold text-blue-400">850.00 IDS</div>
-                    <div className="text-sm text-gray-400">Đang stake</div>
+                    <div className="text-2xl font-bold text-blue-400">850.00 {t('staking.ids')}</div>
+                    <div className="text-sm text-gray-400">{t('rewards.staking')}</div>
                   </div>
                 </div>
               </div>
 
               {/* Rewards History */}
               <div>
-                <h3 className="font-semibold text-white mb-3">Lịch sử phần thưởng</h3>
+                <h3 className="font-semibold text-white mb-3">{t('rewards.rewardsHistory')}</h3>
                 <div className="space-y-3">
                   <div className="flex items-center justify-between p-3 bg-gray-800 rounded-lg border border-gray-700">
                     <div>
-                      <div className="font-medium text-white">Hôm nay</div>
-                      <div className="text-sm text-gray-400">Từ 850 IDS stake</div>
+                      <div className="font-medium text-white">{t('rewards.today')}</div>
+                      <div className="text-sm text-gray-400">{t('rewards.from850Ids')}</div>
                     </div>
                     <div className="text-right">
-                      <div className="font-bold text-cyan-400">+2.45 IDS</div>
+                      <div className="font-bold text-cyan-400">+2.45 {t('staking.ids')}</div>
                       <div className="text-xs text-gray-500">~$2.45</div>
                     </div>
                   </div>
 
                   <div className="flex items-center justify-between p-3 bg-gray-800 rounded-lg border border-gray-700">
                     <div>
-                      <div className="font-medium text-white">7 ngày qua</div>
-                      <div className="text-sm text-gray-400">Phần thưởng tích lũy</div>
+                      <div className="font-medium text-white">{t('rewards.last7Days')}</div>
+                      <div className="text-sm text-gray-400">{t('rewards.earned')}</div>
                     </div>
                     <div className="text-right">
-                      <div className="font-bold text-cyan-400">+17.23 IDS</div>
+                      <div className="font-bold text-cyan-400">+17.23 {t('staking.ids')}</div>
                       <div className="text-xs text-gray-500">~$17.23</div>
                     </div>
                   </div>
 
                   <div className="flex items-center justify-between p-3 bg-gray-800 rounded-lg border border-gray-700">
                     <div>
-                      <div className="font-medium text-white">30 ngày qua</div>
-                      <div className="text-sm text-gray-400">Phần thưởng tích lũy</div>
+                      <div className="font-medium text-white">{t('rewards.last30Days')}</div>
+                      <div className="text-sm text-gray-400">{t('rewards.earned')}</div>
                     </div>
                     <div className="text-right">
-                      <div className="font-bold text-cyan-400">+73.89 IDS</div>
+                      <div className="font-bold text-cyan-400">+73.89 {t('staking.ids')}</div>
                       <div className="text-xs text-gray-500">~$73.89</div>
                     </div>
                   </div>
 
                   <div className="flex items-center justify-between p-3 bg-gray-800 rounded-lg border border-gray-700">
                     <div>
-                      <div className="font-medium text-white">Tổng cộng</div>
-                      <div className="text-sm text-gray-400">Từ khi bắt đầu stake</div>
+                      <div className="font-medium text-white">{t('rewards.total')}</div>
+                      <div className="text-sm text-gray-400">{t('rewards.fromStart')}</div>
                     </div>
                     <div className="text-right">
-                      <div className="font-bold text-cyan-400">+127.45 IDS</div>
+                      <div className="font-bold text-cyan-400">+127.45 {t('staking.ids')}</div>
                       <div className="text-xs text-gray-500">~$127.45</div>
                     </div>
                   </div>
@@ -1343,7 +1341,7 @@ export default function IDSStakingPlatform() {
 
               {/* Stake Positions */}
               <div>
-                <h3 className="font-semibold text-white mb-3">Vị thế stake hiện tại</h3>
+                <h3 className="font-semibold text-white mb-3">{t('rewards.currentPositions')}</h3>
                 <div className="space-y-2">
                   <div className="flex items-center justify-between p-3 bg-gray-800 rounded-lg border border-gray-700">
                     <div className="flex items-center gap-3">
@@ -1351,13 +1349,13 @@ export default function IDSStakingPlatform() {
                         1
                       </div>
                       <div>
-                        <div className="font-medium text-white">500 IDS</div>
-                        <div className="text-sm text-gray-400">90 ngày - 8% APY</div>
+                        <div className="font-medium text-white">500 {t('staking.ids')}</div>
+                        <div className="text-sm text-gray-400">{t('history.90DaysApy')}</div>
                       </div>
                     </div>
                     <div className="text-right">
-                      <div className="font-bold text-cyan-400">+1.10 IDS/ngày</div>
-                      <div className="text-xs text-gray-500">Còn 65 ngày</div>
+                      <div className="font-bold text-cyan-400">+1.10 {t('staking.ids')}/day</div>
+                      <div className="text-xs text-gray-500">{t('rewards.65DaysLeft')}</div>
                     </div>
                   </div>
 
@@ -1367,13 +1365,13 @@ export default function IDSStakingPlatform() {
                         2
                       </div>
                       <div>
-                        <div className="font-medium text-white">350 IDS</div>
-                        <div className="text-sm text-gray-400">30 ngày - 5% APY</div>
+                        <div className="font-medium text-white">350 {t('staking.ids')}</div>
+                        <div className="text-sm text-gray-400">{t('history.30DaysApy')}</div>
                       </div>
                     </div>
                     <div className="text-right">
-                      <div className="font-bold text-cyan-400">+0.48 IDS/ngày</div>
-                      <div className="text-xs text-gray-500">Còn 5 ngày</div>
+                      <div className="font-bold text-cyan-400">+0.48 {t('staking.ids')}/day</div>
+                      <div className="text-xs text-gray-500">{t('rewards.5DaysLeft')}</div>
                     </div>
                   </div>
                 </div>
@@ -1382,12 +1380,12 @@ export default function IDSStakingPlatform() {
               {/* Claim Information */}
               <div className="p-4 bg-blue-900/20 rounded-lg border border-blue-700/50">
                 <div className="text-center">
-                  <div className="text-blue-300 font-semibold mb-2">💡 Thông tin nhận thưởng</div>
+                  <div className="text-blue-300 font-semibold mb-2">{t('rewards.claimInformation')}</div>
                   <div className="text-sm text-blue-200 mb-3 space-y-1">
-                    <div>• Phần thưởng được tích lũy hàng ngày</div>
-                    <div>• Có thể nhận bất kỳ lúc nào</div>
-                    <div>• Không có phí giao dịch khi nhận</div>
-                    <div>• Phần thưởng sẽ được chuyển vào số dư khả dụng</div>
+                    <div>{t('rewards.dailyEarnings')}</div>
+                    <div>{t('rewards.canClaimAnytime')}</div>
+                    <div>{t('rewards.noTransactionFee')}</div>
+                    <div>{t('rewards.rewardsWillBeAdded')}</div>
                   </div>
                 </div>
               </div>
@@ -1401,14 +1399,14 @@ export default function IDSStakingPlatform() {
                   }}
                 >
                   <Gift className="w-4 h-4 mr-2" />
-                  Nhận 12.34 IDS
+                  {t('rewards.claim12Ids')}
                 </Button>
                 <Button
                   variant="outline"
                   className="flex-1 border-gray-700 text-gray-300 hover:bg-gray-800 hover:text-gray-200 bg-transparent"
                   onClick={() => setShowRewardsModal(false)}
                 >
-                  Đóng
+                  {t('rewards.close')}
                 </Button>
               </div>
             </CardContent>
@@ -1429,23 +1427,21 @@ export default function IDSStakingPlatform() {
             <CardHeader className="text-center">
               <CardTitle className="flex items-center justify-center text-white text-2xl">
                 <div className="w-10 h-10 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center mr-3">
-                  <span className="text-white font-bold text-lg">IDS</span>
+                  <span className="text-white font-bold text-lg">{t('header.ids')}</span>
                 </div>
-                Intelligent Decentralized Solution
+                {t('header.intelligentDecentralizedSolution')}
               </CardTitle>
               <CardDescription className="text-gray-400 text-lg">
-                Hệ sinh thái Nobody Chain - Bảo mật thông tin, Tự do Internet
+                {t('header.nobodyChain')}
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-8">
               {/* Hero Section */}
               <div className="text-center p-6 bg-gradient-to-r from-blue-900/30 to-purple-900/30 rounded-lg border border-blue-700/50">
                 <div className="text-4xl mb-4">🚀</div>
-                <h2 className="text-2xl font-bold text-white mb-3">Nobody Chain Ecosystem</h2>
+                <h2 className="text-2xl font-bold text-white mb-3">{t('header.nobodyChainEcosystem')}</h2>
                 <p className="text-gray-300 text-lg leading-relaxed">
-                  Chúng tôi là đội ngũ lập trình viên tài năng đến từ khắp nơi trên thế giới, tập trung phát triển các
-                  sản phẩm công nghệ blockchain tiên tiến nhằm bảo vệ quyền riêng tư và mang lại tự do cho môi trường
-                  Internet.
+                  {t('header.teamDescription')}
                 </p>
               </div>
 
@@ -1459,11 +1455,11 @@ export default function IDSStakingPlatform() {
                     </div>
                     <div>
                       <h3 className="text-xl font-bold text-white">A-Scan Explorer</h3>
-                      <p className="text-blue-400 text-sm">Blockchain Explorer</p>
+                      <p className="text-blue-400 text-sm">{t('products.aScanExplorer')}</p>
                     </div>
                   </div>
                   <p className="text-gray-300 mb-4">
-                    Trình khám phá blockchain hoàn chỉnh với đầy đủ thông tin về IDS và Nobody Chain.
+                    {t('products.aScanExplorerDescription')}
                   </p>
                   <a
                     href="https://a-scan.nobody.network"
@@ -1471,7 +1467,7 @@ export default function IDSStakingPlatform() {
                     rel="noopener noreferrer"
                     className="inline-flex items-center text-blue-400 hover:text-blue-300 font-semibold"
                   >
-                    Khám phá ngay →
+                    {t('products.exploreNow')} →
                   </a>
                 </div>
 
@@ -1483,11 +1479,11 @@ export default function IDSStakingPlatform() {
                     </div>
                     <div>
                       <h3 className="text-xl font-bold text-white">Chat Network</h3>
-                      <p className="text-purple-400 text-sm">Decentralized Communication</p>
+                      <p className="text-purple-400 text-sm">{t('products.chatNetwork')}</p>
                     </div>
                   </div>
                   <p className="text-gray-300 mb-4">
-                    Hệ thống giao tiếp phi tập trung bảo mật cao, sản phẩm chủ lực đang hoạt động ổn định.
+                    {t('products.chatNetworkDescription')}
                   </p>
                   <a
                     href="https://chat.nobody.network"
@@ -1495,7 +1491,7 @@ export default function IDSStakingPlatform() {
                     rel="noopener noreferrer"
                     className="inline-flex items-center text-purple-400 hover:text-purple-300 font-semibold"
                   >
-                    Trải nghiệm ngay →
+                    {t('products.experienceNow')} →
                   </a>
                 </div>
 
@@ -1507,11 +1503,11 @@ export default function IDSStakingPlatform() {
                     </div>
                     <div>
                       <h3 className="text-xl font-bold text-white">Wallet Air</h3>
-                      <p className="text-cyan-400 text-sm">Crypto Wallet</p>
+                      <p className="text-cyan-400 text-sm">{t('products.cryptoWallet')}</p>
                     </div>
                   </div>
                   <p className="text-gray-300 mb-4">
-                    Ví tiền mã hóa an toàn, đã có mặt trên App Store và Google Play Store.
+                    {t('products.cryptoWalletDescription')}
                   </p>
                   <div className="flex gap-3">
                     <a
@@ -1520,7 +1516,7 @@ export default function IDSStakingPlatform() {
                       rel="noopener noreferrer"
                       className="inline-flex items-center text-cyan-400 hover:text-cyan-300 font-semibold text-sm"
                     >
-                      📱 Android
+                      {t('products.android')}
                     </a>
                     <a
                       href="https://apps.apple.com/app/walletair/id123456789"
@@ -1528,7 +1524,7 @@ export default function IDSStakingPlatform() {
                       rel="noopener noreferrer"
                       className="inline-flex items-center text-cyan-400 hover:text-cyan-300 font-semibold text-sm"
                     >
-                      🍎 iOS
+                      {t('products.ios')}
                     </a>
                   </div>
                 </div>
@@ -1541,39 +1537,39 @@ export default function IDSStakingPlatform() {
                     </div>
                     <div>
                       <h3 className="text-xl font-bold text-white">IDS Staking</h3>
-                      <p className="text-orange-400 text-sm">Investment Platform</p>
+                      <p className="text-orange-400 text-sm">{t('products.investmentPlatform')}</p>
                     </div>
                   </div>
                   <p className="text-gray-300 mb-4">
-                    Platform đầu tư IDS coin với lợi suất hấp dẫn và hệ thống giới thiệu bạn bè.
+                    {t('products.investmentPlatformDescription')}
                   </p>
-                  <span className="inline-flex items-center text-orange-400 font-semibold">Đang sử dụng ✓</span>
+                  <span className="inline-flex items-center text-orange-400 font-semibold">{t('products.using')}</span>
                 </div>
               </div>
 
               {/* Mission Statement */}
               <div className="p-6 bg-gradient-to-r from-gray-800 to-gray-700 rounded-lg border border-gray-600">
-                <h3 className="text-xl font-bold text-white mb-4 text-center">🎯 Sứ mệnh của chúng tôi</h3>
+                <h3 className="text-xl font-bold text-white mb-4 text-center">{t('mission.mission')}</h3>
                 <div className="grid md:grid-cols-3 gap-6 text-center">
                   <div>
                     <div className="text-3xl mb-3">🛡️</div>
-                    <h4 className="font-semibold text-white mb-2">Bảo mật thông tin</h4>
+                    <h4 className="font-semibold text-white mb-2">{t('mission.privacyProtection')}</h4>
                     <p className="text-gray-300 text-sm">
-                      Phát triển các giải pháp bảo vệ quyền riêng tư và dữ liệu cá nhân
+                      {t('mission.developPrivacySolutions')}
                     </p>
                   </div>
                   <div>
                     <div className="text-3xl mb-3">🌐</div>
-                    <h4 className="font-semibold text-white mb-2">Tự do Internet</h4>
+                    <h4 className="font-semibold text-white mb-2">{t('mission.internetFreedom')}</h4>
                     <p className="text-gray-300 text-sm">
-                      Tạo ra môi trường Internet tự do, không bị kiểm duyệt và giám sát
+                      {t('mission.createFreeInternet')}
                     </p>
                   </div>
                   <div>
                     <div className="text-3xl mb-3">🚀</div>
-                    <h4 className="font-semibold text-white mb-2">Đổi mới công nghệ</h4>
+                    <h4 className="font-semibold text-white mb-2">{t('mission.innovation')}</h4>
                     <p className="text-gray-300 text-sm">
-                      Tiên phong trong việc ứng dụng blockchain và công nghệ phi tập trung
+                      {t('mission.leadingEdgeTechnology')}
                     </p>
                   </div>
                 </div>
@@ -1582,23 +1578,22 @@ export default function IDSStakingPlatform() {
               {/* Investment Call */}
               <div className="p-6 bg-gradient-to-r from-blue-900/50 to-purple-900/50 rounded-lg border border-blue-700/50 text-center">
                 <div className="text-4xl mb-4">💎</div>
-                <h3 className="text-2xl font-bold text-white mb-3">Đầu tư vào tương lai</h3>
+                <h3 className="text-2xl font-bold text-white mb-3">{t('investment.investInFuture')}</h3>
                 <p className="text-gray-300 text-lg mb-4">
-                  Chúng tôi đang tiếp tục huy động vốn để phát triển thêm nhiều sản phẩm công nghệ tiên tiến khác phục
-                  vụ cộng đồng toàn cầu.
+                  {t('investment.ongoingFundraising')}
                 </p>
                 <div className="flex justify-center gap-4">
                   <div className="text-center">
                     <div className="text-2xl font-bold text-blue-400">50+</div>
-                    <div className="text-sm text-gray-400">Developers</div>
+                    <div className="text-sm text-gray-400">{t('investment.developers')}</div>
                   </div>
                   <div className="text-center">
                     <div className="text-2xl font-bold text-purple-400">4</div>
-                    <div className="text-sm text-gray-400">Live Products</div>
+                    <div className="text-sm text-gray-400">{t('investment.liveProducts')}</div>
                   </div>
                   <div className="text-center">
                     <div className="text-2xl font-bold text-cyan-400">100K+</div>
-                    <div className="text-sm text-gray-400">Users</div>
+                    <div className="text-sm text-gray-400">{t('investment.users')}</div>
                   </div>
                 </div>
               </div>
@@ -1609,7 +1604,7 @@ export default function IDSStakingPlatform() {
                   className="border-gray-700 text-gray-300 hover:bg-gray-800 hover:text-gray-200 bg-transparent px-8"
                   onClick={() => setShowInfoModal(false)}
                 >
-                  Đóng
+                  {t('referral.close')}
                 </Button>
               </div>
             </CardContent>
