@@ -29,7 +29,6 @@ import {
 } from "lucide-react"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import LocaleDropdown from "@/commons/LocaleDropdown"
-import ThemeToggle from "@/commons/ThemeToggle"
 
 export default function IDSStakingPlatform() {
   ;<style jsx>{`
