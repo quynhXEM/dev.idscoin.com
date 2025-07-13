@@ -2,7 +2,7 @@
 
 import type React from "react"
 
-import { useState, useRef } from "react"
+import { useState, useRef, useEffect } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -55,6 +55,7 @@ export default function IDSStakingPlatform() {
   const [showRewardsModal, setShowRewardsModal] = useState(false)
   const [showInfoModal, setShowInfoModal] = useState(false)
   const [vipSelectedChain, setVipSelectedChain] = useState("ethereum")
+  const [isMobile, setIsMobile] = useState(false)
 
   const tooltipRefs = useRef<{ [key: string]: HTMLDivElement | null }>({})
 
@@ -144,17 +145,13 @@ export default function IDSStakingPlatform() {
 
   const getTooltipClasses = (tooltipId: string) => {
     const position = tooltipPosition[tooltipId] || "top"
-    const isMobile = window.innerWidth < 768
-
-    // Mobile overlay positioning
+    // Sử dụng biến isMobile đã được xác định ở client
     if (position === "mobile-overlay") {
       return "fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-72 max-w-[85vw] p-4 bg-gray-800 border border-gray-700 rounded-lg shadow-2xl text-sm text-gray-300 z-[70]"
     }
-
     const baseClasses = isMobile
       ? "absolute w-60 p-3 bg-gray-800 border border-gray-700 rounded-lg shadow-lg text-xs text-gray-300"
       : "absolute w-64 p-3 bg-gray-800 border border-gray-700 rounded-lg shadow-lg text-xs text-gray-300"
-
     switch (position) {
       case "top":
         return `${baseClasses} bottom-full left-1/2 transform -translate-x-1/2 mb-2`
@@ -196,6 +193,10 @@ export default function IDSStakingPlatform() {
         return "absolute top-full left-1/2 transform -translate-x-1/2 border-4 border-transparent border-t-gray-800"
     }
   }
+
+  useEffect(() => {
+    setIsMobile(typeof window !== "undefined" && window.innerWidth < 768)
+  }, [])
 
   return (
     <div className="min-h-screen bg-black text-white">
@@ -708,9 +709,7 @@ export default function IDSStakingPlatform() {
                   <div className="text-center mb-3">
                     <UserPlus className="w-8 h-8 mx-auto text-blue-400 mb-2" />
                     <div className="text-sm font-medium text-blue-300">{t('referral.yourLink')}</div>
-                    <div className="text-xs text-gray-400">
-                      {t('referral.earn')}
-                    </div>
+                    <div className="text-xs text-gray-400">{t('referral.earn', { percent: membershipType === "free" ? "5%" : "50%" })}</div>
                   </div>
 
                   <div className="flex items-center space-x-2">
