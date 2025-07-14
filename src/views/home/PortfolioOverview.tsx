@@ -7,10 +7,11 @@ import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 
 interface PortfolioOverviewProps {
-  t: (key: string) => string
+  t: (key: string) => string,
+  setShowRewardsModal: (show: boolean) => void
 }
 
-const PortfolioOverview: React.FC<PortfolioOverviewProps> = ({ t }) => (
+const PortfolioOverview: React.FC<PortfolioOverviewProps> = ({ t, setShowRewardsModal }) => (
   <div className="space-y-6">
     <Card className="bg-gray-900 border-gray-800">
       <CardHeader>
@@ -84,8 +85,9 @@ const PortfolioOverview: React.FC<PortfolioOverviewProps> = ({ t }) => (
         </div>
 
         <Button
+          onClick={() => setShowRewardsModal(true)}
           variant="outline"
-          className="w-full border-gray-700 text-gray-300 hover:bg-blue-900/30 hover:border-blue-600 hover:text-blue-300 bg-transparent"
+          className="w-full border-gray-700 text-gray-300 hover:bg-blue-900/30 hover:border-blue-600 hover:text-blue-300 bg-transparent cursor-pointer"
         >
           <Gift className="w-4 h-4 mr-2" />
           {t('rewards.claimRewards')}

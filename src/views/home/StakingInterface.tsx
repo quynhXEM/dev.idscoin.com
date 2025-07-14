@@ -51,7 +51,7 @@ const StakingInterface: React.FC<StakingInterfaceProps> = ({
 
         <TabsContent value="stake" className="space-y-6">
           <div className="space-y-4">
-            <div>
+            <div className="flex flex-col gap-2">
               <Label htmlFor="amount" className="text-gray-900 font-semibold">
                 {t('staking.amount')}
               </Label>
@@ -68,7 +68,7 @@ const StakingInterface: React.FC<StakingInterfaceProps> = ({
                     type="button"
                     size="sm"
                     variant="ghost"
-                    className="h-6 px-2 text-xs text-gray-700 hover:text-gray-900 hover:bg-gray-200"
+                    className="h-6 px-2 text-xs text-gray-700 hover:text-gray-900 hover:bg-gray-200 cursor-pointer"
                     onClick={() => setStakeAmount("1250.00")}
                   >
                     Max
@@ -90,7 +90,7 @@ const StakingInterface: React.FC<StakingInterfaceProps> = ({
                     key={days}
                     variant={lockPeriod === days ? "default" : "outline"}
                     onClick={() => setLockPeriod(days)}
-                    className={`h-12 ${
+                    className={`h-12 cursor-pointer ${
                       lockPeriod === days
                         ? "bg-gray-900 hover:bg-gray-800 text-white font-bold border-gray-900"
                         : "border-gray-800 text-gray-900 hover:bg-gray-900 hover:text-white hover:border-gray-900 bg-white/80 font-semibold"
@@ -128,7 +128,7 @@ const StakingInterface: React.FC<StakingInterfaceProps> = ({
               </div>
             </div>
 
-            <Button className="w-full bg-gray-900 hover:bg-gray-800 text-white font-bold shadow-lg" size="lg">
+            <Button className="w-full bg-gray-900 hover:bg-gray-800 text-white font-bold shadow-lg cursor-pointer" size="lg">
               <Lock className="w-4 h-4 mr-2" />
               {t('staking.stake')}
             </Button>
@@ -186,7 +186,7 @@ const StakingInterface: React.FC<StakingInterfaceProps> = ({
             </div>
 
             {/* Swap Amount */}
-            <div>
+            <div className="flex flex-col gap-1">
               <Label htmlFor="swapAmount" className="text-gray-900 font-semibold">
                 {t('staking.usdtAmount')}
               </Label>
@@ -203,7 +203,7 @@ const StakingInterface: React.FC<StakingInterfaceProps> = ({
                     type="button"
                     size="sm"
                     variant="ghost"
-                    className="h-6 px-2 text-xs text-gray-700 hover:text-gray-900 hover:bg-gray-200"
+                    className="h-6 px-2 text-xs text-gray-700 hover:text-gray-900 hover:bg-gray-200 cursor-pointer"
                     onClick={() => setSwapAmount("500.00")}
                   >
                     Max
@@ -247,7 +247,7 @@ const StakingInterface: React.FC<StakingInterfaceProps> = ({
                 <Button
                   size="sm"
                   variant="outline"
-                  className="border-gray-800 text-gray-900 hover:bg-gray-900 hover:text-white bg-white/60"
+                  className="border-gray-800 text-gray-900 hover:bg-gray-900 hover:text-white bg-white/60 cursor-pointer"
                 >
                   {t('staking.connectWallet')}
                 </Button>
@@ -267,7 +267,7 @@ const StakingInterface: React.FC<StakingInterfaceProps> = ({
               </div>
             </div>
 
-            <Button className="w-full bg-gray-900 hover:bg-gray-800 text-white font-bold shadow-lg" size="lg">
+            <Button className="w-full bg-gray-900 hover:bg-gray-800 text-white font-bold shadow-lg cursor-pointer" size="lg">
               <DollarSign className="w-4 h-4 mr-2" />
               {t('staking.swap')}
             </Button>

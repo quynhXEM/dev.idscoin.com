@@ -52,7 +52,7 @@ const ReferralCard: React.FC<ReferralCardProps> = ({
             </div>
             <Button
               size="sm"
-              className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
+              className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 cursor-pointer"
               onClick={() => setShowVipModal(true)}
             >
               {t('vip.upgrade100')}
@@ -77,7 +77,7 @@ const ReferralCard: React.FC<ReferralCardProps> = ({
           <Button
             size="sm"
             onClick={copyReferralLink}
-            className={copied ? "bg-emerald-600 hover:bg-emerald-700" : "bg-blue-600 hover:bg-blue-700"}
+            className={copied ? "bg-emerald-600 hover:bg-emerald-700 cursor-pointer" : "bg-blue-600 hover:bg-blue-700 cursor-pointer"}
           >
             {copied ? (
               <>
@@ -121,7 +121,7 @@ const ReferralCard: React.FC<ReferralCardProps> = ({
       <div className="pt-2">
         <Button
           variant="outline"
-          className="w-full border-gray-700 text-gray-300 hover:bg-blue-900/30 hover:border-blue-600 hover:text-blue-300 bg-transparent"
+          className="w-full border-gray-700 text-gray-300 hover:bg-blue-900/30 hover:border-blue-600 hover:text-blue-300 bg-transparent cursor-pointer"
           size="sm"
           onClick={() => setShowCommissionModal(true)}
         >

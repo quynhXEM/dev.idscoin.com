@@ -110,13 +110,13 @@ const VipUpgradeModal: React.FC<VipUpgradeModalProps> = ({
           <div className="flex space-x-3">
             <Button
               variant="outline"
-              className="flex-1 border-gray-700 text-gray-300 hover:bg-gray-800 hover:text-gray-200 bg-transparent"
+              className="flex-1 border-gray-700 text-gray-300 hover:bg-gray-800 hover:text-gray-200 bg-transparent cursor-pointer"
               onClick={onClose}
             >
               {t('vip.cancel')}
             </Button>
             <Button
-              className="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
+              className="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 cursor-pointer"
               onClick={() => {
                 setMembershipType("vip")
                 onClose()

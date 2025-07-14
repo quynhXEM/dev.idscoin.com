@@ -88,7 +88,7 @@ export default function IDSStakingPlatform() {
               setShowCommissionModal={setShowCommissionModal}
             />
           </div>
-          <PortfolioOverview t={t} />
+          <PortfolioOverview t={t} setShowRewardsModal={setShowRewardsModal} />
         </div>
       </div>
       <Footer t={t} />

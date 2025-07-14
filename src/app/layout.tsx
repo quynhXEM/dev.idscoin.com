@@ -1,4 +1,5 @@
 import "./globals.css";
+import { chakraPetch } from "@/assets/font";
 
 export default function RootLayout({
   children,
@@ -9,7 +10,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={` antialiased`}
+        className={`${chakraPetch.variable} antialiased`}
       >
         {children}
         <script

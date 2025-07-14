@@ -9,10 +9,10 @@ interface AnnouncementBannerProps {
 const AnnouncementBanner: React.FC<AnnouncementBannerProps> = ({ t, onClick }) => (
   <div className="mb-8">
     <Card
-      className="bg-gradient-to-r from-blue-600 via-purple-600 to-blue-600 border-blue-500 cursor-pointer hover:shadow-lg hover:shadow-blue-500/30 transition-all duration-300"
+      className="p-0 bg-gradient-to-r from-blue-600 via-purple-600 to-blue-600 border-blue-500 cursor-pointer hover:shadow-lg hover:shadow-blue-500/30 transition-all duration-300"
       onClick={onClick}
     >
-      <CardContent className="p-4">
+      <CardContent className="p-3">
         <div className="flex items-center justify-center">
           <div className="animate-bounce mr-3">
             <span className="text-2xl">🚀</span>
