@@ -7,7 +7,7 @@ interface AnnouncementBannerProps {
 }
 
 const AnnouncementBanner: React.FC<AnnouncementBannerProps> = ({ t, onClick }) => (
-  <div className="mb-8">
+  <div className="mb-3">
     <Card
       className="p-0 bg-gradient-to-r from-blue-600 via-purple-600 to-blue-600 border-blue-500 cursor-pointer hover:shadow-lg hover:shadow-blue-500/30 transition-all duration-300"
       onClick={onClick}

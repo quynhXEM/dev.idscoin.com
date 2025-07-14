@@ -9,7 +9,7 @@ interface HeroStatsProps {
 }
 
 const HeroStats: React.FC<HeroStatsProps> = ({ t, tooltips }) => (
-  <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mb-8">
+  <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mb-8 mt-8">
     {/* TVL */}
     <Card className="bg-gray-900 border-gray-800 text-white">
       <CardContent className="p-6">
