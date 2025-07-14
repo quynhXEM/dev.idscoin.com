@@ -17,10 +17,12 @@ interface StakingInterfaceProps {
   setSelectedChain: (v: string) => void
   swapAmount: string
   setSwapAmount: (v: string) => void
+  handleStake: () => void
+  handleSwap: () => void
 }
 
 const StakingInterface: React.FC<StakingInterfaceProps> = ({
-  t, stakeAmount, setStakeAmount, lockPeriod, setLockPeriod, selectedChain, setSelectedChain, swapAmount, setSwapAmount
+  t, stakeAmount, setStakeAmount, lockPeriod, setLockPeriod, selectedChain, setSelectedChain, swapAmount, setSwapAmount,handleStake, handleSwap
 }) => (
   <Card className="bg-gradient-to-br from-orange-600 via-orange-500 to-amber-500 border-orange-400 shadow-lg shadow-orange-500/30 ring-1 ring-orange-400/50">
     <CardHeader>
@@ -59,6 +61,8 @@ const StakingInterface: React.FC<StakingInterfaceProps> = ({
                 <Input
                   id="amount"
                   placeholder="0.00"
+                  min={100}
+                  max={1250}
                   value={stakeAmount}
                   onChange={(e) => setStakeAmount(e.target.value)}
                   className="pr-20 bg-white/90 border-gray-800 text-gray-900 placeholder:text-gray-600 focus:border-gray-900 focus:bg-white font-medium"
@@ -128,7 +132,7 @@ const StakingInterface: React.FC<StakingInterfaceProps> = ({
               </div>
             </div>
 
-            <Button className="w-full bg-gray-900 hover:bg-gray-800 text-white font-bold shadow-lg cursor-pointer" size="lg">
+            <Button onClick={() => handleStake()} className="w-full bg-gray-900 hover:bg-gray-800 text-white font-bold shadow-lg cursor-pointer" size="lg">
               <Lock className="w-4 h-4 mr-2" />
               {t('staking.stake')}
             </Button>
@@ -145,7 +149,7 @@ const StakingInterface: React.FC<StakingInterfaceProps> = ({
                   <SelectValue placeholder={t('staking.selectChain')} />
                 </SelectTrigger>
                 <SelectContent className="bg-white border-gray-800">
-                  <SelectItem value="ethereum" className="flex items-center">
+                  <SelectItem value="1" className="flex items-center">
                     <div className="flex items-center gap-2">
                       <span className="text-lg">⟠</span>
                       <div>
@@ -154,7 +158,7 @@ const StakingInterface: React.FC<StakingInterfaceProps> = ({
                       </div>
                     </div>
                   </SelectItem>
-                  <SelectItem value="bsc" className="flex items-center">
+                  <SelectItem value="56" className="flex items-center">
                     <div className="flex items-center gap-2">
                       <span className="text-lg">🟡</span>
                       <div>
@@ -163,7 +167,7 @@ const StakingInterface: React.FC<StakingInterfaceProps> = ({
                       </div>
                     </div>
                   </SelectItem>
-                  <SelectItem value="polygon" className="flex items-center">
+                  <SelectItem value="137" className="flex items-center">
                     <div className="flex items-center gap-2">
                       <span className="text-lg">🟣</span>
                       <div>
@@ -172,7 +176,7 @@ const StakingInterface: React.FC<StakingInterfaceProps> = ({
                       </div>
                     </div>
                   </SelectItem>
-                  <SelectItem value="arbitrum" className="flex items-center">
+                  <SelectItem value="42161" className="flex items-center">
                     <div className="flex items-center gap-2">
                       <span className="text-lg">🔵</span>
                       <div>
@@ -237,23 +241,6 @@ const StakingInterface: React.FC<StakingInterfaceProps> = ({
               </div>
             </div>
 
-            {/* Wallet Connection Status */}
-            <div className="bg-white/10 backdrop-blur-sm p-3 rounded-lg border border-gray-800">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 bg-red-500 rounded-full"></div>
-                  <span className="text-sm text-gray-900 font-medium">{t('staking.notConnected')}</span>
-                </div>
-                <Button
-                  size="sm"
-                  variant="outline"
-                  className="border-gray-800 text-gray-900 hover:bg-gray-900 hover:text-white bg-white/60 cursor-pointer"
-                >
-                  {t('staking.connectWallet')}
-                </Button>
-              </div>
-            </div>
-
             {/* Swap Instructions */}
             <div className="bg-blue-900/20 backdrop-blur-sm p-4 rounded-lg border border-blue-700/50">
               <div className="text-sm text-gray-900 space-y-2">
@@ -267,7 +254,7 @@ const StakingInterface: React.FC<StakingInterfaceProps> = ({
               </div>
             </div>
 
-            <Button className="w-full bg-gray-900 hover:bg-gray-800 text-white font-bold shadow-lg cursor-pointer" size="lg">
+            <Button onClick={() => handleSwap()} className="w-full bg-gray-900 hover:bg-gray-800 text-white font-bold shadow-lg cursor-pointer" size="lg">
               <DollarSign className="w-4 h-4 mr-2" />
               {t('staking.swap')}
             </Button>
