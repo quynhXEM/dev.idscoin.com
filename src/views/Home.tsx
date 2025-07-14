@@ -94,6 +94,7 @@ export default function IDSStakingPlatform() {
         sessionStorage.setItem("idscoin_visited", "1");
       }
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const tooltips = {

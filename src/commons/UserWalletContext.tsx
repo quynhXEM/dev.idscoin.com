@@ -96,7 +96,7 @@ export function UserWalletProvider({ children }: { children: ReactNode }) {
       const chainId = await provider.request({ method: "eth_chainId" });
       setWallet({ address: accounts[0], chainId: parseInt(chainId, 16) });
     } catch (err) {
-      // console.error("Kết nối ví thất bại", err);
+      console.error("Kết nối ví thất bại", err);
       setWallet(null);
     }
   };
