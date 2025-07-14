@@ -2,7 +2,7 @@
 
 import type React from "react"
 
-import { useState, useRef, useEffect } from "react"
+import { useState } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -30,6 +30,7 @@ import {
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import LocaleDropdown from "@/commons/LocaleDropdown"
 import { useTranslations } from "next-intl"
+import { Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip"
 
 export default function IDSStakingPlatform() {
   const t = useTranslations("home")
@@ -47,17 +48,12 @@ export default function IDSStakingPlatform() {
   const [copied, setCopied] = useState(false)
   const [membershipType, setMembershipType] = useState<"free" | "vip">("free")
   const [showVipModal, setShowVipModal] = useState(false)
-  const [activeTooltip, setActiveTooltip] = useState<string | null>(null)
-  const [tooltipPosition, setTooltipPosition] = useState<{ [key: string]: string }>({})
   const [selectedChain, setSelectedChain] = useState("ethereum")
   const [swapAmount, setSwapAmount] = useState("")
   const [showCommissionModal, setShowCommissionModal] = useState(false)
   const [showRewardsModal, setShowRewardsModal] = useState(false)
   const [showInfoModal, setShowInfoModal] = useState(false)
   const [vipSelectedChain, setVipSelectedChain] = useState("ethereum")
-  const [isMobile, setIsMobile] = useState(false)
-
-  const tooltipRefs = useRef<{ [key: string]: HTMLDivElement | null }>({})
 
   const referralLink = "https://ids-community.com/ref/USER123456"
 
@@ -78,125 +74,6 @@ export default function IDSStakingPlatform() {
     locked: t('tooltips.locked'),
     stakeProgress: t('tooltips.stakeProgress'),
   }
-
-  const calculateTooltipPosition = (tooltipId: string, iconElement: HTMLElement) => {
-    const tooltip = tooltipRefs.current[tooltipId]
-    if (!tooltip) return "bottom"
-
-    const iconRect = iconElement.getBoundingClientRect()
-    const viewportWidth = window.innerWidth
-    const viewportHeight = window.innerHeight
-    const headerHeight = 80
-    const isMobile = viewportWidth < 768
-
-    if (isMobile) {
-      // Get tooltip dimensions
-      const tooltipRect = tooltip.getBoundingClientRect()
-      const tooltipWidth = 240 // w-60 = 240px
-      const tooltipHeight = tooltipRect.height || 120 // estimated height
-
-      // Calculate available space in each direction
-      const spaceLeft = iconRect.left
-      const spaceRight = viewportWidth - iconRect.right
-      const spaceTop = iconRect.top - headerHeight
-      const spaceBottom = viewportHeight - iconRect.bottom
-
-      // Determine best position based on available space
-      if (spaceRight >= tooltipWidth) {
-        return "right" // Show to the right if there's enough space
-      } else if (spaceLeft >= tooltipWidth) {
-        return "left" // Show to the left if right doesn't fit
-      } else if (spaceBottom >= tooltipHeight) {
-        return "bottom-center" // Show below, centered within viewport
-      } else if (spaceTop >= tooltipHeight) {
-        return "top-center" // Show above, centered within viewport
-      } else {
-        return "mobile-overlay" // Use overlay if nothing fits
-      }
-    }
-
-    // Desktop positioning logic (existing)
-    const tooltipRect = tooltip.getBoundingClientRect()
-    const wouldOverflowRight = iconRect.left + tooltipRect.width / 2 > viewportWidth - 20
-    const wouldOverflowLeft = iconRect.left - tooltipRect.width / 2 < 20
-    const wouldHitHeader = iconRect.top - tooltipRect.height < headerHeight + 20
-    const wouldOverflowBottom = iconRect.bottom + tooltipRect.height > viewportHeight - 20
-
-    if (wouldHitHeader && !wouldOverflowBottom) {
-      return "bottom"
-    } else if (wouldOverflowBottom && !wouldHitHeader) {
-      return "top"
-    } else if (wouldOverflowRight && !wouldOverflowLeft) {
-      return "left"
-    } else if (wouldOverflowLeft && !wouldOverflowRight) {
-      return "right"
-    } else {
-      return "top"
-    }
-  }
-
-  const handleTooltipShow = (tooltipId: string, event: React.MouseEvent<HTMLElement>) => {
-    const iconElement = event.currentTarget
-    const position = calculateTooltipPosition(tooltipId, iconElement)
-
-    setTooltipPosition((prev) => ({ ...prev, [tooltipId]: position }))
-    setActiveTooltip(tooltipId)
-  }
-
-  const getTooltipClasses = (tooltipId: string) => {
-    const position = tooltipPosition[tooltipId] || "top"
-    // Sử dụng biến isMobile đã được xác định ở client
-    if (position === "mobile-overlay") {
-      return "fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-72 max-w-[85vw] p-4 bg-gray-800 border border-gray-700 rounded-lg shadow-2xl text-sm text-gray-300 z-[70]"
-    }
-    const baseClasses = isMobile
-      ? "absolute w-60 p-3 bg-gray-800 border border-gray-700 rounded-lg shadow-lg text-xs text-gray-300"
-      : "absolute w-64 p-3 bg-gray-800 border border-gray-700 rounded-lg shadow-lg text-xs text-gray-300"
-    switch (position) {
-      case "top":
-        return `${baseClasses} bottom-full left-1/2 transform -translate-x-1/2 mb-2`
-      case "bottom":
-        return `${baseClasses} top-full left-1/2 transform -translate-x-1/2 mt-2`
-      case "left":
-        return `${baseClasses} right-full top-1/2 transform -translate-y-1/2 mr-2`
-      case "right":
-        return `${baseClasses} left-full top-1/2 transform -translate-y-1/2 ml-2`
-      case "bottom-center":
-        return `${baseClasses} top-full left-1/2 transform -translate-x-1/2 mt-2 max-w-[90vw]`
-      case "top-center":
-        return `${baseClasses} bottom-full left-1/2 transform -translate-x-1/2 mb-2 max-w-[90vw]`
-      default:
-        return `${baseClasses} bottom-full left-1/2 transform -translate-x-1/2 mb-2`
-    }
-  }
-
-  const getArrowClasses = (tooltipId: string) => {
-    const position = tooltipPosition[tooltipId] || "top"
-
-    // No arrow for mobile overlay
-    if (position === "mobile-overlay") {
-      return "hidden"
-    }
-
-    switch (position) {
-      case "top":
-      case "top-center":
-        return "absolute top-full left-1/2 transform -translate-x-1/2 border-4 border-transparent border-t-gray-800"
-      case "bottom":
-      case "bottom-center":
-        return "absolute bottom-full left-1/2 transform -translate-x-1/2 border-4 border-transparent border-b-gray-800"
-      case "left":
-        return "absolute left-full top-1/2 transform -translate-y-1/2 border-4 border-transparent border-l-gray-800"
-      case "right":
-        return "absolute right-full top-1/2 transform -translate-y-1/2 border-4 border-transparent border-r-gray-800"
-      default:
-        return "absolute top-full left-1/2 transform -translate-x-1/2 border-4 border-transparent border-t-gray-800"
-    }
-  }
-
-  useEffect(() => {
-    setIsMobile(typeof window !== "undefined" && window.innerWidth < 768)
-  }, [])
 
   return (
     <div className="min-h-screen bg-black text-white">
@@ -254,29 +131,15 @@ export default function IDSStakingPlatform() {
                   <div className="flex items-center gap-1 mb-1">
                     <p className="text-gray-400 text-sm">{t('stats.totalTvl')}</p>
                     <div className="relative">
-                      <div
-                        className="p-1 -m-1 cursor-help transition-colors rounded"
-                        onMouseEnter={(e) => handleTooltipShow("tvl", e)}
-                        onMouseLeave={() => setActiveTooltip(null)}
-                        onClick={(e) => {
-                          e.preventDefault()
-                          setActiveTooltip(activeTooltip === "tvl" ? null : "tvl")
-                          if (activeTooltip !== "tvl") {
-                            handleTooltipShow("tvl", e)
-                          }
-                        }}
-                      >
-                        <Info className="w-3 h-3 text-gray-500 hover:text-blue-400 transition-colors" />
-                      </div>
-                      {activeTooltip === "tvl" && (
-                        <div
-                          ref={(el) => (tooltipRefs.current.tvl = el)}
-                          className={`${getTooltipClasses("tvl")} z-[60]`}
-                        >
-                          {tooltips.tvl}
-                          <div className={getArrowClasses("tvl")}></div>
-                        </div>
-                      )}
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <span className="p-1 -m-1 cursor-help transition-colors rounded">
+                            <Info className="w-3 h-3 text-gray-500 hover:text-blue-400 transition-colors" />
+                          </span>
+                        </TooltipTrigger>
+                        <TooltipContent side="top">{tooltips.tvl}</TooltipContent>
+                      </Tooltip>
+                      {/* Xóa các logic liên quan đến tooltip custom cũ */}
                     </div>
                   </div>
                   <p className="text-2xl font-bold">$2.4M</p>
@@ -293,29 +156,15 @@ export default function IDSStakingPlatform() {
                   <div className="flex items-center gap-1 mb-1">
                     <p className="text-gray-400 text-sm">{t('stats.averageApy')}</p>
                     <div className="relative">
-                      <div
-                        className="p-1 -m-1 cursor-help transition-colors rounded"
-                        onMouseEnter={(e) => handleTooltipShow("apy", e)}
-                        onMouseLeave={() => setActiveTooltip(null)}
-                        onClick={(e) => {
-                          e.preventDefault()
-                          setActiveTooltip(activeTooltip === "apy" ? null : "apy")
-                          if (activeTooltip !== "apy") {
-                            handleTooltipShow("apy", e)
-                          }
-                        }}
-                      >
-                        <Info className="w-3 h-3 text-gray-500 hover:text-blue-400 transition-colors" />
-                      </div>
-                      {activeTooltip === "apy" && (
-                        <div
-                          ref={(el) => (tooltipRefs.current.apy = el)}
-                          className={`${getTooltipClasses("apy")} z-[60]`}
-                        >
-                          {tooltips.apy}
-                          <div className={getArrowClasses("apy")}></div>
-                        </div>
-                      )}
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <span className="p-1 -m-1 cursor-help transition-colors rounded">
+                            <Info className="w-3 h-3 text-gray-500 hover:text-blue-400 transition-colors" />
+                          </span>
+                        </TooltipTrigger>
+                        <TooltipContent side="top">{tooltips.apy}</TooltipContent>
+                      </Tooltip>
+                      {/* Xóa các logic liên quan đến tooltip custom cũ */}
                     </div>
                   </div>
                   <p className="text-2xl font-bold">13.5%</p>
@@ -332,29 +181,15 @@ export default function IDSStakingPlatform() {
                   <div className="flex items-center gap-1 mb-1">
                     <p className="text-gray-400 text-sm">{t('stats.users')}</p>
                     <div className="relative">
-                      <div
-                        className="p-1 -m-1 cursor-help transition-colors rounded"
-                        onMouseEnter={(e) => handleTooltipShow("users", e)}
-                        onMouseLeave={() => setActiveTooltip(null)}
-                        onClick={(e) => {
-                          e.preventDefault()
-                          setActiveTooltip(activeTooltip === "users" ? null : "users")
-                          if (activeTooltip !== "users") {
-                            handleTooltipShow("users", e)
-                          }
-                        }}
-                      >
-                        <Info className="w-3 h-3 text-gray-500 hover:text-blue-400 transition-colors" />
-                      </div>
-                      {activeTooltip === "users" && (
-                        <div
-                          ref={(el) => (tooltipRefs.current.users = el)}
-                          className={`${getTooltipClasses("users")} z-[60]`}
-                        >
-                          {tooltips.users}
-                          <div className={getArrowClasses("users")}></div>
-                        </div>
-                      )}
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <span className="p-1 -m-1 cursor-help transition-colors rounded">
+                            <Info className="w-3 h-3 text-gray-500 hover:text-blue-400 transition-colors" />
+                          </span>
+                        </TooltipTrigger>
+                        <TooltipContent side="top">{tooltips.users}</TooltipContent>
+                      </Tooltip>
+                      {/* Xóa các logic liên quan đến tooltip custom cũ */}
                     </div>
                   </div>
                   <p className="text-2xl font-bold">12,847</p>
@@ -371,29 +206,15 @@ export default function IDSStakingPlatform() {
                   <div className="flex items-center gap-1 mb-1">
                     <p className="text-gray-400 text-sm">{t('stats.locked')}</p>
                     <div className="relative">
-                      <div
-                        className="p-1 -m-1 cursor-help transition-colors rounded"
-                        onMouseEnter={(e) => handleTooltipShow("locked", e)}
-                        onMouseLeave={() => setActiveTooltip(null)}
-                        onClick={(e) => {
-                          e.preventDefault()
-                          setActiveTooltip(activeTooltip === "locked" ? null : "locked")
-                          if (activeTooltip !== "locked") {
-                            handleTooltipShow("locked", e)
-                          }
-                        }}
-                      >
-                        <Info className="w-3 h-3 text-gray-500 hover:text-blue-400 transition-colors" />
-                      </div>
-                      {activeTooltip === "locked" && (
-                        <div
-                          ref={(el) => (tooltipRefs.current.locked = el)}
-                          className={`${getTooltipClasses("locked")} z-[60]`}
-                        >
-                          {tooltips.locked}
-                          <div className={getArrowClasses("locked")}></div>
-                        </div>
-                      )}
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <span className="p-1 -m-1 cursor-help transition-colors rounded">
+                            <Info className="w-3 h-3 text-gray-500 hover:text-blue-400 transition-colors" />
+                          </span>
+                        </TooltipTrigger>
+                        <TooltipContent side="top">{tooltips.locked}</TooltipContent>
+                      </Tooltip>
+                      {/* Xóa các logic liên quan đến tooltip custom cũ */}
                     </div>
                   </div>
                   <p className="text-2xl font-bold">8.2M</p>
@@ -812,29 +633,15 @@ export default function IDSStakingPlatform() {
                     <div className="flex items-center gap-1">
                       <span className="text-gray-300">{t('overview.stakeProgress')}:</span>
                       <div className="relative">
-                        <div
-                          className="p-1 -m-1 cursor-help transition-colors rounded"
-                          onMouseEnter={(e) => handleTooltipShow("stakeProgress", e)}
-                          onMouseLeave={() => setActiveTooltip(null)}
-                          onClick={(e) => {
-                            e.preventDefault()
-                            setActiveTooltip(activeTooltip === "stakeProgress" ? null : "stakeProgress")
-                            if (activeTooltip !== "stakeProgress") {
-                              handleTooltipShow("stakeProgress", e)
-                            }
-                          }}
-                        >
-                          <Info className="w-3 h-3 text-gray-500 hover:text-blue-400 transition-colors" />
-                        </div>
-                        {activeTooltip === "stakeProgress" && (
-                          <div
-                            ref={(el) => (tooltipRefs.current.stakeProgress = el)}
-                            className={`${getTooltipClasses("stakeProgress")} z-[60]`}
-                          >
-                            {t('overview.stakeProgressDescription')}
-                            <div className={getArrowClasses("stakeProgress")}></div>
-                          </div>
-                        )}
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <span className="p-1 -m-1 cursor-help transition-colors rounded">
+                              <Info className="w-3 h-3 text-gray-500 hover:text-blue-400 transition-colors" />
+                            </span>
+                          </TooltipTrigger>
+                          <TooltipContent side="top">{tooltips.stakeProgress}</TooltipContent>
+                        </Tooltip>
+                        {/* Xóa các logic liên quan đến tooltip custom cũ */}
                       </div>
                     </div>
                     <span className="text-gray-300">68%</span>
@@ -1612,9 +1419,7 @@ export default function IDSStakingPlatform() {
       )}
 
       {/* Mobile Tooltip Backdrop */}
-      {activeTooltip && tooltipPosition[activeTooltip] === "mobile-overlay" && (
-        <div className="fixed inset-0 bg-black/60 z-[65] md:hidden" onClick={() => setActiveTooltip(null)} />
-      )}
+      {/* Xóa các logic liên quan đến tooltip custom cũ */}
     </div>
   )
 }
