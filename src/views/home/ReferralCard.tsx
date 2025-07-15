@@ -3,7 +3,7 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/com
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
-import { Gift, Shield, Copy, UserPlus } from "lucide-react"
+import { Gift, Shield, Copy, UserPlus, Share2 } from "lucide-react"
 
 interface ReferralCardProps {
   t: (key: string) => string
@@ -22,7 +22,7 @@ const ReferralCard: React.FC<ReferralCardProps> = ({
     <CardHeader>
       <div className="flex items-center justify-between">
         <CardTitle className="flex items-center text-white">
-          <Gift className="w-5 h-5 mr-2 text-blue-400" />
+          <Share2 className="w-5 h-5 mr-2 text-blue-400" />
           {t('referral.introduce')}
         </CardTitle>
         <Badge

@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select"
-import { Lock, DollarSign } from "lucide-react"
+import { Lock, DollarSign, Zap } from "lucide-react"
 
 interface StakingInterfaceProps {
   t: (key: string) => string
@@ -27,7 +27,7 @@ const StakingInterface: React.FC<StakingInterfaceProps> = ({
   <Card className="bg-gradient-to-br from-orange-600 via-orange-500 to-amber-500 border-orange-400 shadow-lg shadow-orange-500/30 ring-1 ring-orange-400/50">
     <CardHeader>
       <CardTitle className="flex items-center text-gray-900 font-bold text-lg">
-        <Lock className="w-5 h-5 mr-2 text-gray-900" />
+        <Zap className="w-5 h-5 mr-2 text-gray-900" />
         {t('staking.stake')}
       </CardTitle>
       <CardDescription className="text-gray-800 font-medium">

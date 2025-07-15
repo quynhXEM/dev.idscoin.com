@@ -150,6 +150,7 @@ export default function IDSStakingPlatform() {
             </div>
             <PortfolioOverview
               t={t}
+              tooltips={tooltips}
               setShowRewardsModal={setShowRewardsModal}
             />
           </div>
