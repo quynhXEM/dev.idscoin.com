@@ -3,19 +3,20 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/com
 import { Button } from "@/components/ui/button"
 import { Gift } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
+import { useUserStatus } from "@/commons/UserWalletContext"
 
 interface CommissionDetailsModalProps {
   t: (key: string) => string
   show: boolean
   onClose: () => void
-  membershipType: "free" | "vip"
   setShowVipModal: (v: boolean) => void
 }
 
 const CommissionDetailsModal: React.FC<CommissionDetailsModalProps> = ({
-  t, show, onClose, membershipType, setShowVipModal
+  t, show, onClose, setShowVipModal
 }) => {
-  if (!show) return null
+  const { isVip } = useUserStatus();
+  if (!show) return;
   return (
     <div
           className="fixed inset-0 bg-black/80 flex items-center justify-center z-50"
@@ -40,20 +41,20 @@ const CommissionDetailsModal: React.FC<CommissionDetailsModalProps> = ({
                 <div className="flex items-center justify-between mb-3">
                   <h3 className="font-semibold text-white">{t('referral.currentStatus')}</h3>
                   <Badge
-                    variant={membershipType === "vip" ? "default" : "secondary"}
+                    variant={isVip ? "default" : "secondary"}
                     className={
-                      membershipType === "vip"
+                      isVip
                         ? "bg-gradient-to-r from-blue-500 to-purple-500 text-white"
                         : "bg-gray-700 text-gray-300 hover:bg-gray-600 hover:text-gray-200"
                     }
                   >
-                    {membershipType === "vip" ? "VIP" : "Miễn phí"}
+                    {isVip ? "VIP" : "Miễn phí"}
                   </Badge>
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div className="text-center">
                     <div className="text-2xl font-bold text-emerald-400">
-                      {membershipType === "free" ? "5%" : "50%"}
+                      {!isVip ? "5%" : "50%"}
                     </div>
                     <div className="text-sm text-gray-400">{t('referral.usdtRate')}</div>
                   </div>
@@ -74,7 +75,7 @@ const CommissionDetailsModal: React.FC<CommissionDetailsModalProps> = ({
                       <div className="text-sm text-gray-400">{t('referral.1F1Upgrade')}</div>
                     </div>
                     <div className="text-right">
-                      <div className="font-bold text-emerald-400">+${membershipType === "free" ? "5.00" : "50.00"}</div>
+                      <div className="font-bold text-emerald-400">+${!isVip ? "5.00" : "50.00"}</div>
                       <div className="text-xs text-gray-500">{t('referral.fromUpgrade100')}</div>
                     </div>
                   </div>
@@ -86,7 +87,7 @@ const CommissionDetailsModal: React.FC<CommissionDetailsModalProps> = ({
                     </div>
                     <div className="text-right">
                       <div className="font-bold text-emerald-400">
-                        +${membershipType === "free" ? "15.00" : "150.00"}
+                        +${!isVip ? "15.00" : "150.00"}
                       </div>
                       <div className="text-xs text-gray-500">{t('referral.fromUpgrade300')}</div>
                     </div>
@@ -99,7 +100,7 @@ const CommissionDetailsModal: React.FC<CommissionDetailsModalProps> = ({
                     </div>
                     <div className="text-right">
                       <div className="font-bold text-emerald-400">
-                        +${membershipType === "free" ? "40.00" : "400.00"}
+                        +${!isVip ? "40.00" : "400.00"}
                       </div>
                       <div className="text-xs text-gray-500">{t('referral.fromUpgrade800')}</div>
                     </div>
@@ -112,7 +113,7 @@ const CommissionDetailsModal: React.FC<CommissionDetailsModalProps> = ({
                     </div>
                     <div className="text-right">
                       <div className="font-bold text-emerald-400">
-                        +${membershipType === "free" ? "60.00" : "600.00"}
+                        +${!isVip ? "60.00" : "600.00"}
                       </div>
                       <div className="text-xs text-gray-500">{t('referral.fromUpgrade1200')}</div>
                     </div>
@@ -136,7 +137,7 @@ const CommissionDetailsModal: React.FC<CommissionDetailsModalProps> = ({
                     </div>
                     <div className="text-right">
                       <div className="font-bold text-emerald-400">
-                        +${membershipType === "free" ? "25.00" : "250.00"}
+                        +${!isVip ? "25.00" : "250.00"}
                       </div>
                     </div>
                   </div>
@@ -153,7 +154,7 @@ const CommissionDetailsModal: React.FC<CommissionDetailsModalProps> = ({
                     </div>
                     <div className="text-right">
                       <div className="font-bold text-emerald-400">
-                        +${membershipType === "free" ? "20.00" : "200.00"}
+                        +${!isVip ? "20.00" : "200.00"}
                       </div>
                     </div>
                   </div>
@@ -170,14 +171,14 @@ const CommissionDetailsModal: React.FC<CommissionDetailsModalProps> = ({
                     </div>
                     <div className="text-right">
                       <div className="font-bold text-emerald-400">
-                        +${membershipType === "free" ? "15.00" : "150.00"}
+                        +${!isVip ? "15.00" : "150.00"}
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
 
-              {membershipType === "free" && (
+              {!isVip && (
                 <div className="p-4 bg-blue-900/20 rounded-lg border border-blue-700/50">
                   <div className="text-center">
                     <div className="text-blue-300 font-semibold mb-2">{t('vip.tip')}</div>

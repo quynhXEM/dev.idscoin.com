@@ -5,21 +5,21 @@ import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select"
 import { DollarSign } from "lucide-react"
+import { useUserStatus } from "@/commons/UserWalletContext"
 
 interface VipUpgradeModalProps {
   t: (key: string) => string
   show: boolean
   onClose: () => void
-  membershipType: "free" | "vip"
-  setMembershipType: (v: "free" | "vip") => void
   vipSelectedChain: string
   setVipSelectedChain: (v: string) => void
 }
 
 const VipUpgradeModal: React.FC<VipUpgradeModalProps> = ({
-  t, show, onClose, membershipType, setMembershipType, vipSelectedChain, setVipSelectedChain
+  t, show, onClose, vipSelectedChain, setVipSelectedChain
 }) => {
-  if (!show) return null
+  const { setIsVip } = useUserStatus();
+  if (!show) return;
   return (
     <div
       className="fixed inset-0 bg-black/80 flex items-center justify-center z-50"
@@ -50,7 +50,7 @@ const VipUpgradeModal: React.FC<VipUpgradeModalProps> = ({
                 <SelectValue placeholder={t('vip.selectChain')} />
               </SelectTrigger>
               <SelectContent className="bg-gray-800 border-gray-700 text-white">
-                <SelectItem value="ethereum" className="text-white hover:bg-gray-700 focus:bg-gray-700">
+                <SelectItem value="1" className="text-white hover:bg-gray-700 focus:bg-gray-700">
                   <div className="flex items-center gap-2">
                     <span className="text-lg">⟠</span>
                     <div>
@@ -59,7 +59,7 @@ const VipUpgradeModal: React.FC<VipUpgradeModalProps> = ({
                     </div>
                   </div>
                 </SelectItem>
-                <SelectItem value="bsc" className="text-white hover:bg-gray-700 focus:bg-gray-700">
+                <SelectItem value="56" className="text-white hover:bg-gray-700 focus:bg-gray-700">
                   <div className="flex items-center gap-2">
                     <span className="text-lg">🟡</span>
                     <div>
@@ -68,7 +68,7 @@ const VipUpgradeModal: React.FC<VipUpgradeModalProps> = ({
                     </div>
                   </div>
                 </SelectItem>
-                <SelectItem value="polygon" className="text-white hover:bg-gray-700 focus:bg-gray-700">
+                <SelectItem value="137" className="text-white hover:bg-gray-700 focus:bg-gray-700">
                   <div className="flex items-center gap-2">
                     <span className="text-lg">🟣</span>
                     <div>
@@ -77,7 +77,7 @@ const VipUpgradeModal: React.FC<VipUpgradeModalProps> = ({
                     </div>
                   </div>
                 </SelectItem>
-                <SelectItem value="arbitrum" className="text-white hover:bg-gray-700 focus:bg-gray-700">
+                <SelectItem value="42161" className="text-white hover:bg-gray-700 focus:bg-gray-700">
                   <div className="flex items-center gap-2">
                     <span className="text-lg">🔵</span>
                     <div>
@@ -118,7 +118,7 @@ const VipUpgradeModal: React.FC<VipUpgradeModalProps> = ({
             <Button
               className="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 cursor-pointer"
               onClick={() => {
-                setMembershipType("vip")
+                setIsVip(true)
                 onClose()
               }}
             >

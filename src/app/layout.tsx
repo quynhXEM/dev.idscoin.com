@@ -1,4 +1,5 @@
 import "./globals.css";
+import 'react-tooltip/dist/react-tooltip.css'
 import { chakraPetch } from "@/assets/font";
 
 export default function RootLayout({

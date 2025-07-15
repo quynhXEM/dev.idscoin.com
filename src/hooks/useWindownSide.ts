@@ -6,7 +6,7 @@ export default function useWindowSize() {
 
   useEffect(() => {
     function updateSize() {
-      setSize({ width: window.innerWidth, height: window.innerHeight });
+      setSize({ width: window.innerWidth -300, height: window.innerHeight});
     }
 
     updateSize(); // Gọi lần đầu khi component mount

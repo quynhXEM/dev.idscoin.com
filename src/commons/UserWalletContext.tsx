@@ -31,7 +31,7 @@ export type WalletContextType = {
   connectWallet: () => void;
   sendTransaction: (params: SendTxParams) => Promise<any>;
   getBalance: (address: string, chainId?: number, tokenAddress?: string) => Promise<string>;
-  balance: string;
+  balance: {ids: string, usdt: string};
 };
 
 const UserWalletContext = createContext<WalletContextType | undefined>(

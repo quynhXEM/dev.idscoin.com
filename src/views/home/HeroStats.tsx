@@ -1,12 +1,9 @@
 import React from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { TrendingUp, BarChart3, Users, Lock, Info } from "lucide-react";
-import {
-  Tooltip,
-  TooltipTrigger,
-  TooltipContent,
-} from "@/components/ui/tooltip";
 import useWindowSize from "@/hooks/useWindownSide";
+import { Button } from "@/components/ui/button";
+import { Tooltip } from "react-tooltip";
 
 interface HeroStatsProps {
   t: (key: string) => string;
@@ -23,16 +20,17 @@ const HeroStats: React.FC<HeroStatsProps> = ({ t, tooltips }) => {
           <div className="flex items-center justify-between">
             <div>
               <div className="flex items-center gap-1 mb-1">
-                <p className="text-gray-400 text-sm">{t("stats.totalTvl")}</p>
-                <Tooltip >
-                  <TooltipTrigger asChild>
-                    <span className="p-1 -m-1 cursor-help transition-colors rounded">
-                      <Info className="w-3 h-3 text-gray-500 hover:text-blue-400 transition-colors" />
-                    </span>
-                  </TooltipTrigger>
-                  <TooltipContent side="top" className="text-wrap" style={{ maxWidth: width}}>
-                    {tooltips.tvl}
-                  </TooltipContent>
+                <p className="text-gray-400 text-sm inline-flex flex-wrap text-wrap items-center gap-1">
+                  {t("stats.totalTvl")}
+                  <Info className="tooltips-tvl w-3 h-3 text-gray-500 cursor-help hover:text-blue-400 transition-colors" />
+                </p>
+                <Tooltip
+                  anchorSelect=".tooltips-tvl"
+                  place="top"
+                  className="text-wrap outline-none"
+                  style={{ maxWidth: width }}
+                >
+                  {tooltips.tvl}
                 </Tooltip>
               </div>
               <p className="text-2xl font-bold">$2.4M</p>
@@ -45,18 +43,19 @@ const HeroStats: React.FC<HeroStatsProps> = ({ t, tooltips }) => {
       <Card className="bg-gray-900 border-gray-800 text-white">
         <CardContent className="px-6">
           <div className="flex items-center justify-between">
-            <div>
-              <div className="flex items-center gap-1 mb-1">
-                <p className="text-gray-400 text-sm">{t("stats.averageApy")}</p>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <span className="p-1 -m-1 cursor-help transition-colors rounded">
-                      <Info className="w-3 h-3 text-gray-500 hover:text-blue-400 transition-colors" />
-                    </span>
-                  </TooltipTrigger>
-                  <TooltipContent side="top" className="text-wrap" style={{ maxWidth: width}}>
-                    {tooltips.apy}
-                  </TooltipContent>
+            <div className="">
+              <div className="items-center inline-flex gap-1 mb-1">
+                <p className="text-gray-400 text-sm inline-flex flex-wrap text-wrap items-center gap-1">
+                  {t("stats.averageApy")}
+                  <Info className="tooltips-apy w-3 h-3 text-gray-500 cursor-help hover:text-blue-400 transition-colors" />
+                </p>
+                <Tooltip
+                  anchorSelect=".tooltips-apy"
+                  place="top"
+                  className="text-wrap outline-none"
+                  style={{ maxWidth: width }}
+                >
+                  {tooltips.apy}
                 </Tooltip>
               </div>
               <p className="text-2xl font-bold">13.5%</p>
@@ -71,16 +70,17 @@ const HeroStats: React.FC<HeroStatsProps> = ({ t, tooltips }) => {
           <div className="flex items-center justify-between">
             <div>
               <div className="flex items-center gap-1 mb-1">
-                <p className="text-gray-400 text-sm">{t("stats.users")}</p>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <span className="p-1 -m-1 cursor-help transition-colors rounded">
-                      <Info className="w-3 h-3 text-gray-500 hover:text-blue-400 transition-colors" />
-                    </span>
-                  </TooltipTrigger>
-                  <TooltipContent side="top" className="text-wrap" style={{ maxWidth: width}}>
-                    {tooltips.users}
-                  </TooltipContent>
+              <p className="text-gray-400 text-sm inline-flex flex-wrap text-wrap items-center gap-1">
+                  {t("stats.users")}
+                  <Info className="tooltips-users w-3 h-3 text-gray-500 cursor-help hover:text-blue-400 transition-colors" />
+                </p>
+                <Tooltip
+                  anchorSelect=".tooltips-users"
+                  place="top"
+                  className="text-wrap outline-none"
+                  style={{ maxWidth: width }}
+                >
+                  {tooltips.users}
                 </Tooltip>
               </div>
               <p className="text-2xl font-bold">12,847</p>
@@ -95,16 +95,17 @@ const HeroStats: React.FC<HeroStatsProps> = ({ t, tooltips }) => {
           <div className="flex items-center justify-between">
             <div>
               <div className="flex items-center gap-1 mb-1">
-                <p className="text-gray-400 text-sm">{t("stats.locked")}</p>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <span className="p-1 -m-1 cursor-help transition-colors rounded">
-                      <Info className="w-3 h-3 text-gray-500 hover:text-blue-400 transition-colors" />
-                    </span>
-                  </TooltipTrigger>
-                  <TooltipContent side="top" className="text-wrap" style={{ maxWidth: width}}>
-                    {tooltips.locked}
-                  </TooltipContent>
+                <p className="text-gray-400 text-sm inline-flex flex-wrap text-wrap items-center gap-1">
+                  {t("stats.locked")}
+                  <Info className="tooltips-locked w-3 h-3 text-gray-500 cursor-help hover:text-blue-400 transition-colors" />
+                </p>
+                <Tooltip
+                  anchorSelect=".tooltips-locked"
+                  place="top"
+                  className="text-wrap outline-none"
+                  style={{ maxWidth: width }}
+                >
+                  {tooltips.locked}
                 </Tooltip>
               </div>
               <p className="text-2xl font-bold">8.2M</p>
