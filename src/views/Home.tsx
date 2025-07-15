@@ -17,6 +17,7 @@ import { StakingInterface } from "./home/StakingInterface";
 import { ReferralSection } from "./home/ReferralCard";
 import { PortfolioOverview } from "./home/PortfolioOverview";
 import { usdtContracts } from "@/lib/crypto";
+import { useUserWallet } from "@/commons/UserWalletContext";
 
 export default function IDSStakingPlatform() {
   const t = useTranslations("home");
