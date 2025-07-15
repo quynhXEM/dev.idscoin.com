@@ -70,6 +70,7 @@
       "arbNetwork": "ARB Network"
     },
     "referral": {
+      "connectWallet": "Kết nối ví",
       "introduce": "Giới thiệu bạn bè",
       "earn5": "Nhận hoa hồng 5% USDT khi F1 nâng cấp VIP",
       "earn50": "Nhận hoa hồng 50% USDT khi F1 nâng cấp VIP",
@@ -104,6 +105,7 @@
       "5VipUpgrades": "5 lần nâng cấp VIP",
       "4VipUpgrades": "4 lần nâng cấp VIP",
       "3VipUpgrades": "3 lần nâng cấp VIP",
+
       "close": "Đóng"
     },
     "vip": {

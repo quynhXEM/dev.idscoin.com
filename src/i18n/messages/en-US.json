@@ -69,6 +69,7 @@
       "arbNetwork": "ARB Network"
     },
     "referral": {
+      "connectWallet": "Connect wallet",
       "introduce": "Refer friends",
       "earn5": "Earn 5% USDT commission when F1 upgrades to VIP",
       "earn50": "Earn 50% USDT commission when F1 upgrades to VIP",

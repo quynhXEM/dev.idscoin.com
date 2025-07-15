@@ -35,7 +35,6 @@ export default function IDSStakingPlatform() {
       animation: marquee 15s linear infinite;
     }
   `}</style>;
-  const [membershipType, setMembershipType] = useState<"free" | "vip">("free");
   const [showVipModal, setShowVipModal] = useState(false);
   const [showCommissionModal, setShowCommissionModal] = useState(false);
   const [showRewardsModal, setShowRewardsModal] = useState(false);
@@ -47,7 +46,7 @@ export default function IDSStakingPlatform() {
     if (typeof window !== "undefined") {
       const visited = sessionStorage.getItem("idscoin_visited");
       if (visited) {
-        // connectWallet();
+        connectWallet();
       } else {
         sessionStorage.setItem("idscoin_visited", "1");
       }

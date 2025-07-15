@@ -25,7 +25,7 @@ import {
 import { useUserStatus, useUserWallet } from "@/commons/UserWalletContext";
 
 interface ReferralSectionProps {
-  t: (key: string) => string;
+  t: (key: string, params?: Record<string, string>) => string;
   onShowVipModal: () => void;
   onShowCommissionModal: () => void;
 }
@@ -71,51 +71,51 @@ export function ReferralSection({
         <CardHeader>
           <CardTitle className="flex items-center text-white">
             <Share2 className="w-5 h-5 mr-2 text-blue-400" />
-            Giới thiệu bạn bè
+            {t("referral.introduce")}
           </CardTitle>
           <CardDescription className="text-gray-400">
-            Kết nối ví để bắt đầu kiếm hoa hồng từ việc giới thiệu bạn bè
+            {t("referral.connectWallet")}
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="text-center p-8 bg-gray-800 rounded-lg border-2 border-dashed border-gray-700">
             <Wallet className="w-16 h-16 mx-auto text-gray-500 mb-4" />
             <h3 className="text-lg font-semibold text-white mb-2">
-              Cần kết nối ví
+              {t("referral.connectWallet")}
             </h3>
             <p className="text-gray-400 text-sm mb-4">
-              Kết nối ví để tạo link giới thiệu và bắt đầu kiếm hoa hồng
+              {t("referral.connectWallet")}
             </p>
             <Button
               className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
               onClick={connectWallet}
             >
               <Wallet className="w-4 h-4 mr-2" />
-              Kết nối ví ngay
+              {t("staking.connectWallet")}
             </Button>
           </div>
 
           <div className="grid grid-cols-2 gap-3">
             <div className="text-center p-3 bg-gray-800 rounded-lg border border-gray-700">
               <div className="text-lg font-bold text-blue-400">5% - 50%</div>
-              <div className="text-xs text-gray-400">Hoa hồng USDT</div>
+              <div className="text-xs text-gray-400">{t("referral.earn5").replace(/\d+%/, "USDT")}</div>
             </div>
             <div className="text-center p-3 bg-gray-800 rounded-lg border border-gray-700">
               <div className="text-lg font-bold text-emerald-400">$100</div>
-              <div className="text-xs text-gray-400">Phí nâng cấp VIP</div>
+              <div className="text-xs text-gray-400">{t("vip.upgradeCost")}</div>
             </div>
           </div>
 
           <div className="p-4 bg-blue-900/20 rounded-lg border border-blue-700/50">
             <div className="text-sm text-blue-300 space-y-2">
               <div className="font-semibold text-blue-200 mb-2">
-                💡 Cách thức hoạt động:
+                💡 {t("referral.detailsDescription")}
               </div>
               <div className="space-y-1 text-blue-200">
-                <div>• Kết nối ví để tạo link giới thiệu cá nhân</div>
-                <div>• Chia sẻ link với bạn bè</div>
-                <div>• Nhận 5% hoa hồng khi F1 nâng cấp VIP ($5 từ $100)</div>
-                <div>• Nâng cấp VIP để nhận 50% hoa hồng ($50 từ $100)</div>
+                <div>• {t("referral.yourLink")}</div>
+                <div>• {t("referral.copy")}</div>
+                <div>• {t("referral.earn5")}</div>
+                <div>• {t("referral.earn50")}</div>
               </div>
             </div>
           </div>
@@ -130,10 +130,10 @@ export function ReferralSection({
         <CardHeader>
           <CardTitle className="flex items-center text-white">
             <Share2 className="w-5 h-5 mr-2 text-blue-400" />
-            Tạo link giới thiệu
+            {t("referral.yourLink")}
           </CardTitle>
           <CardDescription className="text-gray-400">
-            Tạo link giới thiệu cá nhân để bắt đầu kiếm hoa hồng
+            {t("referral.detailsDescription")}
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -141,11 +141,10 @@ export function ReferralSection({
             <div className="text-center mb-4">
               <UserPlus className="w-12 h-12 mx-auto text-yellow-500 mb-3" />
               <h3 className="text-lg font-semibold text-white mb-2">
-                Tạo link giới thiệu
+                {t("referral.yourLink")}
               </h3>
               <p className="text-gray-400 text-sm">
-                Ví đã được kết nối. Vui lòng điền thông tin để tạo link giới
-                thiệu cá nhân.
+                {t("referral.detailsDescription")}
               </p>
             </div>
 
@@ -192,7 +191,7 @@ export function ReferralSection({
                   <User className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
                 </div>
                 <p className="text-xs text-gray-400 mt-1">
-                  Link của bạn sẽ là: idscoin.com/ref/
+                  {t("referral.yourLink")} idscoin.com/ref/
                   {registrationUsername || "username"}
                 </p>
               </div>
@@ -203,7 +202,7 @@ export function ReferralSection({
                 disabled={!registrationEmail || !registrationUsername}
               >
                 <UserPlus className="w-4 h-4 mr-2" />
-                Tạo link giới thiệu
+                {t("referral.yourLink")}
               </Button>
             </div>
           </div>
@@ -212,7 +211,7 @@ export function ReferralSection({
             <div className="flex items-center gap-2 mb-2">
               <div className="w-2 h-2 bg-green-500 rounded-full"></div>
               <span className="text-sm text-green-300 font-medium">
-                Ví đã kết nối
+                {t("staking.connectWallet")}
               </span>
             </div>
             <p className="text-xs text-green-200">Địa chỉ: {wallet?.address}</p>
@@ -221,11 +220,11 @@ export function ReferralSection({
           <div className="grid grid-cols-2 gap-3">
             <div className="text-center p-3 bg-gray-800 rounded-lg border border-gray-700">
               <div className="text-lg font-bold text-blue-400">5% - 50%</div>
-              <div className="text-xs text-gray-400">Hoa hồng USDT</div>
+              <div className="text-xs text-gray-400">{t("referral.earn5").replace(/\d+%/, "USDT")}</div>
             </div>
             <div className="text-center p-3 bg-gray-800 rounded-lg border border-gray-700">
               <div className="text-lg font-bold text-emerald-400">$100</div>
-              <div className="text-xs text-gray-400">Phí nâng cấp VIP</div>
+              <div className="text-xs text-gray-400">{t("vip.upgradeCost")}</div>
             </div>
           </div>
         </CardContent>
@@ -239,7 +238,7 @@ export function ReferralSection({
         <div className="flex items-center justify-between">
           <CardTitle className="flex items-center text-white">
             <Share2 className="w-5 h-5 mr-2 text-blue-400" />
-            Giới thiệu bạn bè
+            {t("referral.introduce")}
           </CardTitle>
           <div className="flex items-center gap-2">
             <Badge
@@ -250,14 +249,14 @@ export function ReferralSection({
                   : "bg-gray-800 text-gray-300 hover:bg-gray-700 hover:text-gray-200"
               }
             >
-              {isVip ? "VIP" : "Miễn phí"}
+              {isVip ? "VIP" : t("referral.copy")}
             </Badge>
           </div>
         </div>
         <CardDescription className="text-gray-400">
           {!isVip
-            ? "Nhận hoa hồng 5% USDT khi F1 nâng cấp VIP"
-            : "Nhận hoa hồng 50% USDT khi F1 nâng cấp VIP"}
+            ? t("referral.earn5")
+            : t("referral.earn50")}
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
@@ -265,9 +264,9 @@ export function ReferralSection({
           <div className="p-4 bg-gray-800 rounded-lg border border-blue-700/50">
             <div className="flex items-center justify-between">
               <div>
-                <div className="font-semibold text-blue-300">Nâng cấp VIP</div>
+                <div className="font-semibold text-blue-300">{t("vip.upgrade")}</div>
                 <div className="text-sm text-blue-400/80">
-                  Nhận 50% hoa hồng thay vì 5%
+                  {t("vip.upgrade50")}
                 </div>
               </div>
               <Button
@@ -275,7 +274,7 @@ export function ReferralSection({
                 className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
                 onClick={onShowVipModal}
               >
-                Nâng cấp $100
+                {t("vip.upgrade100")}
               </Button>
             </div>
           </div>
@@ -285,10 +284,10 @@ export function ReferralSection({
           <div className="text-center mb-3">
             <UserPlus className="w-8 h-8 mx-auto text-blue-400 mb-2" />
             <div className="text-sm font-medium text-blue-300">
-              Link giới thiệu của bạn
+              {t("referral.yourLink")}
             </div>
             <div className="text-xs text-gray-400">
-              Hoa hồng: {!isVip ? "5%" : "50%"} USDT
+              {t("referral.earn", { percent: !isVip ? "5%" : "50%" })}
             </div>
           </div>
 
@@ -310,12 +309,12 @@ export function ReferralSection({
               {copied ? (
                 <>
                   <Shield className="w-4 h-4 mr-1" />
-                  Đã copy
+                  {t("referral.copied")}
                 </>
               ) : (
                 <>
                   <Copy className="w-4 h-4 mr-1" />
-                  Copy
+                  {t("referral.copy")}
                 </>
               )}
             </Button>
@@ -325,25 +324,25 @@ export function ReferralSection({
         <div className="grid grid-cols-2 gap-3">
           <div className="text-center p-3 bg-gray-800 rounded-lg border border-gray-700">
             <div className="text-lg font-bold text-blue-400">12</div>
-            <div className="text-xs text-gray-400">Bạn bè đã tham gia</div>
+            <div className="text-xs text-gray-400">{t("referral.friendsJoined")}</div>
           </div>
           <div className="text-center p-3 bg-gray-800 rounded-lg border border-gray-700">
             <div className="text-lg font-bold text-emerald-400">
               ${!isVip ? "22.84" : "228.35"}
             </div>
-            <div className="text-xs text-gray-400">USDT hoa hồng</div>
+            <div className="text-xs text-gray-400">{t("referral.usdtEarnings")}</div>
           </div>
         </div>
 
         <div className="space-y-2">
           <div className="flex justify-between text-sm">
-            <span className="text-gray-300">Hoa hồng hôm nay:</span>
+            <span className="text-gray-300">{t("referral.todayEarnings")}</span>
             <span className="text-emerald-400">
               +${!isVip ? "0.62" : "6.15"}
             </span>
           </div>
           <div className="flex justify-between text-sm">
-            <span className="text-gray-300">Hoa hồng tháng này:</span>
+            <span className="text-gray-300">{t("referral.monthlyEarnings")}</span>
             <span className="text-emerald-400">
               +${!isVip ? "14.23" : "142.25"}
             </span>
@@ -358,7 +357,7 @@ export function ReferralSection({
             onClick={onShowCommissionModal}
           >
             <Gift className="w-4 h-4 mr-2" />
-            Xem chi tiết hoa hồng
+            {t("referral.viewDetails")}
           </Button>
         </div>
       </CardContent>
