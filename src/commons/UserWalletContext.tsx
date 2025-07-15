@@ -1,5 +1,6 @@
 "use client";
 
+import { usePathname } from "@/i18n/navigation";
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, {
   useContext,
@@ -30,21 +31,41 @@ export type WalletContextType = {
   disconnect: () => void;
   connectWallet: () => void;
   sendTransaction: (params: SendTxParams) => Promise<any>;
-  getBalance: (address: string, chainId?: number, tokenAddress?: string) => Promise<string>;
-  balance: {ids: string, usdt: string};
+  getBalance: (
+    address: string,
+    chainId?: number,
+    tokenAddress?: string
+  ) => Promise<string>;
+  balance: { ids: string; usdt: string };
+  account: {
+    id: string;
+    status: string;
+    app_id: string;
+    email: string;
+    password: unknown;
+    username: string;
+    country_code: string | null;
+    email_verified: boolean;
+    wallet_address: string;
+    referrer_id: string | null;
+    avatar: string | null;
+  } | null;
 };
 
 const UserWalletContext = createContext<WalletContextType | undefined>(
   undefined
 );
 
-const NETWORKS: Record<number, {
-  chainId: string;
-  chainName: string;
-  rpcUrls: string[];
-  nativeCurrency: { name: string; symbol: string; decimals: number };
-  blockExplorerUrls: string[];
-}> = {
+const NETWORKS: Record<
+  number,
+  {
+    chainId: string;
+    chainName: string;
+    rpcUrls: string[];
+    nativeCurrency: { name: string; symbol: string; decimals: number };
+    blockExplorerUrls: string[];
+  }
+> = {
   1: {
     chainId: "0x1",
     chainName: "Ethereum Mainnet",
@@ -77,19 +98,103 @@ const NETWORKS: Record<number, {
 
 export function UserWalletProvider({ children }: { children: ReactNode }) {
   const [wallet, setWallet] = useState<WalletInfo>(null);
-  const [balance, setBalance] = useState<{ids: string, usdt: string}>({ids: "0", usdt: "0"});
+  const [balance, setBalance] = useState<{ ids: string; usdt: string }>({
+    ids: "0",
+    usdt: "0",
+  });
+  const [account, setAccount] = useState<{
+    id: string;
+    status: string;
+    app_id: string;
+    email: string;
+    password: unknown;
+    username: string;
+    country_code: string | null;
+    email_verified: boolean;
+    wallet_address: string;
+    referrer_id: string | null;
+    avatar: string | null;
+  } | null>(null);
   const isConnected = !!wallet;
+  const path = usePathname();
 
   useEffect(() => {
     if (!wallet) return;
-    getBalance(wallet.address, 97)
+    getBalance(wallet.address, 97);
   }, [wallet]);
 
   const disconnect = () => setWallet(null);
 
+  const addNewMember = async (wallet: WalletInfo) => {
+    // Check user is exist
+    const exist = await fetch("/api/directus/request", {
+      method: "POST",
+      body: JSON.stringify({
+        type: "readItems",
+        collection: "member",
+        params: {
+          filter: {
+            wallet_address: wallet?.address?.toLocaleLowerCase(),
+            status: "active",
+            app_id:
+              process.env.NEXT_PUBLIC_APP_ID ??
+              "db2a722c-59e2-445c-b89e-7b692307119a",
+          },
+        },
+      }),
+    })
+      .then((data) => data.json())
+      .then((data) => data.result[0])
+      .catch(() => null);
+
+    if (exist) {
+      setAccount(exist);
+      return;
+    }
+
+    let ref = null;
+    if (!path.includes("/home")) {
+      ref = await fetch("/api/directus/request", {
+        method: "POST",
+        body: JSON.stringify({
+          type: "readItems",
+          collection: "member",
+          params: {
+            filter: {
+              username: path.split("/")[1],
+              status: "active",
+              app_id:
+                process.env.NEXT_PUBLIC_APP_ID ??
+                "db2a722c-59e2-445c-b89e-7b692307119a",
+            },
+            fields: ["id"],
+          },
+        }),
+      })
+        .then((data) => data.json())
+        .then((data) => data.result[0]?.id)
+        .catch(() => null);
+    }
+
+    await fetch("/api/directus/request", {
+      method: "POST",
+      body: JSON.stringify({
+        type: "createItem",
+        collection: "member",
+        items: {
+          status: "active",
+          app_id:
+            process.env.NEXT_PUBLIC_APP_ID ??
+            "db2a722c-59e2-445c-b89e-7b692307119a",
+          wallet_address: wallet?.address?.toLocaleLowerCase(),
+          referrer_id: ref,
+        },
+      }),
+    });
+  };
+
   const connectWallet = async () => {
     if (typeof window === "undefined" || !(window as any).ethereum) {
-      alert("Vui lòng cài đặt MetaMask hoặc ví Web3 khác!");
       return;
     }
     try {
@@ -99,6 +204,8 @@ export function UserWalletProvider({ children }: { children: ReactNode }) {
       });
       const chainId = await provider.request({ method: "eth_chainId" });
       setWallet({ address: accounts[0], chainId: parseInt(chainId, 16) });
+      addNewMember({ address: accounts[0], chainId: parseInt(chainId, 16) });
+      sessionStorage.setItem("idscoin_connected", "true");
     } catch (err) {
       console.error("Kết nối ví thất bại", err);
       setWallet(null);
@@ -117,7 +224,12 @@ export function UserWalletProvider({ children }: { children: ReactNode }) {
           try {
             await provider.request({
               method: "wallet_switchEthereumChain",
-              params: [{ chainId: NETWORKS[chainId]?.chainId || "0x" + chainId.toString(16) }],
+              params: [
+                {
+                  chainId:
+                    NETWORKS[chainId]?.chainId || "0x" + chainId.toString(16),
+                },
+              ],
             });
           } catch (switchError: any) {
             if (switchError.code === 4902 && NETWORKS[chainId]) {
@@ -142,7 +254,7 @@ export function UserWalletProvider({ children }: { children: ReactNode }) {
         const tx = {
           from: wallet.address,
           to,
-          value: (BigInt(Math.floor(Number(amount) * 1e18))).toString(16),
+          value: BigInt(Math.floor(Number(amount) * 1e18)).toString(16),
         };
         const txHash = await provider.request({
           method: "eth_sendTransaction",
@@ -204,7 +316,12 @@ export function UserWalletProvider({ children }: { children: ReactNode }) {
       if (parseInt(currentChain, 16) !== chainId) {
         await provider.request({
           method: "wallet_switchEthereumChain",
-          params: [{ chainId: NETWORKS[chainId]?.chainId || "0x" + chainId.toString(16) }],
+          params: [
+            {
+              chainId:
+                NETWORKS[chainId]?.chainId || "0x" + chainId.toString(16),
+            },
+          ],
         });
       }
     }
@@ -215,7 +332,10 @@ export function UserWalletProvider({ children }: { children: ReactNode }) {
         method: "eth_getBalance",
         params: [address, "latest"],
       });
-      setBalance(prev => ({...prev, ids: (Number(BigInt(balanceHex)) / 1e18).toFixed(2).toString()}));
+      setBalance((prev) => ({
+        ...prev,
+        ids: (Number(BigInt(balanceHex)) / 1e18).toFixed(2).toString(),
+      }));
       return (Number(BigInt(balanceHex)) / 1e18).toFixed(2).toString();
     } else {
       // Lấy số dư token ERC20
@@ -247,14 +367,31 @@ export function UserWalletProvider({ children }: { children: ReactNode }) {
         ],
       });
       const decimals = parseInt(decimalsHex, 16);
-      setBalance(prev => ({...prev, usdt: (Number(BigInt(balanceHex)) / 10 ** decimals).toFixed(2).toString()}));
-      return (Number(BigInt(balanceHex)) / 10 ** decimals).toFixed(2).toString();
+      setBalance((prev) => ({
+        ...prev,
+        usdt: (Number(BigInt(balanceHex)) / 10 ** decimals)
+          .toFixed(2)
+          .toString(),
+      }));
+      return (Number(BigInt(balanceHex)) / 10 ** decimals)
+        .toFixed(2)
+        .toString();
     }
   };
 
   return (
     <UserWalletContext.Provider
-      value={{ wallet, isConnected, setWallet, disconnect, connectWallet, sendTransaction, getBalance, balance }}
+      value={{
+        wallet,
+        isConnected,
+        setWallet,
+        disconnect,
+        connectWallet,
+        sendTransaction,
+        getBalance,
+        balance,
+        account,
+      }}
     >
       {children}
     </UserWalletContext.Provider>
@@ -279,17 +416,31 @@ export type UserStatusContextType = {
   toggleVip: () => void;
 };
 
-const UserStatusContext = createContext<UserStatusContextType | undefined>(undefined);
+const UserStatusContext = createContext<UserStatusContextType | undefined>(
+  undefined
+);
 
 export function UserStatusProvider({ children }: { children: ReactNode }) {
+  const { account } = useUserWallet();
   const [isRegister, setIsRegister] = useState<boolean>(false);
   const [isVip, setIsVip] = useState<boolean>(false);
-
   const toggleRegister = () => setIsRegister((prev) => !prev);
   const toggleVip = () => setIsVip((prev) => !prev);
 
+  useEffect(() => {
+    setIsRegister(account?.username != null);
+  }, [account]);
   return (
-    <UserStatusContext.Provider value={{ isRegister, isVip, setIsRegister, setIsVip, toggleRegister, toggleVip }}>
+    <UserStatusContext.Provider
+      value={{
+        isRegister,
+        isVip,
+        setIsRegister,
+        setIsVip,
+        toggleRegister,
+        toggleVip,
+      }}
+    >
       {children}
     </UserStatusContext.Provider>
   );

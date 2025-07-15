@@ -13,7 +13,7 @@ export const POST = async (request: Request) => {
 
     const raw = JSON.stringify({
       status: "active",
-      app_id: process.env.APP_ID || "db2a722c-59e2-445c-b89e-7b692307119a",
+      NEXT_PUBLIC_APP_ID: process.env.NEXT_PUBLIC_APP_ID || "db2a722c-59e2-445c-b89e-7b692307119a",
       email,
       username,
       password,

@@ -16,7 +16,7 @@ import InfoModal from "./home/InfoModal";
 import { StakingInterface } from "./home/StakingInterface";
 import { ReferralSection } from "./home/ReferralCard";
 import { PortfolioOverview } from "./home/PortfolioOverview";
-import { usdtContracts } from "@/lib/crypto";
+import { usdtContracts } from "@/libs/crypto";
 import { useUserWallet } from "@/commons/UserWalletContext";
 
 export default function IDSStakingPlatform() {
@@ -43,11 +43,9 @@ export default function IDSStakingPlatform() {
 
   useEffect(() => {
     if (typeof window !== "undefined") {
-      const visited = sessionStorage.getItem("idscoin_visited");
-      if (visited) {
+      const connected = sessionStorage.getItem("idscoin_connected");
+      if (connected) {
         connectWallet();
-      } else {
-        sessionStorage.setItem("idscoin_visited", "1");
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -61,7 +59,7 @@ export default function IDSStakingPlatform() {
       usdtContracts[vipSelectedChain as keyof typeof usdtContracts]
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[vipSelectedChain])
+  }, [vipSelectedChain]);
 
   const tooltips = {
     tvl: t("tooltips.tvl"),

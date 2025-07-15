@@ -21,7 +21,7 @@ import {
 } from "@/components/ui/select";
 import { Zap, Lock, DollarSign, Wallet } from "lucide-react";
 import { useUserWallet } from "@/commons/UserWalletContext";
-import { usdtContracts } from "@/lib/crypto";
+import { usdtContracts } from "@/libs/crypto";
 
 interface StakingInterfaceProps {
   t: (key: string) => string;

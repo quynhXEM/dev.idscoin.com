@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Card,
   CardContent,
@@ -35,23 +35,23 @@ export function ReferralSection({
   onShowVipModal,
   onShowCommissionModal,
 }: ReferralSectionProps) {
-  const [registrationEmail, setRegistrationEmail] = useState("");
-  const [registrationUsername, setRegistrationUsername] = useState("");
-  const [copied, setCopied] = useState(false);
   const {
     connectWallet,
     isConnected,
     wallet,
+    account
   } = useUserWallet();
+  const [registrationEmail, setRegistrationEmail] = useState(account?.email || "");
+  const [registrationUsername, setRegistrationUsername] = useState(account?.username || "");
+  const [copied, setCopied] = useState(false);
+  
   const { isRegister, isVip, setIsRegister } = useUserStatus();
-
-  const referralLink = `https://idscoin.com/ref/${
-    registrationUsername || "USER123456"
-  }`;
 
   const copyReferralLink = async () => {
     try {
-      await navigator.clipboard.writeText(referralLink);
+      await navigator.clipboard.writeText(`${process.env.NEXT_PUBLIC_WEB_URL}${
+        registrationUsername || "USER123456"
+      }`);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch (err) {
@@ -59,9 +59,24 @@ export function ReferralSection({
     }
   };
 
-  const handleRegistration = () => {
-    if (registrationEmail && registrationUsername) {
+  const handleRegistration = async () => {
+    if (!registrationEmail || !registrationUsername) return;
+
+    const update_info = await fetch("/api/directus/request", {
+      method: "POST",
+      body: JSON.stringify({
+        type: "updateItem",
+        collection: "member",
+        id: account?.id,
+        items: {
+          email: registrationEmail,
+          username: registrationUsername,
+        },
+      }),
+    }).then(data => data.json())
+    if (update_info.ok) {
       setIsRegister(true);
+      connectWallet();
     }
   };
 
@@ -191,7 +206,7 @@ export function ReferralSection({
                   <User className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
                 </div>
                 <p className="text-xs text-gray-400 mt-1">
-                  {t("referral.yourLink")} idscoin.com/ref/
+                  {t("referral.yourLink")} {process.env.NEXT_PUBLIC_WEB_URL}
                   {registrationUsername || "username"}
                 </p>
               </div>
@@ -293,7 +308,7 @@ export function ReferralSection({
 
           <div className="flex items-center space-x-2">
             <Input
-              value={referralLink}
+              value={`${process.env.NEXT_PUBLIC_WEB_URL}${account?.username}`}
               readOnly
               className="text-xs bg-gray-700 border-gray-600 text-gray-300"
             />
