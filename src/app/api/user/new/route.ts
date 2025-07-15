@@ -21,8 +21,6 @@ export const POST = async (request: Request) => {
       referrer_id,
     });
 
-    const params = JS
-
     const response = await fetch(`${process.env.API_URL}/items/member`, {
       method: "POST",
       headers: myHeaders,

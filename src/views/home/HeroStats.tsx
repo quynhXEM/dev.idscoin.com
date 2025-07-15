@@ -2,7 +2,6 @@ import React from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { TrendingUp, BarChart3, Users, Lock, Info } from "lucide-react";
 import useWindowSize from "@/hooks/useWindownSide";
-import { Button } from "@/components/ui/button";
 import { Tooltip } from "react-tooltip";
 
 interface HeroStatsProps {

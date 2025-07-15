@@ -13,8 +13,6 @@ import VipUpgradeModal from "./home/VipUpgradeModal";
 import CommissionDetailsModal from "./home/CommissionDetailsModal";
 import RewardsModal from "./home/RewardsModal";
 import InfoModal from "./home/InfoModal";
-import { useUserStatus, useUserWallet } from "@/commons/UserWalletContext";
-import { useSearchParams } from "next/navigation";
 import { StakingInterface } from "./home/StakingInterface";
 import { ReferralSection } from "./home/ReferralCard";
 import { PortfolioOverview } from "./home/PortfolioOverview";
