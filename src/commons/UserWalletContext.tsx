@@ -30,6 +30,8 @@ export type WalletContextType = {
   disconnect: () => void;
   connectWallet: () => void;
   sendTransaction: (params: SendTxParams) => Promise<any>;
+  getBalance: (address: string, chainId?: number, tokenAddress?: string) => Promise<string>;
+  balance: string;
 };
 
 const UserWalletContext = createContext<WalletContextType | undefined>(
@@ -75,10 +77,12 @@ const NETWORKS: Record<number, {
 
 export function UserWalletProvider({ children }: { children: ReactNode }) {
   const [wallet, setWallet] = useState<WalletInfo>(null);
+  const [balance, setBalance] = useState<{ids: string, usdt: string}>({ids: "0", usdt: "0"});
   const isConnected = !!wallet;
 
   useEffect(() => {
-    console.log(wallet);
+    if (!wallet) return;
+    getBalance(wallet.address, 97)
   }, [wallet]);
 
   const disconnect = () => setWallet(null);
@@ -183,9 +187,74 @@ export function UserWalletProvider({ children }: { children: ReactNode }) {
     }
   };
 
+  // Hàm lấy số dư coin hoặc token
+  const getBalance = async (
+    address: string,
+    chainId?: number,
+    tokenAddress?: string
+  ): Promise<string> => {
+    if (typeof window === "undefined" || !(window as any).ethereum) {
+      throw new Error("Không tìm thấy provider");
+    }
+    const provider = (window as any).ethereum;
+
+    // Chuyển chain nếu cần
+    if (chainId) {
+      const currentChain = await provider.request({ method: "eth_chainId" });
+      if (parseInt(currentChain, 16) !== chainId) {
+        await provider.request({
+          method: "wallet_switchEthereumChain",
+          params: [{ chainId: NETWORKS[chainId]?.chainId || "0x" + chainId.toString(16) }],
+        });
+      }
+    }
+
+    if (!tokenAddress) {
+      // Lấy số dư coin
+      const balanceHex = await provider.request({
+        method: "eth_getBalance",
+        params: [address, "latest"],
+      });
+      setBalance(prev => ({...prev, ids: (Number(BigInt(balanceHex)) / 1e18).toFixed(2).toString()}));
+      return (Number(BigInt(balanceHex)) / 1e18).toFixed(2).toString();
+    } else {
+      // Lấy số dư token ERC20
+      const methodId = "0x70a08231"; // balanceOf(address)
+      const addressPadded = address.replace("0x", "").padStart(64, "0");
+      const data = methodId + addressPadded;
+
+      const balanceHex = await provider.request({
+        method: "eth_call",
+        params: [
+          {
+            to: tokenAddress,
+            data,
+          },
+          "latest",
+        ],
+      });
+
+      // Lấy số thập phân của token
+      const decimalsData = "0x313ce567"; // decimals()
+      const decimalsHex = await provider.request({
+        method: "eth_call",
+        params: [
+          {
+            to: tokenAddress,
+            data: decimalsData,
+          },
+          "latest",
+        ],
+      });
+      const decimals = parseInt(decimalsHex, 16);
+      setBalance(prev => ({...prev, usdt: (Number(BigInt(balanceHex)) / 10 ** decimals).toFixed(2).toString()}));
+      return (Number(BigInt(balanceHex)) / 10 ** decimals).toFixed(2).toString();
+    }
+  };
+
   return (
     <UserWalletContext.Provider
-      value={{ wallet, isConnected, setWallet, disconnect, connectWallet, sendTransaction }}
+      value={{ wallet, isConnected, setWallet, disconnect, connectWallet, sendTransaction, getBalance, balance }}
     >
       {children}
     </UserWalletContext.Provider>
@@ -196,6 +265,40 @@ export function useUserWallet() {
   const context = useContext(UserWalletContext);
   if (!context) {
     throw new Error("useUserWallet must be used within a UserWalletProvider");
+  }
+  return context;
+}
+
+// Provider lưu trạng thái isRegister và isVip
+export type UserStatusContextType = {
+  isRegister: boolean;
+  isVip: boolean;
+  setIsRegister: (value: boolean) => void;
+  setIsVip: (value: boolean) => void;
+  toggleRegister: () => void;
+  toggleVip: () => void;
+};
+
+const UserStatusContext = createContext<UserStatusContextType | undefined>(undefined);
+
+export function UserStatusProvider({ children }: { children: ReactNode }) {
+  const [isRegister, setIsRegister] = useState<boolean>(false);
+  const [isVip, setIsVip] = useState<boolean>(false);
+
+  const toggleRegister = () => setIsRegister((prev) => !prev);
+  const toggleVip = () => setIsVip((prev) => !prev);
+
+  return (
+    <UserStatusContext.Provider value={{ isRegister, isVip, setIsRegister, setIsVip, toggleRegister, toggleVip }}>
+      {children}
+    </UserStatusContext.Provider>
+  );
+}
+
+export function useUserStatus() {
+  const context = useContext(UserStatusContext);
+  if (!context) {
+    throw new Error("useUserStatus must be used within a UserStatusProvider");
   }
   return context;
 }

@@ -19,7 +19,7 @@ const HeroStats: React.FC<HeroStatsProps> = ({ t, tooltips }) => {
     <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mb-8 mt-8">
       {/* TVL */}
       <Card className="bg-gray-900 border-gray-800 text-white">
-        <CardContent className="p-6">
+        <CardContent className="px-6">
           <div className="flex items-center justify-between">
             <div>
               <div className="flex items-center gap-1 mb-1">
@@ -43,7 +43,7 @@ const HeroStats: React.FC<HeroStatsProps> = ({ t, tooltips }) => {
       </Card>
       {/* APY */}
       <Card className="bg-gray-900 border-gray-800 text-white">
-        <CardContent className="p-6">
+        <CardContent className="px-6">
           <div className="flex items-center justify-between">
             <div>
               <div className="flex items-center gap-1 mb-1">
@@ -67,7 +67,7 @@ const HeroStats: React.FC<HeroStatsProps> = ({ t, tooltips }) => {
       </Card>
       {/* Users */}
       <Card className="bg-gray-900 border-gray-800 text-white">
-        <CardContent className="p-6">
+        <CardContent className="px-6">
           <div className="flex items-center justify-between">
             <div>
               <div className="flex items-center gap-1 mb-1">
@@ -91,7 +91,7 @@ const HeroStats: React.FC<HeroStatsProps> = ({ t, tooltips }) => {
       </Card>
       {/* Locked */}
       <Card className="bg-gray-900 border-gray-800 text-white">
-        <CardContent className="p-6">
+        <CardContent className="px-6">
           <div className="flex items-center justify-between">
             <div>
               <div className="flex items-center gap-1 mb-1">

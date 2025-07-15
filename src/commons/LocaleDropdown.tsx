@@ -28,7 +28,7 @@ export default function LocaleDropdown() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="default">
+        <Button variant="ghost" size="default" className="cursor-pointer">
           <LanguagesIcon />
           {locale === "vi-VN" ? "Vietnamese" : "English"}
         </Button>

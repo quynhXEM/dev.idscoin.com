@@ -24,6 +24,7 @@ const PortfolioOverview: React.FC<PortfolioOverviewProps> = ({
   setShowRewardsModal,
 }) => {
   const { width } = useWindowSize();
+  
   return (
     <div className="space-y-6">
       <Card className="bg-gray-900 border-gray-800">

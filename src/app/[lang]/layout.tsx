@@ -1,4 +1,4 @@
-import { UserWalletProvider } from "@/commons/UserWalletContext";
+import { UserWalletProvider, UserStatusProvider } from "@/commons/UserWalletContext";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
 import { ThemeProvider } from "next-themes";
@@ -18,9 +18,10 @@ export default async function Layout({
         disableTransitionOnChange
       >
         <UserWalletProvider>
-        {children}
+          <UserStatusProvider>
+            {children}
+          </UserStatusProvider>
         </UserWalletProvider>
-        
       </ThemeProvider>
     </NextIntlClientProvider>
   );
