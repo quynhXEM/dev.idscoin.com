@@ -238,7 +238,9 @@
       "swapError": "You have failed to swap {amount} USDT to {ids} IDS coin. Please try again later.",
       "upgradeVipSuccess": "You have successfully upgraded to VIP.",
       "upgradeVipError": "You have failed to upgrade to VIP. Please try again later.",
-      "claimRewardsSuccess": "You have successfully claimed {amount} IDS."
+      "claimRewardsSuccess": "You have successfully claimed {amount} IDS.",
+      "web3Error": "Web3 error",
+      "web3ErrorSub": "Web3 environment not found. Please install web3 on your browser."
     }
   }
 }

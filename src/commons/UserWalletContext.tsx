@@ -9,6 +9,8 @@ import React, {
   createContext,
   useEffect,
 } from "react";
+import { useNotification } from "@/commons/NotificationContext";
+import { useTranslations } from "next-intl";
 
 export type SendTxParams = {
   chainId?: number;
@@ -98,6 +100,7 @@ const NETWORKS: Record<
 
 export function UserWalletProvider({ children }: { children: ReactNode }) {
   const [wallet, setWallet] = useState<WalletInfo>(null);
+  const t = useTranslations("home");
   const [balance, setBalance] = useState<{ ids: string; usdt: string }>({
     ids: "0",
     usdt: "0",
@@ -117,6 +120,7 @@ export function UserWalletProvider({ children }: { children: ReactNode }) {
   } | null>(null);
   const isConnected = !!wallet;
   const path = usePathname();
+  const { notify } = useNotification();
 
   useEffect(() => {
     if (!wallet) return;
@@ -195,6 +199,11 @@ export function UserWalletProvider({ children }: { children: ReactNode }) {
 
   const connectWallet = async () => {
     if (typeof window === "undefined" || !(window as any).ethereum) {
+      notify({
+        title: t("noti.web3Error"),
+        message: t("noti.web3ErrorSub"),
+        type: false,
+      });
       return;
     }
     try {
