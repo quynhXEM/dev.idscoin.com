@@ -69,7 +69,10 @@
       "ethNetwork": "ETH Network",
       "bnbNetwork": "BNB Network",
       "maticNetwork": "MATIC Network",
-      "arbNetwork": "ARB Network"
+      "arbNetwork": "ARB Network",
+      "connectwallet": "Kết nối ví",
+      "walletconnected": "Ví đã kết nối",
+      "walletnotconnected": "Chưa kết nối ví"
     },
     "referral": {
       "connectWallet": "Cần kết nối ví",

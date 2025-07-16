@@ -68,7 +68,10 @@
       "ethNetwork": "ETH Network",
       "bnbNetwork": "BNB Network",
       "maticNetwork": "MATIC Network",
-      "arbNetwork": "ARB Network"
+      "arbNetwork": "ARB Network",
+      "connectwallet": "Connect wallet",
+      "walletconnected": "Wallet connected",
+      "walletnotconnected": "Wallet not connected"
     },
     "referral": {
       "connectWallet": "Need to connect wallet",

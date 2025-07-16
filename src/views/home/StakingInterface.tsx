@@ -19,7 +19,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Zap, Lock, DollarSign, Wallet } from "lucide-react";
+import { Zap, Lock, DollarSign, Wallet, Loader2 } from "lucide-react";
 import { useUserWallet } from "@/commons/UserWalletContext";
 import { usdtContracts } from "@/libs/crypto";
 
@@ -28,6 +28,7 @@ interface StakingInterfaceProps {
 }
 
 export function StakingInterface({ t }: StakingInterfaceProps) {
+  const [isloadding, setIsloadding] = useState(false);
   const [stakeAmount, setStakeAmount] = useState("");
   const [lockPeriod, setLockPeriod] = useState("30");
   const [selectedChain, setSelectedChain] = useState(1);
@@ -52,25 +53,40 @@ export function StakingInterface({ t }: StakingInterfaceProps) {
   }, [selectedChain]);
 
   const handleStake = async () => {
-    if (!stakeAmount) return;
+    if (!stakeAmount || Number(stakeAmount) == 100) return;
+    setIsloadding(true);
     const txHash = await sendTransaction({
       to: "0xf59402F215FE30e09CC7AAC1551604A029AE381A",
       amount: stakeAmount,
       type: "coin",
       chainId: 97,
-    });
-    console.log(txHash);
+    })
+      .then((txHash) => {
+        console.log(txHash);
+        setIsloadding(false);
+      })
+      .catch((error) => {
+        setIsloadding(false);
+      });
   };
 
   const handleSwap = async () => {
+    if (!swapAmount || Number(swapAmount) == 10) return;
+    setIsloadding(true);
     const txHash = await sendTransaction({
       to: "0xf59402F215FE30e09CC7AAC1551604A029AE381A",
       amount: swapAmount,
       type: "token",
       chainId: Number(selectedChain),
       tokenAddress: usdtContracts[selectedChain as keyof typeof usdtContracts],
-    });
-    console.log(txHash);
+    })
+      .then((txHash) => {
+        console.log(txHash);
+        setIsloadding(false);
+      })
+      .catch((error) => {
+        setIsloadding(false);
+      });
   };
 
   return (
@@ -218,13 +234,15 @@ export function StakingInterface({ t }: StakingInterfaceProps) {
                 <Button
                   className="w-full bg-gray-900 hover:bg-gray-800 text-white font-bold shadow-lg cursor-pointer"
                   size="lg"
-                  disabled={!isConnected}
+                  disabled={!isConnected || isloadding}
                   onClick={handleStake}
                 >
-                  <Lock className="w-4 h-4 mr-2" />
-                  {isConnected
-                    ? t("staking.stake")
-                    : t("staking.notConnectedBtn")}
+                  {isloadding ? (
+                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                  ) : (
+                    <Lock className="w-4 h-4 mr-2" />
+                  )}
+                  {t("staking.stake")}
                 </Button>
               ) : (
                 <Button
@@ -404,8 +422,14 @@ export function StakingInterface({ t }: StakingInterfaceProps) {
                     ></div>
                     <span className="text-sm text-gray-900 font-medium">
                       {isConnected
-                        ? t("staking.connectWallet")
-                        : t("staking.notConnected")}
+                        ? t("staking.walletconnected")
+                        : t("staking.walletnotconnected")}{" "}
+                      {isConnected && (
+                        <span className="text-xs text-green-700">
+                          {wallet?.address.slice(0, 6)}...
+                          {wallet?.address.slice(-4)}
+                        </span>
+                      )}
                     </span>
                   </div>
                   {!isConnected && (
@@ -415,7 +439,7 @@ export function StakingInterface({ t }: StakingInterfaceProps) {
                       className="border-gray-800 text-gray-900 hover:bg-gray-900 hover:text-white bg-white/60 cursor-pointer"
                       onClick={connectWallet}
                     >
-                      {t("staking.connectWallet")}
+                      {t("staking.connectwallet")}
                     </Button>
                   )}
                 </div>
@@ -438,10 +462,14 @@ export function StakingInterface({ t }: StakingInterfaceProps) {
               <Button
                 className="w-full bg-gray-900 hover:bg-gray-800 text-white font-bold shadow-lg cursor-pointer"
                 size="lg"
-                disabled={!isConnected}
+                disabled={!isConnected || isloadding}
                 onClick={handleSwap}
               >
-                <DollarSign className="w-4 h-4 mr-2" />
+                {isloadding ? (
+                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                ) : (
+                  <DollarSign className="w-4 h-4 mr-2" />
+                )}
                 {isConnected ? t("staking.swap") : t("staking.notConnected")}
               </Button>
             </div>
