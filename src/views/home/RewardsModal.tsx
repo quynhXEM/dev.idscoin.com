@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Card,
   CardHeader,
@@ -7,17 +7,33 @@ import {
   CardContent,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Gift } from "lucide-react";
+import { Gift, Loader2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
 interface RewardsModalProps {
   t: (key: string) => string;
   show: boolean;
   onClose: () => void;
+  setShowNotificationModal: (show: boolean) => void;
+  setNotificationData: (data: any) => void;
 }
 
-const RewardsModal: React.FC<RewardsModalProps> = ({ t, show, onClose }) => {
+const RewardsModal: React.FC<RewardsModalProps> = ({ t, show, onClose, setShowNotificationModal, setNotificationData }) => {
   if (!show) return null;
+  const [isloading, setIsLoading] = useState<boolean>(false);
+  const handleClaimRewards = () => {
+    setIsLoading(true);
+    setTimeout(() => {
+      onClose()
+      setNotificationData({
+        title: t('noti.success'),
+        message: t('noti.claimRewardsSuccess', { amount: 12.34 }),
+        type: true
+      })
+      setShowNotificationModal(true)
+      setIsLoading(false)
+    }, 1000)
+  }
   return (
     <div
       className="fixed inset-0 bg-black/80 flex items-center justify-center z-50"
@@ -219,17 +235,16 @@ const RewardsModal: React.FC<RewardsModalProps> = ({ t, show, onClose }) => {
 
           <div className="flex space-x-3">
             <Button
+              disabled={isloading}
               className="flex-1 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-700 hover:to-blue-700 cursor-pointer"
-              onClick={() => {
-                // Handle claim rewards logic here
-                onClose();
-              }}
+              onClick={handleClaimRewards}
             >
-              <Gift className="w-4 h-4 mr-2" />
+              {isloading ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Gift className="w-4 h-4 mr-2" />}
               {t("rewards.claim12Ids")}
             </Button>
             <Button
               variant="outline"
+              disabled={isloading}
               className="flex-1 border-gray-700 text-gray-300 hover:bg-gray-800 hover:text-gray-200 bg-transparent cursor-pointer"
               onClick={() => onClose()}
             >

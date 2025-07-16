@@ -224,6 +224,21 @@
       "developers": "Developers",
       "liveProducts": "Live Products",
       "users": "Users"
+    },
+    "noti": {
+      "success": "Success",
+      "error": "Error",
+      "close": "Close",
+      "continue": "Continue",
+      "tryAgain": "Try again",
+      "stakeSuccess": "You have successfully staked {amount} IDS coin with a lock period of {days} days. Rewards will be calculated from tomorrow and automatically added to your account daily.",
+      "stakeError": "You have failed to stake {amount} IDS coin with a lock period of {days} days. Please try again later.",
+      "transactioncancel": "Transaction canceled",
+      "swapSuccess": "You have successfully swapped {amount} USDT to {ids} IDS coin. Please wait 5-10 seconds to receive IDS in your wallet.",
+      "swapError": "You have failed to swap {amount} USDT to {ids} IDS coin. Please try again later.",
+      "upgradeVipSuccess": "You have successfully upgraded to VIP.",
+      "upgradeVipError": "You have failed to upgrade to VIP. Please try again later.",
+      "claimRewardsSuccess": "You have successfully claimed {amount} IDS."
     }
   }
 }

@@ -25,9 +25,11 @@ import { usdtContracts } from "@/libs/crypto";
 
 interface StakingInterfaceProps {
   t: (key: string) => string;
+  setShowNotificationModal: (show: boolean) => void;
+  setNotificationData: (data: any) => void;
 }
 
-export function StakingInterface({ t }: StakingInterfaceProps) {
+export function StakingInterface({ t, setShowNotificationModal, setNotificationData }: StakingInterfaceProps) {
   const [isloadding, setIsloadding] = useState(false);
   const [stakeAmount, setStakeAmount] = useState("");
   const [lockPeriod, setLockPeriod] = useState("30");
@@ -62,10 +64,21 @@ export function StakingInterface({ t }: StakingInterfaceProps) {
       chainId: 97,
     })
       .then((txHash) => {
-        console.log(txHash);
+        setNotificationData({
+          title: t("noti.success"),
+          message: t("noti.stakeSuccess", { amount: stakeAmount, days: lockPeriod}),
+          type: true,
+        });
+        setShowNotificationModal(true);
         setIsloadding(false);
       })
       .catch((error) => {
+        setNotificationData({
+          title: t("noti.error"),
+          message: error?.code === "4001" ? t("noti.transactioncancel") : t("noti.stakeError", { amount: stakeAmount, days: lockPeriod }),
+          type: false,
+        });
+        setShowNotificationModal(true);
         setIsloadding(false);
       });
   };
@@ -80,13 +93,24 @@ export function StakingInterface({ t }: StakingInterfaceProps) {
       chainId: Number(selectedChain),
       tokenAddress: usdtContracts[selectedChain as keyof typeof usdtContracts],
     })
-      .then((txHash) => {
-        console.log(txHash);
-        setIsloadding(false);
-      })
-      .catch((error) => {
-        setIsloadding(false);
-      });
+        .then((txHash) => {
+          setNotificationData({
+            title: t("noti.success"),
+            message: t("noti.swapSuccess", { amount: swapAmount, ids: swapAmount }),
+            type: true,
+          });
+          setShowNotificationModal(true);
+          setIsloadding(false);
+        })
+        .catch((error) => {
+          setNotificationData({
+            title: t("noti.error"),
+            message: error?.code == "4001" ? t("noti.transactioncancel") : t("noti.swapError", { amount: swapAmount, ids: swapAmount }),
+            type: false,
+          });
+          setShowNotificationModal(true);
+          setIsloadding(false);
+        });
   };
 
   return (

@@ -17,6 +17,7 @@ import { ReferralSection } from "./home/ReferralCard";
 import { PortfolioOverview } from "./home/PortfolioOverview";
 import { usdtContracts } from "@/libs/crypto";
 import { useUserWallet } from "@/commons/UserWalletContext";
+import { NotificationModal } from "./home/NotificationModal";
 
 export default function IDSStakingPlatform() {
   const t = useTranslations("home");
@@ -26,6 +27,13 @@ export default function IDSStakingPlatform() {
   const [showInfoModal, setShowInfoModal] = useState(false);
   const [vipSelectedChain, setVipSelectedChain] = useState(1);
   const { connectWallet, getBalance, isConnected, wallet } = useUserWallet();
+
+  const [showNotificationModal, setShowNotificationModal] = useState(false);
+  const [notificationData, setNotificationData] = useState({
+    title: "",
+    message: "",
+    type: true,
+  });
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -63,17 +71,25 @@ export default function IDSStakingPlatform() {
         <HeroStats t={t} tooltips={tooltips} />
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2 space-y-8">
-            <StakingInterface t={t} />
+            <StakingInterface
+              t={t}
+              setShowNotificationModal={setShowNotificationModal}
+              setNotificationData={setNotificationData}
+            />
             <ReferralSection
               t={t}
               onShowVipModal={() => setShowVipModal(true)}
               onShowCommissionModal={() => setShowCommissionModal(true)}
+              setShowNotificationModal={setShowNotificationModal}
+              setNotificationData={setNotificationData}
             />
           </div>
           <PortfolioOverview
             t={t}
             tooltips={tooltips}
             onShowRewardsModal={() => setShowRewardsModal(true)}
+            setShowNotificationModal={setShowNotificationModal}
+            setNotificationData={setNotificationData}
           />
         </div>
       </div>
@@ -84,6 +100,8 @@ export default function IDSStakingPlatform() {
         onClose={() => setShowVipModal(false)}
         vipSelectedChain={vipSelectedChain.toString()}
         setVipSelectedChain={(v) => setVipSelectedChain(Number(v))}
+        setShowNotificationModal={setShowNotificationModal}
+        setNotificationData={setNotificationData}
       />
       <CommissionDetailsModal
         t={t}
@@ -95,11 +113,21 @@ export default function IDSStakingPlatform() {
         t={t}
         show={showRewardsModal}
         onClose={() => setShowRewardsModal(false)}
+        setShowNotificationModal={setShowNotificationModal}
+        setNotificationData={setNotificationData}
       />
       <InfoModal
         t={t}
         show={showInfoModal}
         onClose={() => setShowInfoModal(false)}
+      />
+      <NotificationModal
+        t={t}
+        isOpen={showNotificationModal}
+        onClose={() => setShowNotificationModal(false)}
+        title={notificationData.title}
+        message={notificationData.message}
+        type={notificationData.type}
       />
     </div>
   );

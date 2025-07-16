@@ -28,12 +28,16 @@ interface ReferralSectionProps {
   t: (key: string, params?: Record<string, string>) => string;
   onShowVipModal: () => void;
   onShowCommissionModal: () => void;
+  setShowNotificationModal: (show: boolean) => void;
+  setNotificationData: (data: any) => void;
 }
 
 export function ReferralSection({
   t,
   onShowVipModal,
   onShowCommissionModal,
+  setShowNotificationModal,
+  setNotificationData,
 }: ReferralSectionProps) {
   const {
     connectWallet,

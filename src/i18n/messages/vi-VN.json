@@ -225,6 +225,21 @@
       "developers": "Developers",
       "liveProducts": "Live Products",
       "users": "Users"
+    },
+    "noti": {
+      "success": "Thành công",
+      "error": "Thất bại",
+      "close": "Đóng",
+      "continue": "Tiếp tục",
+      "tryAgain": "Thử lại",
+      "stakeSuccess": "Bạn đã stake thành công {amount} IDS coin với thời gian khóa {days} ngày. Phần thưởng sẽ được tính từ ngày mai và tự động cộng vào tài khoản hàng ngày.",
+      "stakeError": "Bạn đã stake thất bại {amount} IDS coin với thời gian khóa {days} ngày. Vui lòng thử lại sau.",
+      "transactioncancel": "Giao dịch đã bị hủy",
+      "swapSuccess": "Bạn đã swap thành công {amount} USDT thành {ids} IDS coin. Vui lòng chờ 5-10 giây để nhận IDS về ví.",
+      "swapError": "Bạn đã swap thất bại {amount} USDT thành {ids} IDS coin. Vui lòng thử lại sau.",
+      "upgradeVipSuccess": "Bạn đã nâng cấp VIP thành công.",
+      "upgradeVipError": "Bạn đã nâng cấp VIP thất bại. Vui lòng thử lại sau.",
+      "claimRewardsSuccess": "Bạn đã nhận thành công {amount} IDS."
     }
   }
 

@@ -15,12 +15,16 @@ interface PortfolioOverviewProps {
   t: (key: string) => string;
   tooltips: { [key: string]: string };
   onShowRewardsModal: () => void;
+  setShowNotificationModal: (show: boolean) => void;
+  setNotificationData: (data: any) => void;
 }
 
 export function PortfolioOverview({
   t,
   tooltips,
   onShowRewardsModal,
+  setShowNotificationModal,
+  setNotificationData,
 }: PortfolioOverviewProps) {
   const { isConnected, connectWallet, balance } = useUserWallet();
   const WalletConnectionPrompt = ({

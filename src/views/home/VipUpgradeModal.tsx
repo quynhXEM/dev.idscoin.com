@@ -1,10 +1,10 @@
 "use client"
-import React from "react"
+import React, { useState } from "react"
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select"
-import { DollarSign } from "lucide-react"
+import { DollarSign, Loader2 } from "lucide-react"
 import { useUserStatus } from "@/commons/UserWalletContext"
 
 interface VipUpgradeModalProps {
@@ -13,13 +13,30 @@ interface VipUpgradeModalProps {
   onClose: () => void
   vipSelectedChain: string
   setVipSelectedChain: (v: string) => void
+  setShowNotificationModal: (show: boolean) => void
+  setNotificationData: (data: any) => void
 }
 
 const VipUpgradeModal: React.FC<VipUpgradeModalProps> = ({
-  t, show, onClose, vipSelectedChain, setVipSelectedChain
+  t, show, onClose, vipSelectedChain, setVipSelectedChain, setShowNotificationModal, setNotificationData
 }) => {
   const { setIsVip } = useUserStatus();
+  const [isloading, setIsLoading] = useState<boolean>(false);
   if (!show) return;
+  const handleUpgradeVip = () => {
+    setIsLoading(true);
+    setTimeout(() => {
+      setIsVip(true)
+      onClose()
+      setNotificationData({
+        title: t('noti.success'),
+        message: t('noti.upgradeVipSuccess'),
+        type: true
+      })
+      setShowNotificationModal(true)
+      setIsLoading(false)
+    }, 1000)
+  }
   return (
     <div
       className="fixed inset-0 bg-black/80 flex items-center justify-center z-50"
@@ -116,13 +133,11 @@ const VipUpgradeModal: React.FC<VipUpgradeModalProps> = ({
               {t('vip.cancel')}
             </Button>
             <Button
+              disabled={isloading}
               className="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 cursor-pointer"
-              onClick={() => {
-                setIsVip(true)
-                onClose()
-              }}
+              onClick={handleUpgradeVip}
             >
-              <DollarSign className="w-4 h-4 mr-2" />
+              {isloading ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <DollarSign className="w-4 h-4 mr-2" />}
               {t('vip.upgrade100')}
             </Button>
           </div>
