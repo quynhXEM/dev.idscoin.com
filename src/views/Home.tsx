@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import type React from "react";
@@ -21,19 +20,6 @@ import { useUserWallet } from "@/commons/UserWalletContext";
 
 export default function IDSStakingPlatform() {
   const t = useTranslations("home");
-  <style jsx>{`
-    @keyframes marquee {
-      0% {
-        transform: translateX(100%);
-      }
-      100% {
-        transform: translateX(-100%);
-      }
-    }
-    .animate-marquee {
-      animation: marquee 15s linear infinite;
-    }
-  `}</style>;
   const [showVipModal, setShowVipModal] = useState(false);
   const [showCommissionModal, setShowCommissionModal] = useState(false);
   const [showRewardsModal, setShowRewardsModal] = useState(false);

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   Card,
   CardContent,
@@ -86,10 +86,10 @@ export function ReferralSection({
         <CardHeader>
           <CardTitle className="flex items-center text-white">
             <Share2 className="w-5 h-5 mr-2 text-blue-400" />
-            {t("referral.introduce")}
+            <p className="text-2xl">{t("referral.introduce")}</p>
           </CardTitle>
           <CardDescription className="text-gray-400">
-            {t("referral.connectWallet")}
+            {t("referral.connectWallettoRef")}
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -99,38 +99,38 @@ export function ReferralSection({
               {t("referral.connectWallet")}
             </h3>
             <p className="text-gray-400 text-sm mb-4">
-              {t("referral.connectWallet")}
+              {t("referral.connectWalletSub")}
             </p>
             <Button
               className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
               onClick={connectWallet}
             >
               <Wallet className="w-4 h-4 mr-2" />
-              {t("staking.connectWallet")}
+              {t("staking.connectWalletBtn")}
             </Button>
           </div>
 
           <div className="grid grid-cols-2 gap-3">
             <div className="text-center p-3 bg-gray-800 rounded-lg border border-gray-700">
               <div className="text-lg font-bold text-blue-400">5% - 50%</div>
-              <div className="text-xs text-gray-400">{t("referral.earn5").replace(/\d+%/, "USDT")}</div>
+              <div className="text-xs text-gray-400">{t("referral.commicsionusdt")}</div>
             </div>
             <div className="text-center p-3 bg-gray-800 rounded-lg border border-gray-700">
               <div className="text-lg font-bold text-emerald-400">$100</div>
-              <div className="text-xs text-gray-400">{t("vip.upgradeCost")}</div>
+              <div className="text-xs text-gray-400">{t("referral.vipfee")}</div>
             </div>
           </div>
 
           <div className="p-4 bg-blue-900/20 rounded-lg border border-blue-700/50">
             <div className="text-sm text-blue-300 space-y-2">
               <div className="font-semibold text-blue-200 mb-2">
-                💡 {t("referral.detailsDescription")}
+                💡 {t("referral.howtowork")}
               </div>
               <div className="space-y-1 text-blue-200">
-                <div>• {t("referral.yourLink")}</div>
-                <div>• {t("referral.copy")}</div>
-                <div>• {t("referral.earn5")}</div>
-                <div>• {t("referral.earn50")}</div>
+                <div>• {t("referral.wallettolink")}</div>
+                <div>• {t("referral.sharelink")}</div>
+                <div>• {t("referral.commicsion")}</div>
+                <div>• {t("referral.vipcommicsion")}</div>
               </div>
             </div>
           </div>
@@ -145,10 +145,10 @@ export function ReferralSection({
         <CardHeader>
           <CardTitle className="flex items-center text-white">
             <Share2 className="w-5 h-5 mr-2 text-blue-400" />
-            {t("referral.yourLink")}
+            <p className="text-2xl">{t("referral.createlink")}</p>
           </CardTitle>
           <CardDescription className="text-gray-400">
-            {t("referral.detailsDescription")}
+            {t("referral.createlinkcommicsion")}
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -156,7 +156,7 @@ export function ReferralSection({
             <div className="text-center mb-4">
               <UserPlus className="w-12 h-12 mx-auto text-yellow-500 mb-3" />
               <h3 className="text-lg font-semibold text-white mb-2">
-                {t("referral.yourLink")}
+                {t("referral.createlink")}
               </h3>
               <p className="text-gray-400 text-sm">
                 {t("referral.detailsDescription")}
@@ -171,7 +171,7 @@ export function ReferralSection({
                 >
                   Email
                 </Label>
-                <div className="relative">
+                <div className="relative mt-1">
                   <Input
                     id="registration-email"
                     type="email"
@@ -191,7 +191,7 @@ export function ReferralSection({
                 >
                   Username (Mã giới thiệu)
                 </Label>
-                <div className="relative">
+                <div className="relative mt-1">
                   <Input
                     id="registration-username"
                     placeholder="username123"
@@ -206,7 +206,7 @@ export function ReferralSection({
                   <User className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
                 </div>
                 <p className="text-xs text-gray-400 mt-1">
-                  {t("referral.yourLink")} {process.env.NEXT_PUBLIC_WEB_URL}
+                  {t("referral.yourLink")}: {process.env.NEXT_PUBLIC_WEB_URL}
                   {registrationUsername || "username"}
                 </p>
               </div>
@@ -217,7 +217,7 @@ export function ReferralSection({
                 disabled={!registrationEmail || !registrationUsername}
               >
                 <UserPlus className="w-4 h-4 mr-2" />
-                {t("referral.yourLink")}
+                {t("referral.createlink")}
               </Button>
             </div>
           </div>
@@ -226,7 +226,7 @@ export function ReferralSection({
             <div className="flex items-center gap-2 mb-2">
               <div className="w-2 h-2 bg-green-500 rounded-full"></div>
               <span className="text-sm text-green-300 font-medium">
-                {t("staking.connectWallet")}
+                {t("referral.walletconnected")}
               </span>
             </div>
             <p className="text-xs text-green-200">Địa chỉ: {wallet?.address}</p>
@@ -253,7 +253,7 @@ export function ReferralSection({
         <div className="flex items-center justify-between">
           <CardTitle className="flex items-center text-white">
             <Share2 className="w-5 h-5 mr-2 text-blue-400" />
-            {t("referral.introduce")}
+            <p className="text-2xl">{t("referral.introduce")}</p>
           </CardTitle>
           <div className="flex items-center gap-2">
             <Badge
@@ -264,7 +264,7 @@ export function ReferralSection({
                   : "bg-gray-800 text-gray-300 hover:bg-gray-700 hover:text-gray-200"
               }
             >
-              {isVip ? "VIP" : t("referral.copy")}
+              {isVip ? "VIP" : t("referral.free")}
             </Badge>
           </div>
         </div>

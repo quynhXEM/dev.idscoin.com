@@ -208,13 +208,13 @@ export function StakingInterface({t}: StakingInterfaceProps) {
                   </div>
                   <p className="text-yellow-200 text-sm mb-3">
                     {t("staking.connectWallet")}
-                  </p>
+                  </p>  
                   <Button
                     className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
                     onClick={connectWallet}
                   >
                     <Wallet className="w-4 h-4 mr-2" />
-                    {t("staking.connectWallet")}
+                    {t("staking.connectWalletBtn")}
                   </Button>
                 </div>
               )}
@@ -226,7 +226,7 @@ export function StakingInterface({t}: StakingInterfaceProps) {
                 onClick={handleStake}
               >
                 <Lock className="w-4 h-4 mr-2" />
-                {isConnected ? t("staking.stake") : t("staking.notConnected")}
+                {isConnected ? t("staking.stake") : t("staking.notConnectedBtn")}
               </Button>
             </div>
           </TabsContent>

@@ -8,7 +8,7 @@ const Footer: React.FC<FooterProps> = ({ t }) => (
   <footer className="border-t border-gray-800 bg-gray-900/50 mt-16">
     <div className="container mx-auto px-4 py-6">
       <div className="text-center text-gray-400 text-sm">
-        © 2024{" "}
+        © {new Date().getFullYear()}{" "}
         <a
           href="https://www.nobody.network"
           target="_blank"

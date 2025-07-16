@@ -9,7 +9,6 @@ import { Progress } from "@/components/ui/progress";
 import { Separator } from "@/components/ui/separator";
 import { Wallet, Gift, Clock, Shield, Info } from "lucide-react";
 import { useUserWallet } from "@/commons/UserWalletContext";
-import useWindowSize from "@/hooks/useWindownSide";
 import { Tooltip } from "react-tooltip";
 
 interface PortfolioOverviewProps {
@@ -24,7 +23,6 @@ export function PortfolioOverview({
   onShowRewardsModal,
 }: PortfolioOverviewProps) {
   const { isConnected, connectWallet, balance } = useUserWallet();
-  const { width } = useWindowSize();
   const WalletConnectionPrompt = ({
     title,
     icon,
@@ -43,7 +41,7 @@ export function PortfolioOverview({
         onClick={connectWallet}
       >
         <Wallet className="w-4 h-4 mr-2" />
-        {t("staking.connectWallet")}
+        {t("staking.connectWalletBtn")}
       </Button>
     </div>
   );
@@ -55,7 +53,7 @@ export function PortfolioOverview({
         <CardHeader>
           <CardTitle className="flex items-center text-white">
             <Wallet className="w-5 h-5 mr-2 text-blue-400" />
-            {t("overview.totalAccount")}
+            <p className="text-2xl">{t("overview.totalAccount")}</p>
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -98,7 +96,7 @@ export function PortfolioOverview({
                       anchorSelect=".tooltips-progress"
                       place="top"
                       className="text-wrap outline-none"
-                      style={{ maxWidth: width }}
+                      style={{ maxWidth: 270, zIndex: 100 }}
                     >
                       {tooltips.stakeProgress}
                     </Tooltip>
@@ -110,9 +108,9 @@ export function PortfolioOverview({
             </div>
           ) : (
             <WalletConnectionPrompt
-              title={t("staking.connectWallet") + " " + t("overview.totalAccount").toLowerCase()}
+              title={t("referral.connecttoshow")}
               icon={<Wallet className="w-12 h-12 mx-auto text-gray-500 mb-3" />}
-              description={t("staking.connectWallet") + " " + t("overview.totalAccount").toLowerCase()}
+              description={t("referral.connecttoshowinfo")}
             />
           )}
         </CardContent>
@@ -123,7 +121,7 @@ export function PortfolioOverview({
         <CardHeader>
           <CardTitle className="flex items-center text-white">
             <Gift className="w-5 h-5 mr-2 text-cyan-400" />
-            {t("rewards.rewards")}
+            <p className="text-2xl">{t("rewards.rewards")}</p>
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -164,9 +162,9 @@ export function PortfolioOverview({
             </div>
           ) : (
             <WalletConnectionPrompt
-              title={t("staking.connectWallet") + " " + t("rewards.rewards").toLowerCase()}
+              title={t("referral.connecttoshow")}
               icon={<Gift className="w-12 h-12 mx-auto text-gray-500 mb-3" />}
-              description={t("staking.connectWallet") + " " + t("rewards.rewards").toLowerCase()}
+              description={t("referral.connecttoshowreward")}
             />
           )}
         </CardContent>
@@ -177,7 +175,7 @@ export function PortfolioOverview({
         <CardHeader>
           <CardTitle className="flex items-center text-white">
             <Clock className="w-5 h-5 mr-2 text-cyan-400" />
-            {t("history.stakeHistory")}
+            <p className="text-2xl">{t("history.stakeHistory")}</p>
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -212,9 +210,9 @@ export function PortfolioOverview({
             </div>
           ) : (
             <WalletConnectionPrompt
-              title={t("staking.connectWallet") + " " + t("history.stakeHistory").toLowerCase()}
+              title={t("referral.connecttoshow")}
               icon={<Clock className="w-12 h-12 mx-auto text-gray-500 mb-3" />}
-              description={t("staking.connectWallet") + " " + t("history.stakeHistory").toLowerCase()}
+              description={t("referral.connecttoshowhistory")}
             />
           )}
         </CardContent>

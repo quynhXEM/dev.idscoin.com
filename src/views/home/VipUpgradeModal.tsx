@@ -27,7 +27,7 @@ const VipUpgradeModal: React.FC<VipUpgradeModalProps> = ({
     >
       <Card className="w-full max-w-md mx-4 bg-gray-900 border-gray-800" onClick={e => e.stopPropagation()}>
         <CardHeader>
-          <CardTitle className="flex items-center text-white">
+          <CardTitle className="flex items-center text-white text-2xl">
             <div className="w-6 h-6 bg-gradient-to-r from-blue-600 to-purple-600 rounded mr-2"></div>
             {t('vip.upgrade')}
           </CardTitle>

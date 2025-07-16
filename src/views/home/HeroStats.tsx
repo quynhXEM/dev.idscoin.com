@@ -1,7 +1,6 @@
 import React from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { TrendingUp, BarChart3, Users, Lock, Info } from "lucide-react";
-import useWindowSize from "@/hooks/useWindownSide";
 import { Tooltip } from "react-tooltip";
 
 interface HeroStatsProps {
@@ -10,7 +9,6 @@ interface HeroStatsProps {
 }
 
 const HeroStats: React.FC<HeroStatsProps> = ({ t, tooltips }) => {
-  const { width } = useWindowSize();
   return (
     <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mb-8 mt-8">
       {/* TVL */}
@@ -27,7 +25,7 @@ const HeroStats: React.FC<HeroStatsProps> = ({ t, tooltips }) => {
                   anchorSelect=".tooltips-tvl"
                   place="top"
                   className="text-wrap outline-none"
-                  style={{ maxWidth: width }}
+                  style={{ maxWidth: 270, zIndex: 100 }}
                 >
                   {tooltips.tvl}
                 </Tooltip>
@@ -52,7 +50,7 @@ const HeroStats: React.FC<HeroStatsProps> = ({ t, tooltips }) => {
                   anchorSelect=".tooltips-apy"
                   place="top"
                   className="text-wrap outline-none"
-                  style={{ maxWidth: width }}
+                  style={{ maxWidth: 270, zIndex: 100 }}
                 >
                   {tooltips.apy}
                 </Tooltip>
@@ -77,7 +75,7 @@ const HeroStats: React.FC<HeroStatsProps> = ({ t, tooltips }) => {
                   anchorSelect=".tooltips-users"
                   place="top"
                   className="text-wrap outline-none"
-                  style={{ maxWidth: width }}
+                  style={{ maxWidth: 270, zIndex: 100 }}
                 >
                   {tooltips.users}
                 </Tooltip>
@@ -102,7 +100,7 @@ const HeroStats: React.FC<HeroStatsProps> = ({ t, tooltips }) => {
                   anchorSelect=".tooltips-locked"
                   place="top"
                   className="text-wrap outline-none"
-                  style={{ maxWidth: width }}
+                  style={{ maxWidth: 270, zIndex: 100 }}
                 >
                   {tooltips.locked}
                 </Tooltip>
