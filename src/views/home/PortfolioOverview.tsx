@@ -37,7 +37,7 @@ export function PortfolioOverview({
       <h3 className="text-lg font-semibold text-white mb-2">{title}</h3>
       <p className="text-gray-400 text-sm mb-4">{description}</p>
       <Button
-        className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
+        className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 cursor-pointer"
         onClick={connectWallet}
       >
         <Wallet className="w-4 h-4 mr-2" />
@@ -153,7 +153,7 @@ export function PortfolioOverview({
 
               <Button
                 variant="outline"
-                className="w-full border-gray-700 text-gray-300 hover:bg-blue-900/30 hover:border-blue-600 hover:text-blue-300 bg-transparent"
+                className="w-full border-gray-700 text-gray-300 hover:bg-blue-900/30 hover:border-blue-600 hover:text-blue-300 bg-transparent cursor-pointer"
                 onClick={onShowRewardsModal}
               >
                 <Gift className="w-4 h-4 mr-2" />

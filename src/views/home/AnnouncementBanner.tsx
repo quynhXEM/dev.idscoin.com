@@ -27,10 +27,10 @@ const AnnouncementBanner: React.FC<AnnouncementBannerProps> = ({
       `}</style>
 
       <Card
-        className="bg-gradient-to-r from-blue-600 via-purple-600 to-blue-600 border-blue-500 cursor-pointer hover:shadow-lg hover:shadow-blue-500/30 transition-all duration-300"
+        className="p-3 bg-gradient-to-r from-blue-600 via-purple-600 to-blue-600 border-blue-500 cursor-pointer hover:shadow-lg hover:shadow-blue-500/30 transition-all duration-300"
         onClick={onClick}
       >
-        <CardContent className="">
+        <CardContent className="p-0">
           <div className="flex items-center justify-center">
             <div className="animate-bounce mr-3">
               <span className="text-2xl">🚀</span>

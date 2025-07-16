@@ -27,7 +27,7 @@ interface StakingInterfaceProps {
   t: (key: string) => string;
 }
 
-export function StakingInterface({t}: StakingInterfaceProps) {
+export function StakingInterface({ t }: StakingInterfaceProps) {
   const [stakeAmount, setStakeAmount] = useState("");
   const [lockPeriod, setLockPeriod] = useState("30");
   const [selectedChain, setSelectedChain] = useState(1);
@@ -104,7 +104,10 @@ export function StakingInterface({t}: StakingInterfaceProps) {
           <TabsContent value="stake" className="space-y-6">
             <div className="space-y-4">
               <div>
-                <Label htmlFor="amount" className="text-gray-900 font-semibold my-2">
+                <Label
+                  htmlFor="amount"
+                  className="text-gray-900 font-semibold my-2"
+                >
                   {t("staking.amount")}
                 </Label>
                 <div className="relative">
@@ -112,7 +115,11 @@ export function StakingInterface({t}: StakingInterfaceProps) {
                     id="amount"
                     placeholder="0.00"
                     value={stakeAmount}
-                    onChange={(e) => setStakeAmount(e.target.value.toLowerCase().replace(/[^0-9.]/g, ""))}
+                    onChange={(e) =>
+                      setStakeAmount(
+                        e.target.value.toLowerCase().replace(/[^0-9.]/g, "")
+                      )
+                    }
                     className="pr-20 bg-white/90 border-gray-800 text-gray-900 placeholder:text-gray-600 focus:border-gray-900 focus:bg-white font-medium"
                     disabled={!isConnected}
                   />
@@ -121,7 +128,7 @@ export function StakingInterface({t}: StakingInterfaceProps) {
                       type="button"
                       size="sm"
                       variant="ghost"
-                      className="h-6 px-2 text-xs text-gray-700 hover:text-gray-900 hover:bg-gray-200"
+                      className="h-6 px-2 text-xs text-gray-700 hover:text-gray-900 hover:bg-gray-200 cursor-pointer"
                       onClick={() => setStakeAmount(balance.ids.toString())}
                       disabled={!isConnected}
                     >
@@ -134,9 +141,12 @@ export function StakingInterface({t}: StakingInterfaceProps) {
                 </div>
                 <div className="flex justify-between text-sm mt-1">
                   <p className="text-gray-800 font-medium">
-                    {t("staking.availableBalance")}: {isConnected ? `${balance.ids} IDS` : "--- IDS"}
+                    {t("staking.availableBalance")}:{" "}
+                    {isConnected ? `${balance.ids} IDS` : "--- IDS"}
                   </p>
-                  <p className="text-gray-800 font-medium">{t("staking.min")}: 100 IDS</p>
+                  <p className="text-gray-800 font-medium">
+                    {t("staking.min")}: 100 IDS
+                  </p>
                 </div>
               </div>
 
@@ -150,14 +160,16 @@ export function StakingInterface({t}: StakingInterfaceProps) {
                       key={days}
                       variant={lockPeriod === days ? "default" : "outline"}
                       onClick={() => setLockPeriod(days)}
-                      className={`h-12 ${
+                      className={`h-12 cursor-pointer ${
                         lockPeriod === days
                           ? "bg-gray-900 hover:bg-gray-800 text-white font-bold border-gray-900"
                           : "border-gray-800 text-gray-900 hover:bg-gray-900 hover:text-white hover:border-gray-900 bg-white/80 font-semibold"
                       }`}
                     >
                       <div className="text-center">
-                        <div className="font-semibold">{days} {t("staking.days")}</div>
+                        <div className="font-semibold">
+                          {days} {t("staking.days")}
+                        </div>
                         <div className="text-xs opacity-80">
                           {days === "30"
                             ? "5%"
@@ -165,7 +177,8 @@ export function StakingInterface({t}: StakingInterfaceProps) {
                             ? "8%"
                             : days === "180"
                             ? "15%"
-                            : "25%"} {t("staking.apy")}
+                            : "25%"}{" "}
+                          {t("staking.apy")}
                         </div>
                       </div>
                     </Button>
@@ -181,11 +194,14 @@ export function StakingInterface({t}: StakingInterfaceProps) {
                   <span className="font-bold text-gray-900">
                     {stakeAmount && isConnected
                       ? (Number.parseFloat(stakeAmount) * 0.0007).toFixed(4)
-                      : "0.0000"} IDS
+                      : "0.0000"}{" "}
+                    IDS
                   </span>
                 </div>
                 <div className="flex items-center justify-between text-sm mt-1">
-                  <span className="text-gray-900 font-semibold">{t("staking.apy")}</span>
+                  <span className="text-gray-900 font-semibold">
+                    {t("staking.apy")}
+                  </span>
                   <span className="font-bold text-gray-900">
                     {lockPeriod === "30"
                       ? "5%"
@@ -198,36 +214,27 @@ export function StakingInterface({t}: StakingInterfaceProps) {
                 </div>
               </div>
 
-              {!isConnected && (
-                <div className="bg-yellow-900/20 backdrop-blur-sm p-4 rounded-lg border border-yellow-700/50">
-                  <div className="flex items-center gap-2 mb-2">
-                    <Wallet className="w-5 h-5 text-yellow-500" />
-                    <span className="text-yellow-300 font-semibold">
-                      {t("staking.notConnected")}
-                    </span>
-                  </div>
-                  <p className="text-yellow-200 text-sm mb-3">
-                    {t("staking.connectWallet")}
-                  </p>  
-                  <Button
-                    className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
-                    onClick={connectWallet}
-                  >
-                    <Wallet className="w-4 h-4 mr-2" />
-                    {t("staking.connectWalletBtn")}
-                  </Button>
-                </div>
+              {isConnected ? (
+                <Button
+                  className="w-full bg-gray-900 hover:bg-gray-800 text-white font-bold shadow-lg cursor-pointer"
+                  size="lg"
+                  disabled={!isConnected}
+                  onClick={handleStake}
+                >
+                  <Lock className="w-4 h-4 mr-2" />
+                  {isConnected
+                    ? t("staking.stake")
+                    : t("staking.notConnectedBtn")}
+                </Button>
+              ) : (
+                <Button
+                  className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 cursor-pointer"
+                  onClick={connectWallet}
+                >
+                  <Wallet className="w-4 h-4 mr-2" />
+                  {t("staking.connectWalletBtn")}
+                </Button>
               )}
-
-              <Button
-                className="w-full bg-gray-900 hover:bg-gray-800 text-white font-bold shadow-lg"
-                size="lg"
-                disabled={!isConnected}
-                onClick={handleStake}
-              >
-                <Lock className="w-4 h-4 mr-2" />
-                {isConnected ? t("staking.stake") : t("staking.notConnectedBtn")}
-              </Button>
             </div>
           </TabsContent>
 
@@ -237,7 +244,10 @@ export function StakingInterface({t}: StakingInterfaceProps) {
                 <Label className="text-gray-900 font-semibold">
                   {t("staking.selectChain")}
                 </Label>
-                <Select value={selectedChain.toString()} onValueChange={(value) => setSelectedChain(Number(value))}>
+                <Select
+                  value={selectedChain.toString()}
+                  onValueChange={(value) => setSelectedChain(Number(value))}
+                >
                   <SelectTrigger className="w-full mt-2 bg-white/90 border-gray-800 text-gray-900 focus:border-gray-900 font-medium">
                     <SelectValue placeholder={t("staking.selectChain")} />
                   </SelectTrigger>
@@ -246,8 +256,12 @@ export function StakingInterface({t}: StakingInterfaceProps) {
                       <div className="flex items-center gap-2">
                         <span className="text-lg">⟠</span>
                         <div>
-                          <div className="font-semibold">{t("staking.ethereum")}</div>
-                          <div className="text-xs text-gray-500">{t("staking.eth")}</div>
+                          <div className="font-semibold">
+                            {t("staking.ethereum")}
+                          </div>
+                          <div className="text-xs text-gray-500">
+                            {t("staking.eth")}
+                          </div>
                         </div>
                       </div>
                     </SelectItem>
@@ -255,8 +269,12 @@ export function StakingInterface({t}: StakingInterfaceProps) {
                       <div className="flex items-center gap-2">
                         <span className="text-lg">🟡</span>
                         <div>
-                          <div className="font-semibold">{t("staking.bsc")}</div>
-                          <div className="text-xs text-gray-500">{t("staking.bnb")}</div>
+                          <div className="font-semibold">
+                            {t("staking.bsc")}
+                          </div>
+                          <div className="text-xs text-gray-500">
+                            {t("staking.bnb")}
+                          </div>
                         </div>
                       </div>
                     </SelectItem>
@@ -264,8 +282,12 @@ export function StakingInterface({t}: StakingInterfaceProps) {
                       <div className="flex items-center gap-2">
                         <span className="text-lg">🟣</span>
                         <div>
-                          <div className="font-semibold">{t("staking.polygon")}</div>
-                          <div className="text-xs text-gray-500">{t("staking.matic")}</div>
+                          <div className="font-semibold">
+                            {t("staking.polygon")}
+                          </div>
+                          <div className="text-xs text-gray-500">
+                            {t("staking.matic")}
+                          </div>
                         </div>
                       </div>
                     </SelectItem>
@@ -273,8 +295,12 @@ export function StakingInterface({t}: StakingInterfaceProps) {
                       <div className="flex items-center gap-2">
                         <span className="text-lg">🔵</span>
                         <div>
-                          <div className="font-semibold">{t("staking.arbitrum")}</div>
-                          <div className="text-xs text-gray-500">{t("staking.arb")}</div>
+                          <div className="font-semibold">
+                            {t("staking.arbitrum")}
+                          </div>
+                          <div className="text-xs text-gray-500">
+                            {t("staking.arb")}
+                          </div>
                         </div>
                       </div>
                     </SelectItem>
@@ -294,7 +320,11 @@ export function StakingInterface({t}: StakingInterfaceProps) {
                     id="swapAmount"
                     placeholder="0.00"
                     value={swapAmount}
-                    onChange={(e) => setSwapAmount(e.target.value.toLowerCase().replace(/[^0-9.]/g, ""))}
+                    onChange={(e) =>
+                      setSwapAmount(
+                        e.target.value.toLowerCase().replace(/[^0-9.]/g, "")
+                      )
+                    }
                     className="pr-20 bg-white/90 border-gray-800 text-gray-900 placeholder:text-gray-600 focus:border-gray-900 focus:bg-white font-medium"
                     disabled={!isConnected}
                   />
@@ -303,7 +333,7 @@ export function StakingInterface({t}: StakingInterfaceProps) {
                       type="button"
                       size="sm"
                       variant="ghost"
-                      className="h-6 px-2 text-xs text-gray-700 hover:text-gray-900 hover:bg-gray-200"
+                      className="h-6 px-2 text-xs text-gray-700 hover:text-gray-900 hover:bg-gray-200 cursor-pointer"
                       onClick={() => setSwapAmount(balance.usdt)}
                       disabled={!isConnected}
                     >
@@ -316,9 +346,12 @@ export function StakingInterface({t}: StakingInterfaceProps) {
                 </div>
                 <div className="flex justify-between text-sm mt-1">
                   <p className="text-gray-800 font-medium">
-                    {t("staking.availableBalance")}: {isConnected ? `${balance.usdt} USDT` : "--- USDT"}
+                    {t("staking.availableBalance")}:{" "}
+                    {isConnected ? `${balance.usdt} USDT` : "--- USDT"}
                   </p>
-                  <p className="text-gray-800 font-medium">{t("staking.min")}: 10 USDT</p>
+                  <p className="text-gray-800 font-medium">
+                    {t("staking.min")}: 10 USDT
+                  </p>
                 </div>
               </div>
 
@@ -335,7 +368,9 @@ export function StakingInterface({t}: StakingInterfaceProps) {
                   <span className="text-gray-900 font-semibold">
                     {t("staking.transactionFee")}
                   </span>
-                  <span className="font-bold text-emerald-700">{t("staking.free")}</span>
+                  <span className="font-bold text-emerald-700">
+                    {t("staking.free")}
+                  </span>
                 </div>
                 <div className="flex items-center justify-between text-sm">
                   <span className="text-gray-900 font-semibold">
@@ -345,14 +380,17 @@ export function StakingInterface({t}: StakingInterfaceProps) {
                     ~
                     {swapAmount && isConnected
                       ? Number.parseFloat(swapAmount).toFixed(2)
-                      : "0.00"} IDS
+                      : "0.00"}{" "}
+                    IDS
                   </span>
                 </div>
                 <div className="flex items-center justify-between text-sm border-t border-gray-800 pt-2">
                   <span className="text-gray-900 font-semibold">
                     {t("staking.processingTime")}
                   </span>
-                  <span className="font-bold text-gray-900">5-10 {t("staking.seconds")}</span>
+                  <span className="font-bold text-gray-900">
+                    5-10 {t("staking.seconds")}
+                  </span>
                 </div>
               </div>
 
@@ -365,14 +403,16 @@ export function StakingInterface({t}: StakingInterfaceProps) {
                       }`}
                     ></div>
                     <span className="text-sm text-gray-900 font-medium">
-                      {isConnected ? t("staking.connectWallet") : t("staking.notConnected")}
+                      {isConnected
+                        ? t("staking.connectWallet")
+                        : t("staking.notConnected")}
                     </span>
                   </div>
                   {!isConnected && (
                     <Button
                       size="sm"
                       variant="outline"
-                      className="border-gray-800 text-gray-900 hover:bg-gray-900 hover:text-white bg-white/60"
+                      className="border-gray-800 text-gray-900 hover:bg-gray-900 hover:text-white bg-white/60 cursor-pointer"
                       onClick={connectWallet}
                     >
                       {t("staking.connectWallet")}
@@ -396,7 +436,7 @@ export function StakingInterface({t}: StakingInterfaceProps) {
               </div>
 
               <Button
-                className="w-full bg-gray-900 hover:bg-gray-800 text-white font-bold shadow-lg"
+                className="w-full bg-gray-900 hover:bg-gray-800 text-white font-bold shadow-lg cursor-pointer"
                 size="lg"
                 disabled={!isConnected}
                 onClick={handleSwap}

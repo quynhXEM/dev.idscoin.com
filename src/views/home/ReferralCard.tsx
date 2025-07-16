@@ -50,7 +50,7 @@ export function ReferralSection({
   const copyReferralLink = async () => {
     try {
       await navigator.clipboard.writeText(`${process.env.NEXT_PUBLIC_WEB_URL}${
-        registrationUsername || "USER123456"
+        registrationUsername || account?.username
       }`);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
@@ -102,7 +102,7 @@ export function ReferralSection({
               {t("referral.connectWalletSub")}
             </p>
             <Button
-              className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
+              className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 cursor-pointer"
               onClick={connectWallet}
             >
               <Wallet className="w-4 h-4 mr-2" />
@@ -212,7 +212,7 @@ export function ReferralSection({
               </div>
 
               <Button
-                className="w-full bg-gradient-to-r from-yellow-600 to-orange-600 hover:from-yellow-700 hover:to-orange-700"
+                className="w-full bg-gradient-to-r from-yellow-600 to-orange-600 hover:from-yellow-700 hover:to-orange-700 cursor-pointer"
                 onClick={handleRegistration}
                 disabled={!registrationEmail || !registrationUsername}
               >
@@ -286,7 +286,7 @@ export function ReferralSection({
               </div>
               <Button
                 size="sm"
-                className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
+                className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 cursor-pointer"
                 onClick={onShowVipModal}
               >
                 {t("vip.upgrade100")}
@@ -315,11 +315,11 @@ export function ReferralSection({
             <Button
               size="sm"
               onClick={copyReferralLink}
-              className={
+              className={`cursor-pointer ${
                 copied
                   ? "bg-emerald-600 hover:bg-emerald-700"
                   : "bg-blue-600 hover:bg-blue-700"
-              }
+              }`}
             >
               {copied ? (
                 <>
@@ -367,7 +367,7 @@ export function ReferralSection({
         <div className="pt-2">
           <Button
             variant="outline"
-            className="w-full border-gray-700 text-gray-300 hover:bg-blue-900/30 hover:border-blue-600 hover:text-blue-300 bg-transparent"
+            className="w-full border-gray-700 text-gray-300 hover:bg-blue-900/30 hover:border-blue-600 hover:text-blue-300 bg-transparent cursor-pointer"
             size="sm"
             onClick={onShowCommissionModal}
           >

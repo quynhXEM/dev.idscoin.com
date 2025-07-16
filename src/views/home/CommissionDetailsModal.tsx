@@ -187,7 +187,7 @@ const CommissionDetailsModal: React.FC<CommissionDetailsModalProps> = ({
                     </div>
                     <Button
                       size="sm"
-                      className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
+                      className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 cursor-pointer"
                       onClick={() => {
                         onClose()
                         setShowVipModal(true)
@@ -202,7 +202,7 @@ const CommissionDetailsModal: React.FC<CommissionDetailsModalProps> = ({
               <div className="flex justify-end">
                 <Button
                   variant="outline"
-                  className="border-gray-700 text-gray-300 hover:bg-gray-800 hover:text-gray-200 bg-transparent"
+                  className="border-gray-700 text-gray-300 hover:bg-gray-800 hover:text-gray-200 bg-transparent cursor-pointer"
                   onClick={() => onClose()}
                 >
                   {t('referral.close')}

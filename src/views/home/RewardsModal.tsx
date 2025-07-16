@@ -219,7 +219,7 @@ const RewardsModal: React.FC<RewardsModalProps> = ({ t, show, onClose }) => {
 
           <div className="flex space-x-3">
             <Button
-              className="flex-1 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-700 hover:to-blue-700"
+              className="flex-1 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-700 hover:to-blue-700 cursor-pointer"
               onClick={() => {
                 // Handle claim rewards logic here
                 onClose();
@@ -230,7 +230,7 @@ const RewardsModal: React.FC<RewardsModalProps> = ({ t, show, onClose }) => {
             </Button>
             <Button
               variant="outline"
-              className="flex-1 border-gray-700 text-gray-300 hover:bg-gray-800 hover:text-gray-200 bg-transparent"
+              className="flex-1 border-gray-700 text-gray-300 hover:bg-gray-800 hover:text-gray-200 bg-transparent cursor-pointer"
               onClick={() => onClose()}
             >
               {t("rewards.close")}
