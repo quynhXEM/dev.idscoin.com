@@ -22,6 +22,7 @@ import {
 import { Zap, Lock, DollarSign, Wallet, Loader2 } from "lucide-react";
 import { useUserWallet } from "@/commons/UserWalletContext";
 import { useAppMetadata } from "@/commons/AppMetadataContext";
+import { log } from "node:console";
 
 interface StakingInterfaceProps {
   t: (key: string) => string;
@@ -67,11 +68,41 @@ export function StakingInterface({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedChain, wallet]);
 
-
+  const errorNotiTransaction = ({error, type} : {error: any, type: boolean}) => {
+    const code = error.code;
+        if (code == "4001") {
+          setNotificationData({
+            title: t("noti.error"),
+            message: t("noti.transactioncancel"),
+            type: false,
+          });
+        } else if (code == "4902" || code == "-32602") {
+          setNotificationData({
+            title: t("noti.error"),
+            message: t("noti.web3ChainNotFound", {
+              chain:
+                usdt_payment_wallets_testnet[
+                  selectedChain as keyof typeof usdt_payment_wallets_testnet
+                ].name,
+            }),
+            type: false,
+          });
+        } else {
+          setNotificationData({
+            title: t("noti.error"),
+            message: type ? t("noti.stakeError", {
+              amount: stakeAmount,
+              days: lockPeriod,
+            }) : t("noti.swapError", { amount: swapAmount, ids: swapAmount }),
+            type: false,
+          });
+        }
+        setShowNotificationModal(true);
+  };
   const handleStake = async () => {
     if (!stakeAmount || Number(stakeAmount) <= 0) return;
     setIsloadding(true);
-    
+
     const txHash = await sendTransaction({
       to: ids_distribution_wallet.address,
       amount: stakeAmount,
@@ -91,17 +122,7 @@ export function StakingInterface({
         setIsloadding(false);
       })
       .catch((error) => {
-        console.log(error?.code);
-        
-        setNotificationData({
-          title: t("noti.error"),
-          message:
-            error?.code === "4001"
-              ? t("noti.transactioncancel")
-              : t("noti.stakeError", { amount: stakeAmount, days: lockPeriod }),
-          type: false,
-        });
-        setShowNotificationModal(true);
+        errorNotiTransaction({error, type: true});
         setIsloadding(false);
       });
   };
@@ -135,17 +156,7 @@ export function StakingInterface({
         setIsloadding(false);
       })
       .catch((error) => {
-        console.log(error);
-        
-        setNotificationData({
-          title: t("noti.error"),
-          message:
-            error?.code == "4001"
-              ? t("noti.transactioncancel")
-              : t("noti.swapError", { amount: swapAmount, ids: swapAmount }),
-          type: false,
-        });
-        setShowNotificationModal(true);
+        errorNotiTransaction({error, type: false});
         setIsloadding(false);
       });
   };
@@ -325,7 +336,9 @@ export function StakingInterface({
                 </Label>
                 <Select
                   value={selectedChain.toString()}
-                  onValueChange={(value) => setSelectedChain(Number(value))}
+                  onValueChange={(value) => {
+                    setSelectedChain(value);
+                  }}
                 >
                   <SelectTrigger className="w-full mt-2 bg-white/90 border-gray-800 text-gray-900 focus:border-gray-900 font-medium">
                     <SelectValue placeholder={t("staking.selectChain")} />

@@ -53,6 +53,7 @@ export type WalletContextType = {
     referrer_id: string | null;
     avatar: string | null;
   } | null;
+  checkChainExists: (chainId: string) => Promise<boolean>;
 };
 
 const UserWalletContext = createContext<WalletContextType | undefined>(
@@ -274,10 +275,9 @@ export function UserWalletProvider({ children }: { children: ReactNode }) {
         // throw new Error("Thiếu thông tin gửi token hoặc type không hợp lệ");
       }
     } catch (err) {
-      throw err;
+        throw err;
     }
   };
-
   // Hàm lấy số dư coin hoặc token
   const getBalance = async (
     address: string,
@@ -388,6 +388,23 @@ export function UserWalletProvider({ children }: { children: ReactNode }) {
     }
   };
 
+  const checkChainExists = async (chainId: string): Promise<boolean> => {
+    if (typeof window === "undefined" || !(window as any).ethereum) return false;
+    const provider = (window as any).ethereum;
+    try {
+      await provider.request({
+        method: "wallet_switchEthereumChain",
+        params: [{ chainId }],
+      });
+      return true; // Nếu switch thành công, chain đã tồn tại
+    } catch (error: any) {
+      if (error.code === 4902) {
+        return false;
+      }
+      throw error; // Lỗi khác thì throw ra ngoài
+    }
+  }
+
   return (
     <UserWalletContext.Provider
       value={{
@@ -400,6 +417,7 @@ export function UserWalletProvider({ children }: { children: ReactNode }) {
         getBalance,
         balance,
         account,
+        checkChainExists
       }}
     >
       {children}
