@@ -81,6 +81,13 @@ export function ReferralSection({
     if (update_info.ok) {
       setIsRegister(true);
       connectWallet();
+    } else {
+      setNotificationData({
+        title: t("noti.error"),
+        message: update_info.error.errors[0].message,
+        type: false,
+      });
+      setShowNotificationModal(true);
     }
   };
 

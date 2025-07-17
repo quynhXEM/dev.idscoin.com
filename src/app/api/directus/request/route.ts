@@ -93,7 +93,7 @@ export const POST = async (request: Request) => {
       );
     }
     return NextResponse.json({
-      error: "DIRECTUS_REQUEST_ERROR",
+      error: error,
     });
   }
 };
