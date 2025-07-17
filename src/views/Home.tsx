@@ -26,7 +26,7 @@ export default function IDSStakingPlatform() {
   const [showRewardsModal, setShowRewardsModal] = useState(false);
   const [showInfoModal, setShowInfoModal] = useState(false);
   const [vipSelectedChain, setVipSelectedChain] = useState(1);
-  const { connectWallet, getBalance, isConnected, wallet } = useUserWallet();
+  const { connectWallet, getBalance, isConnected, wallet, disconnect } = useUserWallet();
 
   const [showNotificationModal, setShowNotificationModal] = useState(false);
   const [notificationData, setNotificationData] = useState({
@@ -44,6 +44,26 @@ export default function IDSStakingPlatform() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    if (typeof window !== "undefined" && typeof window.ethereum !== "undefined") {
+      window.ethereum.on("accountsChanged", (accounts: string[]) => {
+        if (accounts.length === 0) {
+          disconnect();
+        } else {
+          connectWallet();
+        }
+      });
+    }
+  
+    return () => {
+      if (window.ethereum?.removeListener) {
+        window.ethereum.removeListener("accountsChanged", () => {
+        });
+      }
+    };
+  }, []);
+  
 
   useEffect(() => {
     if (!isConnected || !wallet) return;

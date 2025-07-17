@@ -3,6 +3,8 @@ import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
 import { ThemeProvider } from "next-themes";
 import { NotificationProvider } from "@/commons/NotificationContext";
+import { AppMetadataProvider } from "@/commons/AppMetadataContext";
+import { fetchAppMetadata } from "@/libs/utils";
 
 export default async function Layout({
   children,
@@ -10,6 +12,7 @@ export default async function Layout({
   children: React.ReactNode;
 }>) {
   const messages = await getMessages();
+  const metadata = await fetchAppMetadata();
   return (
     <NextIntlClientProvider messages={messages}>
       <ThemeProvider
@@ -18,13 +21,15 @@ export default async function Layout({
         enableSystem
         disableTransitionOnChange
       >
-        <NotificationProvider>
-          <UserWalletProvider>
-            <UserStatusProvider>
-              {children}
-            </UserStatusProvider>
-          </UserWalletProvider>
-        </NotificationProvider>
+        <AppMetadataProvider initialMetadata={metadata}>
+          <NotificationProvider>
+            <UserWalletProvider>
+              <UserStatusProvider>
+                {children}
+              </UserStatusProvider>
+            </UserWalletProvider>
+          </NotificationProvider>
+        </AppMetadataProvider>
       </ThemeProvider>
     </NextIntlClientProvider>
   );
