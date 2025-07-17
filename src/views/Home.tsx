@@ -67,7 +67,7 @@ export default function IDSStakingPlatform() {
   
 
   useEffect(() => {
-    if (!isConnected || !wallet) return;
+    if (!isConnected || !wallet || !vipSelectedChain) return;
     getBalance(
       wallet.address,
       Number(vipSelectedChain),

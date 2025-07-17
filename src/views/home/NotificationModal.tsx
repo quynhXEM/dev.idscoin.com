@@ -8,7 +8,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { CheckCircle, XCircle, X } from "lucide-react";
+import { CheckCircle, XCircle, X, WandSparklesIcon, CircleAlert } from "lucide-react";
 
 interface NotificationModalProps {
   t: (key: string) => string;
@@ -53,7 +53,7 @@ export function NotificationModal({
                 {isSuccess ? (
                   <CheckCircle className={`w-6 h-6 ${iconColor}`} />
                 ) : (
-                  <XCircle className={`w-6 h-6 ${iconColor}`} />
+                  <CircleAlert className={`w-6 h-6 ${iconColor}`} />
                 )}
               </div>
               <div>
@@ -80,23 +80,6 @@ export function NotificationModal({
           {/* Message Content */}
           <div className={`p-4 rounded-lg border ${borderColor} ${bgGradient}`}>
             <p className="text-gray-300 text-sm leading-relaxed">{message}</p>
-          </div>
-
-          {/* Action Buttons */}
-          <div className="flex gap-3">
-            <Button
-              variant="outline"
-              className="flex-1 border-gray-700 text-gray-300 hover:bg-gray-800 hover:text-gray-200 bg-transparent"
-              onClick={onClose}
-            >
-              {t("noti.close")}
-            </Button>
-            <Button
-              className={`flex-1 ${buttonColor} text-white font-semibold`}
-              onClick={onClose}
-            >
-              {isSuccess ? t("noti.continue") : t("noti.tryAgain")}
-            </Button>
           </div>
         </CardContent>
       </Card>

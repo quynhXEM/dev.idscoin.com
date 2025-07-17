@@ -372,11 +372,11 @@ export function UserWalletProvider({ children }: { children: ReactNode }) {
       }
     } catch (error) {
       if (error?.code == "4902") {
-        notify({
-          title: t("noti.web3Error"),
-          message: t("noti.web3ChainNotFound", {chain: usdt_payment_wallets_testnet[chainId as keyof typeof usdt_payment_wallets_testnet]?.name}),
-          type: false,
-        });
+        // notify({
+        //   title: t("noti.web3Error"),
+        //   message: t("noti.web3ChainNotFound", {chain: usdt_payment_wallets_testnet[chainId as keyof typeof usdt_payment_wallets_testnet]?.name}),
+        //   type: false,
+        // });
       } else {
         notify({
           title: t("noti.web3Error"),

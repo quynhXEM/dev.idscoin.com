@@ -21,6 +21,7 @@ import {
   Gift,
   Mail,
   User,
+  Loader2,
 } from "lucide-react";
 import { useUserStatus, useUserWallet } from "@/commons/UserWalletContext";
 
@@ -47,6 +48,7 @@ export function ReferralSection({
   } = useUserWallet();
   const [registrationEmail, setRegistrationEmail] = useState(account?.email || "");
   const [registrationUsername, setRegistrationUsername] = useState(account?.username || "");
+  const [isloading, setIsLoading] = useState<boolean>(false);
   const [copied, setCopied] = useState(false);
   
   const { isRegister, isVip, setIsRegister } = useUserStatus();
@@ -65,7 +67,7 @@ export function ReferralSection({
 
   const handleRegistration = async () => {
     if (!registrationEmail || !registrationUsername) return;
-
+    setIsLoading(true);
     const update_info = await fetch("/api/directus/request", {
       method: "POST",
       body: JSON.stringify({
@@ -89,6 +91,7 @@ export function ReferralSection({
       });
       setShowNotificationModal(true);
     }
+    setIsLoading(false);
   };
 
   if (!isConnected) {
@@ -225,9 +228,9 @@ export function ReferralSection({
               <Button
                 className="w-full bg-gradient-to-r from-yellow-600 to-orange-600 hover:from-yellow-700 hover:to-orange-700 cursor-pointer"
                 onClick={handleRegistration}
-                disabled={!registrationEmail || !registrationUsername}
+                disabled={!registrationEmail || !registrationUsername || isloading}
               >
-                <UserPlus className="w-4 h-4 mr-2" />
+                {isloading ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <UserPlus className="w-4 h-4 mr-2" />}
                 {t("referral.createlink")}
               </Button>
             </div>
