@@ -39,6 +39,7 @@ export function AppMetadataProvider({ initialMetadata, children }: { initialMeta
   //   theme_color: null,
   //   custom_fields: {
   //     usdt_payment_wallets: [Object],
+  //     usdt_payment_wallets_testnet: [Object],
   //     ids_distribution_wallet: [Object]
   //   },
   //   device_token: []

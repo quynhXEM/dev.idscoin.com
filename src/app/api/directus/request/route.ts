@@ -13,8 +13,6 @@ import {
 const APP_TOKEN = process.env.APP_TOKEN || "";
 export const POST = async (request: Request) => {
   try {
-    console.log(APP_TOKEN);
-    
     const data = await request.json();
     const type = data?.type ?? "";
     const collection = data?.collection ?? "";

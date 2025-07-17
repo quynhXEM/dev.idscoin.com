@@ -240,7 +240,9 @@
       "upgradeVipError": "You have failed to upgrade to VIP. Please try again later.",
       "claimRewardsSuccess": "You have successfully claimed {amount} IDS.",
       "web3Error": "Web3 error",
-      "web3ErrorSub": "Web3 environment not found. Please install web3 on your browser."
+      "web3ErrorSub": "Web3 environment not found. Please install web3 on your browser.",
+      "web3ChainNotFound" : "Your wallet is not added to chain {chain}. Please add it to use our services.",
+      "web3BalanceError" : "Error when getting wallet balance. Please try again later."
     }
   }
 }

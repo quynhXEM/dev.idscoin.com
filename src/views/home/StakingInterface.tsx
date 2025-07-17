@@ -21,7 +21,8 @@ import {
 } from "@/components/ui/select";
 import { Zap, Lock, DollarSign, Wallet, Loader2 } from "lucide-react";
 import { useUserWallet } from "@/commons/UserWalletContext";
-import { usdtContracts } from "@/libs/crypto";
+import { useAppMetadata } from "@/commons/AppMetadataContext";
+import Image from "next/image";
 
 interface StakingInterfaceProps {
   t: (key: string) => string;
@@ -29,12 +30,19 @@ interface StakingInterfaceProps {
   setNotificationData: (data: any) => void;
 }
 
-export function StakingInterface({ t, setShowNotificationModal, setNotificationData }: StakingInterfaceProps) {
+export function StakingInterface({
+  t,
+  setShowNotificationModal,
+  setNotificationData,
+}: StakingInterfaceProps) {
   const [isloadding, setIsloadding] = useState(false);
   const [stakeAmount, setStakeAmount] = useState("");
   const [lockPeriod, setLockPeriod] = useState("30");
-  const [selectedChain, setSelectedChain] = useState(1);
+  const [selectedChain, setSelectedChain] = useState(5);
   const [swapAmount, setSwapAmount] = useState("");
+  const {
+    custom_fields: { usdt_payment_wallets, usdt_payment_wallets_testnet },
+  } = useAppMetadata();
   const {
     connectWallet,
     isConnected,
@@ -49,7 +57,9 @@ export function StakingInterface({ t, setShowNotificationModal, setNotificationD
     getBalance(
       wallet.address,
       selectedChain,
-      usdtContracts[selectedChain as keyof typeof usdtContracts]
+      usdt_payment_wallets_testnet[
+        selectedChain as keyof typeof usdt_payment_wallets_testnet
+      ].token_address
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedChain]);
@@ -66,7 +76,10 @@ export function StakingInterface({ t, setShowNotificationModal, setNotificationD
       .then((txHash) => {
         setNotificationData({
           title: t("noti.success"),
-          message: t("noti.stakeSuccess", { amount: stakeAmount, days: lockPeriod}),
+          message: t("noti.stakeSuccess", {
+            amount: stakeAmount,
+            days: lockPeriod,
+          }),
           type: true,
         });
         setShowNotificationModal(true);
@@ -75,7 +88,10 @@ export function StakingInterface({ t, setShowNotificationModal, setNotificationD
       .catch((error) => {
         setNotificationData({
           title: t("noti.error"),
-          message: error?.code === "4001" ? t("noti.transactioncancel") : t("noti.stakeError", { amount: stakeAmount, days: lockPeriod }),
+          message:
+            error?.code === "4001"
+              ? t("noti.transactioncancel")
+              : t("noti.stakeError", { amount: stakeAmount, days: lockPeriod }),
           type: false,
         });
         setShowNotificationModal(true);
@@ -91,26 +107,35 @@ export function StakingInterface({ t, setShowNotificationModal, setNotificationD
       amount: swapAmount,
       type: "token",
       chainId: Number(selectedChain),
-      tokenAddress: usdtContracts[selectedChain as keyof typeof usdtContracts],
+      tokenAddress:
+        usdt_payment_wallets_testnet[
+          selectedChain as keyof typeof usdt_payment_wallets_testnet
+        ],
     })
-        .then((txHash) => {
-          setNotificationData({
-            title: t("noti.success"),
-            message: t("noti.swapSuccess", { amount: swapAmount, ids: swapAmount }),
-            type: true,
-          });
-          setShowNotificationModal(true);
-          setIsloadding(false);
-        })
-        .catch((error) => {
-          setNotificationData({
-            title: t("noti.error"),
-            message: error?.code == "4001" ? t("noti.transactioncancel") : t("noti.swapError", { amount: swapAmount, ids: swapAmount }),
-            type: false,
-          });
-          setShowNotificationModal(true);
-          setIsloadding(false);
+      .then((txHash) => {
+        setNotificationData({
+          title: t("noti.success"),
+          message: t("noti.swapSuccess", {
+            amount: swapAmount,
+            ids: swapAmount,
+          }),
+          type: true,
         });
+        setShowNotificationModal(true);
+        setIsloadding(false);
+      })
+      .catch((error) => {
+        setNotificationData({
+          title: t("noti.error"),
+          message:
+            error?.code == "4001"
+              ? t("noti.transactioncancel")
+              : t("noti.swapError", { amount: swapAmount, ids: swapAmount }),
+          type: false,
+        });
+        setShowNotificationModal(true);
+        setIsloadding(false);
+      });
   };
 
   return (
@@ -294,58 +319,15 @@ export function StakingInterface({ t, setShowNotificationModal, setNotificationD
                     <SelectValue placeholder={t("staking.selectChain")} />
                   </SelectTrigger>
                   <SelectContent className="bg-white border-gray-800">
-                    <SelectItem value="1">
-                      <div className="flex items-center gap-2">
-                        <span className="text-lg">⟠</span>
-                        <div>
-                          <div className="font-semibold">
-                            {t("staking.ethereum")}
+                    {Object.entries(usdt_payment_wallets_testnet).map(
+                      ([key, value]) => (
+                        <SelectItem key={key} value={key}>
+                          <div className="flex items-center gap-2">
+                            <div className="font-semibold">{value.name}</div>
                           </div>
-                          <div className="text-xs text-gray-500">
-                            {t("staking.eth")}
-                          </div>
-                        </div>
-                      </div>
-                    </SelectItem>
-                    <SelectItem value="56">
-                      <div className="flex items-center gap-2">
-                        <span className="text-lg">🟡</span>
-                        <div>
-                          <div className="font-semibold">
-                            {t("staking.bsc")}
-                          </div>
-                          <div className="text-xs text-gray-500">
-                            {t("staking.bnb")}
-                          </div>
-                        </div>
-                      </div>
-                    </SelectItem>
-                    <SelectItem value="137">
-                      <div className="flex items-center gap-2">
-                        <span className="text-lg">🟣</span>
-                        <div>
-                          <div className="font-semibold">
-                            {t("staking.polygon")}
-                          </div>
-                          <div className="text-xs text-gray-500">
-                            {t("staking.matic")}
-                          </div>
-                        </div>
-                      </div>
-                    </SelectItem>
-                    <SelectItem value="42161">
-                      <div className="flex items-center gap-2">
-                        <span className="text-lg">🔵</span>
-                        <div>
-                          <div className="font-semibold">
-                            {t("staking.arbitrum")}
-                          </div>
-                          <div className="text-xs text-gray-500">
-                            {t("staking.arb")}
-                          </div>
-                        </div>
-                      </div>
-                    </SelectItem>
+                        </SelectItem>
+                      )
+                    )}
                   </SelectContent>
                 </Select>
               </div>

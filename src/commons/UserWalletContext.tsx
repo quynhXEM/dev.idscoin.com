@@ -11,6 +11,7 @@ import React, {
 } from "react";
 import { useNotification } from "@/commons/NotificationContext";
 import { useTranslations } from "next-intl";
+import { useAppMetadata } from "./AppMetadataContext";
 
 export type SendTxParams = {
   chainId?: number;
@@ -58,48 +59,9 @@ const UserWalletContext = createContext<WalletContextType | undefined>(
   undefined
 );
 
-const NETWORKS: Record<
-  number,
-  {
-    chainId: string;
-    chainName: string;
-    rpcUrls: string[];
-    nativeCurrency: { name: string; symbol: string; decimals: number };
-    blockExplorerUrls: string[];
-  }
-> = {
-  1: {
-    chainId: "0x1",
-    chainName: "Ethereum Mainnet",
-    rpcUrls: ["https://rpc.ankr.com/eth"],
-    nativeCurrency: { name: "Ether", symbol: "ETH", decimals: 18 },
-    blockExplorerUrls: ["https://etherscan.io"],
-  },
-  56: {
-    chainId: "0x38",
-    chainName: "BNB Smart Chain Mainnet",
-    rpcUrls: ["https://bsc-dataseed.binance.org/"],
-    nativeCurrency: { name: "BNB", symbol: "BNB", decimals: 18 },
-    blockExplorerUrls: ["https://bscscan.com"],
-  },
-  137: {
-    chainId: "0x89",
-    chainName: "Polygon Mainnet",
-    rpcUrls: ["https://polygon-rpc.com/"],
-    nativeCurrency: { name: "MATIC", symbol: "MATIC", decimals: 18 },
-    blockExplorerUrls: ["https://polygonscan.com"],
-  },
-  42161: {
-    chainId: "0xa4b1",
-    chainName: "Arbitrum One",
-    rpcUrls: ["https://arb1.arbitrum.io/rpc"],
-    nativeCurrency: { name: "ETH", symbol: "ETH", decimals: 18 },
-    blockExplorerUrls: ["https://arbiscan.io"],
-  },
-};
-
 export function UserWalletProvider({ children }: { children: ReactNode }) {
   const [wallet, setWallet] = useState<WalletInfo>(null);
+  const {custom_fields: {usdt_payment_wallets, usdt_payment_wallets_testnet}} = useAppMetadata();
   const t = useTranslations("home");
   const [balance, setBalance] = useState<{ ids: string; usdt: string }>({
     ids: "0",
@@ -317,74 +279,104 @@ export function UserWalletProvider({ children }: { children: ReactNode }) {
     if (typeof window === "undefined" || !(window as any).ethereum) {
       throw new Error("Không tìm thấy provider");
     }
-    const provider = (window as any).ethereum;
+    try {
+      const provider = (window as any).ethereum;
 
-    // Chuyển chain nếu cần
-    if (chainId) {
-      const currentChain = await provider.request({ method: "eth_chainId" });
-      if (parseInt(currentChain, 16) !== chainId) {
-        await provider.request({
-          method: "wallet_switchEthereumChain",
+      // Chuyển chain nếu cần
+      if (chainId) {
+        const currentChain = await provider.request({ method: "eth_chainId" });
+        if (parseInt(currentChain, 16) !== chainId) {
+          await provider.request({
+            method: "wallet_switchEthereumChain",
+            params: [
+              {
+                chainId:
+                usdt_payment_wallets_testnet[chainId as keyof typeof usdt_payment_wallets_testnet]?.chainId || "0x" + chainId.toString(16),
+              },
+            ],
+          });
+        }
+      }
+
+      if (!tokenAddress) {
+        // Lấy số dư coin
+        const balanceHex = await provider.request({
+          method: "eth_getBalance",
+          params: [address, "latest"],
+        });
+        if (!balanceHex || balanceHex === "0x") {
+          setBalance((prev) => ({
+            ...prev,
+            ids: "0.00",
+          }));
+          return "0.00";
+        }
+        setBalance((prev) => ({
+          ...prev,
+          ids: (Number(BigInt(balanceHex)) / 1e18).toFixed(2).toString(),
+        }));
+        return (Number(BigInt(balanceHex)) / 1e18).toFixed(2).toString();
+      } else {
+        // Lấy số dư token ERC20
+        const methodId = "0x70a08231"; // balanceOf(address)
+        const addressPadded = address.replace("0x", "").padStart(64, "0");
+        const data = methodId + addressPadded;
+
+        const balanceHex = await provider.request({
+          method: "eth_call",
           params: [
             {
-              chainId:
-                NETWORKS[chainId]?.chainId || "0x" + chainId.toString(16),
+              to: tokenAddress,
+              data,
             },
+            "latest",
           ],
         });
-      }
-    }
-
-    if (!tokenAddress) {
-      // Lấy số dư coin
-      const balanceHex = await provider.request({
-        method: "eth_getBalance",
-        params: [address, "latest"],
-      });
-      setBalance((prev) => ({
-        ...prev,
-        ids: (Number(BigInt(balanceHex)) / 1e18).toFixed(2).toString(),
-      }));
-      return (Number(BigInt(balanceHex)) / 1e18).toFixed(2).toString();
-    } else {
-      // Lấy số dư token ERC20
-      const methodId = "0x70a08231"; // balanceOf(address)
-      const addressPadded = address.replace("0x", "").padStart(64, "0");
-      const data = methodId + addressPadded;
-
-      const balanceHex = await provider.request({
-        method: "eth_call",
-        params: [
-          {
-            to: tokenAddress,
-            data,
-          },
-          "latest",
-        ],
-      });
-
-      // Lấy số thập phân của token
-      const decimalsData = "0x313ce567"; // decimals()
-      const decimalsHex = await provider.request({
-        method: "eth_call",
-        params: [
-          {
-            to: tokenAddress,
-            data: decimalsData,
-          },
-          "latest",
-        ],
-      });
-      const decimals = parseInt(decimalsHex, 16);
-      setBalance((prev) => ({
-        ...prev,
-        usdt: (Number(BigInt(balanceHex)) / 10 ** decimals)
+        if (!balanceHex || balanceHex === "0x") {
+          setBalance((prev) => ({
+            ...prev,
+            usdt: "0.00",
+          }));
+          return "0.00";
+        }
+        // Lấy số thập phân của token
+        const decimalsData = "0x313ce567"; // decimals()
+        const decimalsHex = await provider.request({
+          method: "eth_call",
+          params: [
+            {
+              to: tokenAddress,
+              data: decimalsData,
+            },
+            "latest",
+          ],
+        });
+        const decimals = parseInt(decimalsHex, 16);
+        setBalance((prev) => ({
+          ...prev,
+          usdt: (Number(BigInt(balanceHex)) / 10 ** decimals)
+            .toFixed(2)
+            .toString(),
+        }));
+        return (Number(BigInt(balanceHex)) / 10 ** decimals)
           .toFixed(2)
-          .toString(),
-      }));
-      return (Number(BigInt(balanceHex)) / 10 ** decimals)
-        .toFixed(2)
-        .toString();
+          .toString();
+      }
+    } catch (error) {
+      if (error?.code == "4902") {
+        notify({
+          title: t("noti.web3Error"),
+          message: t("noti.web3ChainNotFound", {chain: usdt_payment_wallets_testnet[chainId as keyof typeof usdt_payment_wallets_testnet]?.name}),
+          type: false,
+        });
+      } else {
+        notify({
+          title: t("noti.web3Error"),
+          message: t("noti.web3BalanceError"),
+          type: false,
+        });
+      }
+      return "0";
     }
   };
 

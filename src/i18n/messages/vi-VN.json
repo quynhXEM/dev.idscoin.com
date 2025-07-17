@@ -241,7 +241,9 @@
       "upgradeVipError": "Bạn đã nâng cấp VIP thất bại. Vui lòng thử lại sau.",
       "claimRewardsSuccess": "Bạn đã nhận thành công {amount} IDS.",
       "web3Error": "Lỗi ví web3",
-      "web3ErrorSub": "Không tìm thấy môi trường ví web3. Vui lòng cài đặt ví web3 trên trình duyệt của bạn."
+      "web3ErrorSub": "Không tìm thấy môi trường ví web3. Vui lòng cài đặt ví web3 trên trình duyệt của bạn.",
+      "web3ChainNotFound" : "Ví của bạn chưa được thêm chain {chain}. Thêm vào để sử dụng dịch vụ của chúng tôi.",
+      "web3BalanceError" : "Lỗi khi lấy số dư ví. Vui lòng thử lại sau."
     }
   }
 

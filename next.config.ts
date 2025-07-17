@@ -65,13 +65,9 @@ const nextConfig: NextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
-  // rewrites: async () => [
-  //   {
-  //     source: '/:locale(vi-VN|en-US)/api/:path*',
-  //     destination: '/api/:path*',
-  //     locale: false,
-  //   },
-  // ],
+  images: {
+    domains: ["cryptologos.cc"],
+  },
 };
 
 const withNextIntl = createNextIntlPlugin();
