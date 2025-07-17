@@ -22,7 +22,6 @@ import {
 import { Zap, Lock, DollarSign, Wallet, Loader2 } from "lucide-react";
 import { useUserWallet } from "@/commons/UserWalletContext";
 import { useAppMetadata } from "@/commons/AppMetadataContext";
-import Image from "next/image";
 
 interface StakingInterfaceProps {
   t: (key: string) => string;
@@ -38,10 +37,14 @@ export function StakingInterface({
   const [isloadding, setIsloadding] = useState(false);
   const [stakeAmount, setStakeAmount] = useState("");
   const [lockPeriod, setLockPeriod] = useState("30");
-  const [selectedChain, setSelectedChain] = useState(5);
+  const [selectedChain, setSelectedChain] = useState("97");
   const [swapAmount, setSwapAmount] = useState("");
   const {
-    custom_fields: { usdt_payment_wallets, usdt_payment_wallets_testnet },
+    custom_fields: {
+      usdt_payment_wallets,
+      usdt_payment_wallets_testnet,
+      ids_distribution_wallet,
+    },
   } = useAppMetadata();
   const {
     connectWallet,
@@ -53,25 +56,27 @@ export function StakingInterface({
   } = useUserWallet();
 
   useEffect(() => {
-    if (!isConnected || !wallet) return;
+    if (!isConnected || !wallet || !selectedChain) return;
     getBalance(
       wallet.address,
-      selectedChain,
+      Number(selectedChain),
       usdt_payment_wallets_testnet[
         selectedChain as keyof typeof usdt_payment_wallets_testnet
       ].token_address
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedChain]);
+  }, [selectedChain, wallet]);
+
 
   const handleStake = async () => {
-    if (!stakeAmount || Number(stakeAmount) == 100) return;
+    if (!stakeAmount || Number(stakeAmount) <= 0) return;
     setIsloadding(true);
+    
     const txHash = await sendTransaction({
-      to: "0xf59402F215FE30e09CC7AAC1551604A029AE381A",
+      to: ids_distribution_wallet.address,
       amount: stakeAmount,
       type: "coin",
-      chainId: 97,
+      chainId: ids_distribution_wallet.chain_id,
     })
       .then((txHash) => {
         setNotificationData({
@@ -86,6 +91,8 @@ export function StakingInterface({
         setIsloadding(false);
       })
       .catch((error) => {
+        console.log(error?.code);
+        
         setNotificationData({
           title: t("noti.error"),
           message:
@@ -100,17 +107,20 @@ export function StakingInterface({
   };
 
   const handleSwap = async () => {
-    if (!swapAmount || Number(swapAmount) == 10) return;
+    if (!swapAmount || Number(swapAmount) <= 0) return;
     setIsloadding(true);
+
     const txHash = await sendTransaction({
-      to: "0xf59402F215FE30e09CC7AAC1551604A029AE381A",
+      to: usdt_payment_wallets_testnet[
+        selectedChain as keyof typeof usdt_payment_wallets_testnet
+      ].address,
       amount: swapAmount,
       type: "token",
       chainId: Number(selectedChain),
       tokenAddress:
         usdt_payment_wallets_testnet[
           selectedChain as keyof typeof usdt_payment_wallets_testnet
-        ],
+        ].token_address,
     })
       .then((txHash) => {
         setNotificationData({
@@ -125,6 +135,8 @@ export function StakingInterface({
         setIsloadding(false);
       })
       .catch((error) => {
+        console.log(error);
+        
         setNotificationData({
           title: t("noti.error"),
           message:

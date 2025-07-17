@@ -61,7 +61,7 @@ const UserWalletContext = createContext<WalletContextType | undefined>(
 
 export function UserWalletProvider({ children }: { children: ReactNode }) {
   const [wallet, setWallet] = useState<WalletInfo>(null);
-  const {custom_fields: {usdt_payment_wallets, usdt_payment_wallets_testnet}} = useAppMetadata();
+  const {custom_fields: {usdt_payment_wallets, usdt_payment_wallets_testnet, ids_distribution_wallet}} = useAppMetadata();
   const t = useTranslations("home");
   const [balance, setBalance] = useState<{ ids: string; usdt: string }>({
     ids: "0",
@@ -86,7 +86,7 @@ export function UserWalletProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     if (!wallet) return;
-    getBalance(wallet.address, 97);
+    getBalance(wallet.address, ids_distribution_wallet.chain_id);
   }, [wallet]);
 
   const disconnect = () => setWallet(null);
@@ -198,21 +198,21 @@ export function UserWalletProvider({ children }: { children: ReactNode }) {
               params: [
                 {
                   chainId:
-                    NETWORKS[chainId]?.chainId || "0x" + chainId.toString(16),
+                    usdt_payment_wallets_testnet[chainId as keyof typeof usdt_payment_wallets_testnet]?.chainId || "0x" + chainId.toString(16),
                 },
               ],
             });
           } catch (switchError: any) {
-            if (switchError.code === 4902 && NETWORKS[chainId]) {
+            if (switchError.code === 4902 && usdt_payment_wallets_testnet[chainId as keyof typeof usdt_payment_wallets_testnet]) {
               // Nếu chưa có mạng, thêm mạng vào MetaMask
               await provider.request({
                 method: "wallet_addEthereumChain",
-                params: [NETWORKS[chainId]],
+                params: [usdt_payment_wallets_testnet[chainId as keyof typeof usdt_payment_wallets_testnet]],
               });
               // Sau khi thêm, thử lại chuyển mạng
               await provider.request({
                 method: "wallet_switchEthereumChain",
-                params: [{ chainId: NETWORKS[chainId].chainId }],
+                params: [{ chainId: usdt_payment_wallets_testnet[chainId as keyof typeof usdt_payment_wallets_testnet]?.chainId }],
               });
             } else {
               throw switchError;
@@ -245,11 +245,19 @@ export function UserWalletProvider({ children }: { children: ReactNode }) {
             "latest",
           ],
         });
+        
         const decimalsNum = parseInt(decimals, 16);
+        const amountNumber = Number(amount);
+        if (isNaN(amountNumber) || amountNumber <= 0) {
+          throw new Error("Số lượng không hợp lệ");
+        }
+        if (isNaN(decimalsNum)) {
+          throw new Error("Không lấy được số thập phân của token");
+        }
         // Chuẩn bị data cho hàm transfer(address,uint256)
         const methodId = "0xa9059cbb"; // keccak256("transfer(address,uint256)").slice(0,10)
         const toPadded = to.replace("0x", "").padStart(64, "0");
-        const amountBN = BigInt(Math.floor(Number(amount) * 10 ** decimalsNum));
+        const amountBN = BigInt(Math.floor(amountNumber * 10 ** decimalsNum));
         const amountHex = amountBN.toString(16).padStart(64, "0");
         const data = methodId + toPadded + amountHex;
         const tx = {
