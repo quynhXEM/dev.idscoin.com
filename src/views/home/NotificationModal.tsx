@@ -40,8 +40,8 @@ export function NotificationModal({
     : "bg-gradient-to-r from-red-600 to-orange-600 hover:from-red-700 hover:to-orange-700";
 
   return (
-    <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50">
-      <Card
+    <div onClick={onClose} className="fixed inset-0 bg-black/80 flex items-center justify-center z-50">
+      <Card onClick={(e) => e.stopPropagation()} 
         className={`w-full max-w-md mx-4 bg-gray-900 border-gray-800 ${borderColor} shadow-2xl animate-in fade-in-0 zoom-in-95 duration-300`}
       >
         <CardHeader className="pb-1">

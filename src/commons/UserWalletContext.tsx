@@ -120,7 +120,6 @@ export function UserWalletProvider({ children }: { children: ReactNode }) {
       .then((data) => data.json())
       .then((data) => data.result[0])
       .catch(() => null);
-
     if (exist) {
       setAccount(exist);
       return;
@@ -149,7 +148,8 @@ export function UserWalletProvider({ children }: { children: ReactNode }) {
         .then((data) => data.result[0]?.id)
         .catch(() => null);
     }
-
+    console.log("ref", ref);
+    
     await fetch("/api/directus/request", {
       method: "POST",
       body: JSON.stringify({
