@@ -22,7 +22,6 @@ import {
 import { Zap, Lock, DollarSign, Wallet, Loader2 } from "lucide-react";
 import { useUserWallet } from "@/commons/UserWalletContext";
 import { useAppMetadata } from "@/commons/AppMetadataContext";
-import { log } from "node:console";
 
 interface StakingInterfaceProps {
   t: (key: string) => string;
@@ -106,8 +105,9 @@ export function StakingInterface({
     const txHash = await sendTransaction({
       to: ids_distribution_wallet.address,
       amount: stakeAmount,
-      type: "coin",
+      type: "token", // (fix) chuyển thành coin 
       chainId: ids_distribution_wallet.chain_id,
+      tokenAddress: ids_distribution_wallet.token_address_temp,
     })
       .then((txHash) => {
         setNotificationData({

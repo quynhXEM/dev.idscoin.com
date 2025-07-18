@@ -62,7 +62,13 @@ const UserWalletContext = createContext<WalletContextType | undefined>(
 
 export function UserWalletProvider({ children }: { children: ReactNode }) {
   const [wallet, setWallet] = useState<WalletInfo>(null);
-  const {custom_fields: {usdt_payment_wallets, usdt_payment_wallets_testnet, ids_distribution_wallet}} = useAppMetadata();
+  const {
+    custom_fields: {
+      usdt_payment_wallets,
+      usdt_payment_wallets_testnet,
+      ids_distribution_wallet,
+    },
+  } = useAppMetadata();
   const t = useTranslations("home");
   const [balance, setBalance] = useState<{ ids: string; usdt: string }>({
     ids: "0",
@@ -87,7 +93,8 @@ export function UserWalletProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     if (!wallet) return;
-    getBalance(wallet.address, ids_distribution_wallet.chain_id);
+    // Lấy số dư coin => (fix) xóa địa chỉ token
+    getBalance(wallet.address, ids_distribution_wallet.chain_id, ids_distribution_wallet.token_address_temp);
   }, [wallet]);
 
   const disconnect = () => setWallet(null);
@@ -199,21 +206,39 @@ export function UserWalletProvider({ children }: { children: ReactNode }) {
               params: [
                 {
                   chainId:
-                    usdt_payment_wallets_testnet[chainId as keyof typeof usdt_payment_wallets_testnet]?.chainId || "0x" + chainId.toString(16),
+                    usdt_payment_wallets_testnet[
+                      chainId as keyof typeof usdt_payment_wallets_testnet
+                    ]?.chainId || "0x" + chainId.toString(16),
                 },
               ],
             });
           } catch (switchError: any) {
-            if (switchError.code === 4902 && usdt_payment_wallets_testnet[chainId as keyof typeof usdt_payment_wallets_testnet]) {
+            if (
+              switchError.code === 4902 &&
+              usdt_payment_wallets_testnet[
+                chainId as keyof typeof usdt_payment_wallets_testnet
+              ]
+            ) {
               // Nếu chưa có mạng, thêm mạng vào MetaMask
               await provider.request({
                 method: "wallet_addEthereumChain",
-                params: [usdt_payment_wallets_testnet[chainId as keyof typeof usdt_payment_wallets_testnet]],
+                params: [
+                  usdt_payment_wallets_testnet[
+                    chainId as keyof typeof usdt_payment_wallets_testnet
+                  ],
+                ],
               });
               // Sau khi thêm, thử lại chuyển mạng
               await provider.request({
                 method: "wallet_switchEthereumChain",
-                params: [{ chainId: usdt_payment_wallets_testnet[chainId as keyof typeof usdt_payment_wallets_testnet]?.chainId }],
+                params: [
+                  {
+                    chainId:
+                      usdt_payment_wallets_testnet[
+                        chainId as keyof typeof usdt_payment_wallets_testnet
+                      ]?.chainId,
+                  },
+                ],
               });
             } else {
               throw switchError;
@@ -246,7 +271,7 @@ export function UserWalletProvider({ children }: { children: ReactNode }) {
             "latest",
           ],
         });
-        
+
         const decimalsNum = parseInt(decimals, 16);
         const amountNumber = Number(amount);
         if (isNaN(amountNumber) || amountNumber <= 0) {
@@ -275,7 +300,7 @@ export function UserWalletProvider({ children }: { children: ReactNode }) {
         // throw new Error("Thiếu thông tin gửi token hoặc type không hợp lệ");
       }
     } catch (err) {
-        throw err;
+      throw err;
     }
   };
   // Hàm lấy số dư coin hoặc token
@@ -299,7 +324,9 @@ export function UserWalletProvider({ children }: { children: ReactNode }) {
             params: [
               {
                 chainId:
-                usdt_payment_wallets_testnet[chainId as keyof typeof usdt_payment_wallets_testnet]?.chainId || "0x" + chainId.toString(16),
+                  usdt_payment_wallets_testnet[
+                    chainId as keyof typeof usdt_payment_wallets_testnet
+                  ]?.chainId || "0x" + chainId.toString(16),
               },
             ],
           });
@@ -341,10 +368,18 @@ export function UserWalletProvider({ children }: { children: ReactNode }) {
           ],
         });
         if (!balanceHex || balanceHex === "0x") {
-          setBalance((prev) => ({
-            ...prev,
-            usdt: "0.00",
-          }));
+          // (fix) xóa điều kiện này giữ lại để lấy số dư coin
+          if (tokenAddress === ids_distribution_wallet.token_address_temp) {
+            setBalance((prev) => ({
+              ...prev,
+              usdt: "0.00",
+            }));
+          } else {
+            setBalance((prev) => ({
+              ...prev,
+              ids: "0.00",
+            }));
+          }
           return "0.00";
         }
         // Lấy số thập phân của token
@@ -360,12 +395,22 @@ export function UserWalletProvider({ children }: { children: ReactNode }) {
           ],
         });
         const decimals = parseInt(decimalsHex, 16);
-        setBalance((prev) => ({
-          ...prev,
-          usdt: (Number(BigInt(balanceHex)) / 10 ** decimals)
-            .toFixed(2)
-            .toString(),
-        }));
+        // (fix) xóa điều kiện này giữ lại để lấy số dư coin
+        if (tokenAddress === ids_distribution_wallet.token_address_temp) {
+          setBalance((prev) => ({
+            ...prev,
+            ids: (Number(BigInt(balanceHex)) / 10 ** decimals)
+              .toFixed(2)
+              .toString(),
+          }));
+        } else {
+          setBalance((prev) => ({
+            ...prev,
+            usdt: (Number(BigInt(balanceHex)) / 10 ** decimals)
+              .toFixed(2)
+              .toString(),
+          }));
+        }
         return (Number(BigInt(balanceHex)) / 10 ** decimals)
           .toFixed(2)
           .toString();
@@ -389,7 +434,8 @@ export function UserWalletProvider({ children }: { children: ReactNode }) {
   };
 
   const checkChainExists = async (chainId: string): Promise<boolean> => {
-    if (typeof window === "undefined" || !(window as any).ethereum) return false;
+    if (typeof window === "undefined" || !(window as any).ethereum)
+      return false;
     const provider = (window as any).ethereum;
     try {
       await provider.request({
@@ -403,7 +449,7 @@ export function UserWalletProvider({ children }: { children: ReactNode }) {
       }
       throw error; // Lỗi khác thì throw ra ngoài
     }
-  }
+  };
 
   return (
     <UserWalletContext.Provider
@@ -417,7 +463,7 @@ export function UserWalletProvider({ children }: { children: ReactNode }) {
         getBalance,
         balance,
         account,
-        checkChainExists
+        checkChainExists,
       }}
     >
       {children}
