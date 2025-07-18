@@ -158,6 +158,7 @@ export function UserWalletProvider({ children }: { children: ReactNode }) {
       body: JSON.stringify({
         type: "createItem",
         collection: "member",
+        ct_code: true,
         items: {
           status: "active",
           app_id:

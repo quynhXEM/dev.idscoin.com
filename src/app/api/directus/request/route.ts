@@ -9,16 +9,27 @@ import {
   withToken,
   readMe,
 } from "@directus/sdk";
+import { getCountryCodeFromIp } from "@/libs/utils";
 
 const APP_TOKEN = process.env.APP_TOKEN || "";
 export const POST = async (request: Request) => {
   try {
+    const country_code = await getCountryCodeFromIp(
+      request.headers.get("x-forwarded-for") || ""
+    );
+
     const data = await request.json();
     const type = data?.type ?? "";
     const collection = data?.collection ?? "";
     const id = data?.id ?? "";
     const params = data?.params ?? "";
-    const items = data?.items ?? null;
+    const ct_code = data?.ct_code ?? false;
+    const items = data?.items
+      ? {
+          ...data?.items,
+          ...(ct_code ? { ct_code: country_code } : {}),
+        }
+      : null;
     const admin = data?.admin ?? true;
     const access_token = APP_TOKEN;
     if (type) {

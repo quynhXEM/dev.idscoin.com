@@ -21,3 +21,16 @@ export async function fetchAppMetadata() {
   .then(data => data.data)
   return response;
 }
+
+export async function getCountryCodeFromIp(ip: string): Promise<string | null> {
+  try {
+    const res = await fetch(
+      `https://api.ipinfo.io/lite/${ip}?token=68adae36b3207a`
+    ).then((data) => data.json());
+    console.log(res);
+
+    return res?.country_code;
+  } catch {
+    return null;
+  }
+}
