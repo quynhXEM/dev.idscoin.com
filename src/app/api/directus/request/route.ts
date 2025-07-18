@@ -63,9 +63,7 @@ export const POST = async (request: Request) => {
       }
     }
 
-    return NextResponse.json({
-      error: "DIRECTUS_REQUEST_ERROR",
-    });
+    return NextResponse.json({ ok: false, error: "DIRECTUS_REQUEST_ERROR" });
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     if (process.env.NODE_ENV === "development") {

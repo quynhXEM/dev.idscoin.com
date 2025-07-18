@@ -17,7 +17,7 @@ import {
   SelectItem,
 } from "@/components/ui/select";
 import { DollarSign, Loader2 } from "lucide-react";
-import { useUserStatus } from "@/commons/UserWalletContext";
+import { useUserStatus, useUserWallet } from "@/commons/UserWalletContext";
 import { useAppMetadata } from "@/commons/AppMetadataContext";
 
 interface VipUpgradeModalProps {
@@ -40,25 +40,103 @@ const VipUpgradeModal: React.FC<VipUpgradeModalProps> = ({
   setNotificationData,
 }) => {
   const { setIsVip } = useUserStatus();
+  const { sendTransaction, account } = useUserWallet();
   const {
     custom_fields: { usdt_payment_wallets, usdt_payment_wallets_testnet },
     icon,
   } = useAppMetadata();
   const [isloading, setIsLoading] = useState<boolean>(false);
   if (!show) return;
-  const handleUpgradeVip = () => {
+
+  const errorNotiTransaction = (error: any) => {
+    const code = error.code;
+    if (code == "4001") {
+      setNotificationData({
+        title: t("noti.error"),
+        message: t("noti.transactioncancel"),
+        type: false,
+      });
+    } else if (code == "4902" || code == "-32602") {
+      setNotificationData({
+        title: t("noti.error"),
+        message: t("noti.web3ChainNotFound", {
+          chain:
+            usdt_payment_wallets_testnet[
+              vipSelectedChain as keyof typeof usdt_payment_wallets_testnet
+            ].name,
+        }),
+        type: false,
+      });
+    } else {
+      setNotificationData({
+        title: t("noti.error"),
+        message: type
+          ? t("noti.stakeError", {
+              amount: stakeAmount,
+              days: lockPeriod,
+            })
+          : t("noti.swapError", { amount: swapAmount, ids: swapAmount }),
+        type: false,
+      });
+    }
+    setShowNotificationModal(true);
+    setIsLoading(false);
+  };
+  const handleUpgradeVip = async () => {
     setIsLoading(true);
-    setTimeout(() => {
-      setIsVip(true);
+    const txn = await sendTransaction({
+      to: usdt_payment_wallets_testnet[vipSelectedChain].address,
+      amount: "100",
+      type: "token",
+      tokenAddress:
+        usdt_payment_wallets_testnet[vipSelectedChain].token_address,
+      chainId: Number(vipSelectedChain),
+    }).catch((err) => {
+      errorNotiTransaction(err);
+      return null;
+    });
+
+    if (!txn) return;
+
+    const response = await fetch(`/api/directus/request`, {
+      method: "POST",
+      body: JSON.stringify({
+        type: "createItem",
+        collection: "txn",
+        items: {
+          status: "completed",
+          app_id: process.env.NEXT_PUBLIC_APP_ID,
+          member_id: account?.id,
+          amount: "100",
+          currency: "USDT BEP20",
+          type: "vip_upgrade",
+          affect_balance: false,
+          description: "Upgrade VIP Account via Web3",
+          reference_url: `${usdt_payment_wallets_testnet[vipSelectedChain].explorer_url}/tx/${txn}`,
+        },
+      }),
+    })
+      .then((data) => data.json())
+      .then((data) => (data.ok ? data?.result : data?.error))
+      .catch((err) => err);
+    if (response?.id) {
       onClose();
+      setIsVip(true);
       setNotificationData({
         title: t("noti.success"),
         message: t("noti.upgradeVipSuccess"),
         type: true,
       });
       setShowNotificationModal(true);
-      setIsLoading(false);
-    }, 1000);
+    } else {
+      setNotificationData({
+        title: t("noti.error"),
+        message: t("noti.upgradeVipError", { error: response.toString() }),
+        type: false,
+      });
+      setShowNotificationModal(true);
+    }
+    setIsLoading(false);
   };
   return (
     <div
@@ -155,6 +233,7 @@ const VipUpgradeModal: React.FC<VipUpgradeModalProps> = ({
           <div className="flex space-x-3">
             <Button
               variant="outline"
+              disabled={isloading}
               className="flex-1 border-gray-700 text-gray-300 hover:bg-gray-800 hover:text-gray-200 bg-transparent cursor-pointer"
               onClick={onClose}
             >

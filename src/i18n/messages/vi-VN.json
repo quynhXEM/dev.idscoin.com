@@ -238,7 +238,7 @@
       "swapSuccess": "Bạn đã swap thành công {amount} USDT thành {ids} IDS coin. Vui lòng chờ 5-10 giây để nhận IDS về ví.",
       "swapError": "Bạn đã swap thất bại {amount} USDT thành {ids} IDS coin. Vui lòng thử lại sau.",
       "upgradeVipSuccess": "Bạn đã nâng cấp VIP thành công.",
-      "upgradeVipError": "Bạn đã nâng cấp VIP thất bại. Vui lòng thử lại sau.",
+      "upgradeVipError": "Bạn đã nâng cấp VIP thất bại. Vui lòng thử lại sau. Lỗi: {error}",
       "claimRewardsSuccess": "Bạn đã nhận thành công {amount} IDS.",
       "web3Error": "Lỗi ví web3",
       "web3ErrorSub": "Không tìm thấy môi trường ví web3. Vui lòng cài đặt ví web3 trên trình duyệt của bạn.",

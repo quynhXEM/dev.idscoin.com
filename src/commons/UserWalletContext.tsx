@@ -12,7 +12,6 @@ import React, {
 import { useNotification } from "@/commons/NotificationContext";
 import { useTranslations } from "next-intl";
 import { useAppMetadata } from "./AppMetadataContext";
-
 export type SendTxParams = {
   chainId?: number;
   to: string;
@@ -86,6 +85,7 @@ export function UserWalletProvider({ children }: { children: ReactNode }) {
     wallet_address: string;
     referrer_id: string | null;
     avatar: string | null;
+    isVip: boolean;
   } | null>(null);
   const isConnected = !!wallet;
   const path = usePathname();
@@ -94,7 +94,11 @@ export function UserWalletProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     if (!wallet) return;
     // Lấy số dư coin => (fix) xóa địa chỉ token
-    getBalance(wallet.address, ids_distribution_wallet.chain_id, ids_distribution_wallet.token_address_temp);
+    getBalance(
+      wallet.address,
+      ids_distribution_wallet.chain_id,
+      ids_distribution_wallet.token_address_temp
+    );
   }, [wallet]);
 
   const disconnect = () => setWallet(null);
@@ -122,6 +126,7 @@ export function UserWalletProvider({ children }: { children: ReactNode }) {
       .catch(() => null);
     if (exist) {
       setAccount(exist);
+      getVipStatus(exist.id);
       return;
     }
 
@@ -148,8 +153,6 @@ export function UserWalletProvider({ children }: { children: ReactNode }) {
         .then((data) => data.result[0]?.id)
         .catch(() => null);
     }
-    console.log("ref", ref);
-    
     await fetch("/api/directus/request", {
       method: "POST",
       body: JSON.stringify({
@@ -167,6 +170,41 @@ export function UserWalletProvider({ children }: { children: ReactNode }) {
     });
   };
 
+  const getVipStatus = async (user_id: string) => {
+    const response = await fetch("/api/directus/request", {
+      method: "POST",
+      body: JSON.stringify({
+        type: "readItems",
+        collection: "txn",
+        params: {
+          filter: {
+            member_id: user_id,
+            app_id: process.env.NEXT_PUBLIC_APP_ID,
+            type: "vip_upgrade",
+            status: "completed",
+          },
+          limit: 1,
+          fields: ["id", "date_created"],
+        },
+      }),
+    })
+      .then((data) => data.json())
+      .then((data) => (data.ok ? data.result[0] : null))
+      .catch((err) => {
+        return null;
+      });
+
+    if (response) {
+      setAccount((prev) => {
+        if (!prev) return null;
+        return {
+          ...prev,
+          isVip: true,
+        };
+      });
+    }
+  };
+
   const connectWallet = async () => {
     if (typeof window === "undefined" || !(window as any).ethereum) {
       notify({
@@ -182,9 +220,14 @@ export function UserWalletProvider({ children }: { children: ReactNode }) {
         method: "eth_requestAccounts",
       });
       const chainId = await provider.request({ method: "eth_chainId" });
-      setWallet({ address: accounts[0], chainId: parseInt(chainId, 16) });
+      console.log("accounts[0]", accounts[0]);
+      
       addNewMember({ address: accounts[0], chainId: parseInt(chainId, 16) });
+      setWallet({ address: accounts[0], chainId: parseInt(chainId, 16) });
+      
+      
       sessionStorage.setItem("idscoin_connected", "true");
+      
     } catch (err) {
       console.error("Kết nối ví thất bại", err);
       setWallet(null);
@@ -501,7 +544,9 @@ export function UserStatusProvider({ children }: { children: ReactNode }) {
   const toggleVip = () => setIsVip((prev) => !prev);
 
   useEffect(() => {
+    if (!account) return;
     setIsRegister(account?.username != null);
+    setIsVip(account?.isVip || false);
   }, [account]);
   return (
     <UserStatusContext.Provider
