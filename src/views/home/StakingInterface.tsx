@@ -20,7 +20,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Zap, Lock, DollarSign, Wallet, Loader2 } from "lucide-react";
-import { useUserWallet } from "@/commons/UserWalletContext";
+import { useUserStatus, useUserWallet } from "@/commons/UserWalletContext";
 import { useAppMetadata } from "@/commons/AppMetadataContext";
 
 interface StakingInterfaceProps {
@@ -63,6 +63,7 @@ export function StakingInterface({
     getBalance,
     account
   } = useUserWallet();
+  const {setStakeHistory} = useUserStatus();
 
   useEffect(() => {
     if (!isConnected || !wallet || !selectedChain) return;
@@ -116,7 +117,15 @@ export function StakingInterface({
     setShowNotificationModal(true);
   };
   const handleStake = async () => {
-    if (!stakeAmount || Number(stakeAmount) <= 0) return;
+    if (!stakeAmount || Number(stakeAmount) <= 100 || Number(stakeAmount) > Number(balance.ids)) {
+      setNotificationData({
+        title: t("noti.error"),
+        message: t("noti.validate", {action: "stake", min : 100, max : Number(balance.ids) }),
+        type: false,
+      });
+      setShowNotificationModal(true);
+      return;
+    }
     setIsloadding(true);
 
     const transaction = await sendTransaction({
@@ -132,6 +141,7 @@ export function StakingInterface({
     if (!transaction.ok) {
       errorNotiTransaction({ error: transaction.result, type: true });
       setIsloadding(false);
+      return;
     }
 
     const txn = await fetch("/api/directus/request", {
@@ -153,7 +163,7 @@ export function StakingInterface({
           description: `Staked ${stakeAmount} IDS for ${lockPeriod} days at ${stakingOptions[lockPeriod]}% APY`,
         },
       }),
-    });
+    }).then(data => data.json())
     if (txn.ok) {
       setNotificationData({
         title: t("noti.success"),
@@ -165,6 +175,7 @@ export function StakingInterface({
       });
       setShowNotificationModal(true);
       setIsloadding(false);
+      setStakeHistory((prev: any) => ([...prev, txn.result]))
     } else {
       setNotificationData({
         title: t("noti.error"),

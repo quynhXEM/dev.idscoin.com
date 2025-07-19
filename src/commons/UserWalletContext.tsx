@@ -86,6 +86,7 @@ export function UserWalletProvider({ children }: { children: ReactNode }) {
     referrer_id: string | null;
     avatar: string | null;
     isVip: boolean;
+    stake_history: any[];
   } | null>(null);
   const isConnected = !!wallet;
   const path = usePathname();
@@ -127,6 +128,7 @@ export function UserWalletProvider({ children }: { children: ReactNode }) {
     if (exist) {
       setAccount(exist);
       getVipStatus(exist.id);
+      getStakeHistory(exist.id);
       return;
     }
 
@@ -201,6 +203,40 @@ export function UserWalletProvider({ children }: { children: ReactNode }) {
         return {
           ...prev,
           isVip: true,
+        };
+      });
+    }
+  };
+  
+  const getStakeHistory = async (user_id: string) => {
+    const response = await fetch("/api/directus/request", {
+      method: "POST",
+      body: JSON.stringify({
+        type: "readItems",
+        collection: "txn",
+        params: {
+          filter: {
+            member_id: user_id,
+            app_id: process.env.NEXT_PUBLIC_APP_ID,
+            type: "stake_in",
+            status: "completed",
+          },
+          limit: 1000,
+        },
+      }),
+    })
+      .then((data) => data.json())
+      .then((data) => (data.ok ? data.result : null))
+      .catch((err) => {
+        return null;
+      });
+
+    if (response) {
+      setAccount((prev) => {
+        if (!prev) return null;
+        return {
+          ...prev,
+          stake_history: response,
         };
       });
     }
@@ -552,6 +588,8 @@ export type UserStatusContextType = {
   setIsVip: (value: boolean) => void;
   toggleRegister: () => void;
   toggleVip: () => void;
+  stakeHistory: any[];
+  setStakeHistory: (value: any[]) => void;
 };
 
 const UserStatusContext = createContext<UserStatusContextType | undefined>(
@@ -562,6 +600,7 @@ export function UserStatusProvider({ children }: { children: ReactNode }) {
   const { account } = useUserWallet();
   const [isRegister, setIsRegister] = useState<boolean>(false);
   const [isVip, setIsVip] = useState<boolean>(false);
+  const [stakeHistory , setStakeHistory] = useState<any>([]);
   const toggleRegister = () => setIsRegister((prev) => !prev);
   const toggleVip = () => setIsVip((prev) => !prev);
 
@@ -569,6 +608,7 @@ export function UserStatusProvider({ children }: { children: ReactNode }) {
     if (!account) return;
     setIsRegister(account?.username != null);
     setIsVip(account?.isVip || false);
+    setStakeHistory(account?.stake_history || []);
   }, [account]);
   return (
     <UserStatusContext.Provider
@@ -579,6 +619,8 @@ export function UserStatusProvider({ children }: { children: ReactNode }) {
         setIsVip,
         toggleRegister,
         toggleVip,
+        stakeHistory,
+        setStakeHistory,
       }}
     >
       {children}

@@ -187,8 +187,10 @@
       "stakeHistory": "Stake history",
       "90DaysApy": "90 days - 25% APY",
       "locked": "Locked",
-      "30DaysApy": "30 days - 15% APY",
-      "5DaysLeft": "5 days left"
+      "DaysApy": "{day} days - {apy}% APY",
+      "DaysLeft": "{day} days left",
+      "noHistory": "No Stake history",
+      "collectIDS" : "Collect {amount} IDS"
     },
     "footer": {
       "nobodyNetwork": "Nobody Network",
@@ -243,7 +245,12 @@
       "web3ErrorSub": "Web3 environment not found. Please install web3 on your browser.",
       "web3ChainNotFound" : "Your wallet is not added to chain {chain}. Please add it to use our services.",
       "web3BalanceError" : "Error when getting wallet balance. Please try again later.",
-      "addTransactionError": "Error adding transaction data! Transaction hash: {txHash}"
+      "addTransactionError": "Error adding transaction data! Transaction hash: {txHash}",
+      "validate": "You need {action} at least {min} IDS and cannot exceed {max} IDS balance",
+      "cancelStakeTransacrtionError": "Error when canceling stake transaction. Please try again later.",
+      "returnStakeIDSError" : "Error when returning IDS to wallet. Please try again later.",
+      "withdrawIDSsuccess" : "You have successfully withdrawn {amount} IDS.",
+      "withdrawIDSError" : "You have failed to withdraw {amount} IDS. Please try again later."
     }
   }
 }

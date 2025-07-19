@@ -10,6 +10,7 @@ import { Separator } from "@/components/ui/separator";
 import { Wallet, Gift, Clock, Shield, Info } from "lucide-react";
 import { useUserWallet } from "@/commons/UserWalletContext";
 import { Tooltip } from "react-tooltip";
+import { StakeHistory } from "./HistoryStake";
 
 interface PortfolioOverviewProps {
   t: (key: string) => string;
@@ -65,7 +66,9 @@ export function PortfolioOverview({
             <div className="space-y-4">
               <div className="space-y-3">
                 <div className="flex justify-between">
-                  <span className="text-gray-400">{t("overview.totalBalance")}:</span>
+                  <span className="text-gray-400">
+                    {t("overview.totalBalance")}:
+                  </span>
                   <span className="font-semibold text-white">
                     {balance.ids} IDS
                   </span>
@@ -77,12 +80,16 @@ export function PortfolioOverview({
                   </span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-gray-400">{t("overview.available")}:</span>
+                  <span className="text-gray-400">
+                    {t("overview.available")}:
+                  </span>
                   <span className="font-semibold text-white">400.00 IDS</span>
                 </div>
                 <Separator className="bg-gray-700" />
                 <div className="flex justify-between">
-                  <span className="text-gray-400">{t("overview.totalRewards")}:</span>
+                  <span className="text-gray-400">
+                    {t("overview.totalRewards")}:
+                  </span>
                   <span className="font-semibold text-cyan-400">
                     127.45 IDS
                   </span>
@@ -146,11 +153,15 @@ export function PortfolioOverview({
                   <span className="text-blue-400">+2.45 IDS</span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span className="text-gray-300">{t("rewards.last7Days")}:</span>
+                  <span className="text-gray-300">
+                    {t("rewards.last7Days")}:
+                  </span>
                   <span className="text-blue-400">+17.23 IDS</span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span className="text-gray-300">{t("rewards.last30Days")}:</span>
+                  <span className="text-gray-300">
+                    {t("rewards.last30Days")}:
+                  </span>
                   <span className="text-blue-400">+73.89 IDS</span>
                 </div>
               </div>
@@ -184,34 +195,7 @@ export function PortfolioOverview({
         </CardHeader>
         <CardContent>
           {isConnected ? (
-            <div className="space-y-3">
-              <div className="flex items-center justify-between p-3 bg-gray-800 rounded-lg border border-gray-700">
-                <div>
-                  <div className="font-medium text-white">500 IDS</div>
-                  <div className="text-sm text-gray-400">{t("history.90DaysApy")}</div>
-                </div>
-                <Badge
-                  variant="secondary"
-                  className="bg-gray-700 text-gray-300 hover:bg-gray-600 hover:text-white"
-                >
-                  <Shield className="w-3 h-3 mr-1" />
-                  {t("history.locked")}
-                </Badge>
-              </div>
-
-              <div className="flex items-center justify-between p-3 bg-gray-800 rounded-lg border border-gray-700">
-                <div>
-                  <div className="font-medium text-white">350 IDS</div>
-                  <div className="text-sm text-gray-400">{t("history.30DaysApy")}</div>
-                </div>
-                <Badge
-                  variant="outline"
-                  className="border-blue-600 text-blue-400"
-                >
-                  <Clock className="w-3 h-3 mr-1" />{t("history.5DaysLeft")}
-                </Badge>
-              </div>
-            </div>
+            <StakeHistory />
           ) : (
             <WalletConnectionPrompt
               title={t("referral.connecttoshow")}

@@ -188,8 +188,10 @@
       "stakeHistory": "Lịch sử Stake",
       "90DaysApy": "90 ngày - 25% APY",
       "locked": "Đã khóa",
-      "30DaysApy": "30 ngày - 15% APY",
-      "5DaysLeft": "5 ngày còn lại"
+      "DaysApy": "{day} ngày - {apy}% APY",
+      "DaysLeft": "{day} ngày còn lại",
+      "noHistory": "Không có lịch sử Stake",
+      "collectIDS" : "Nhận {amount} IDS"
     },
     "footer": {
       "nobodyNetwork": "Nobody Network",
@@ -244,7 +246,12 @@
       "web3ErrorSub": "Không tìm thấy môi trường ví web3. Vui lòng cài đặt ví web3 trên trình duyệt của bạn.",
       "web3ChainNotFound" : "Ví của bạn chưa được thêm chain {chain}. Thêm vào để sử dụng dịch vụ của chúng tôi.",
       "web3BalanceError" : "Lỗi khi lấy số dư ví. Vui lòng thử lại sau.",
-      "addTransactionError": "Lỗi thêm dữ liệu giao dịch! Mã giao dịch: {txHash}"
+      "addTransactionError": "Lỗi thêm dữ liệu giao dịch! Mã giao dịch: {txHash}",
+      "validate": "Bạn cần {action} ít nhất {min} IDS và không được vượt quá {max} IDS số dư của bạn",
+      "cancelStakeTransacrtionError": "Lỗi khi rút giao dịch stake. Vui lòng thử lại sau.",
+      "returnStakeIDSError" : "Lỗi khi trả IDS về ví. Vui lòng thử lại sau.",
+      "withdrawIDSsuccess" : "Bạn đã rút thành công {amount} IDS.",
+      "withdrawIDSError" : "Bạn đã rút thất bại {amount} IDS. Vui lòng thử lại sau."
     }
   }
 }
