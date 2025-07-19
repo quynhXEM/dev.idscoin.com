@@ -242,7 +242,8 @@
       "web3Error": "Web3 error",
       "web3ErrorSub": "Web3 environment not found. Please install web3 on your browser.",
       "web3ChainNotFound" : "Your wallet is not added to chain {chain}. Please add it to use our services.",
-      "web3BalanceError" : "Error when getting wallet balance. Please try again later."
+      "web3BalanceError" : "Error when getting wallet balance. Please try again later.",
+      "addTransactionError": "Error adding transaction data! Transaction hash: {txHash}"
     }
   }
 }

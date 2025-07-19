@@ -29,6 +29,14 @@ interface StakingInterfaceProps {
   setNotificationData: (data: any) => void;
 }
 
+// Định nghĩa object chứa các lựa chọn số ngày và apy
+const stakingOptions: Record<string, string> = {
+  "30": "5",
+  "90": "8",
+  "180": "15",
+  "360": "25",
+};
+
 export function StakingInterface({
   t,
   setShowNotificationModal,
@@ -53,6 +61,7 @@ export function StakingInterface({
     wallet,
     balance,
     getBalance,
+    account
   } = useUserWallet();
 
   useEffect(() => {
@@ -67,64 +76,105 @@ export function StakingInterface({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedChain, wallet]);
 
-  const errorNotiTransaction = ({error, type} : {error: any, type: boolean}) => {
+  const errorNotiTransaction = ({
+    error,
+    type,
+  }: {
+    error: any;
+    type: boolean;
+  }) => {
     const code = error.code;
-        if (code == "4001") {
-          setNotificationData({
-            title: t("noti.error"),
-            message: t("noti.transactioncancel"),
-            type: false,
-          });
-        } else if (code == "4902" || code == "-32602") {
-          setNotificationData({
-            title: t("noti.error"),
-            message: t("noti.web3ChainNotFound", {
-              chain:
-                usdt_payment_wallets_testnet[
-                  selectedChain as keyof typeof usdt_payment_wallets_testnet
-                ].name,
-            }),
-            type: false,
-          });
-        } else {
-          setNotificationData({
-            title: t("noti.error"),
-            message: type ? t("noti.stakeError", {
+    if (code == "4001") {
+      setNotificationData({
+        title: t("noti.error"),
+        message: t("noti.transactioncancel"),
+        type: false,
+      });
+    } else if (code == "4902" || code == "-32602") {
+      setNotificationData({
+        title: t("noti.error"),
+        message: t("noti.web3ChainNotFound", {
+          chain:
+            usdt_payment_wallets_testnet[
+              selectedChain as keyof typeof usdt_payment_wallets_testnet
+            ].name,
+        }),
+        type: false,
+      });
+    } else {
+      setNotificationData({
+        title: t("noti.error"),
+        message: type
+          ? t("noti.stakeError", {
               amount: stakeAmount,
               days: lockPeriod,
-            }) : t("noti.swapError", { amount: swapAmount, ids: swapAmount }),
-            type: false,
-          });
-        }
-        setShowNotificationModal(true);
+            })
+          : t("noti.swapError", { amount: swapAmount, ids: swapAmount }),
+        type: false,
+      });
+    }
+    setShowNotificationModal(true);
   };
   const handleStake = async () => {
     if (!stakeAmount || Number(stakeAmount) <= 0) return;
     setIsloadding(true);
 
-    const txHash = await sendTransaction({
+    const transaction = await sendTransaction({
       to: ids_distribution_wallet.address,
       amount: stakeAmount,
-      type: "token", // (fix) chuyển thành coin 
+      type: "token", // (fix) chuyển thành coin
       chainId: ids_distribution_wallet.chain_id,
       tokenAddress: ids_distribution_wallet.token_address_temp,
     })
-      .then((txHash) => {
-        setNotificationData({
-          title: t("noti.success"),
-          message: t("noti.stakeSuccess", {
-            amount: stakeAmount,
-            days: lockPeriod,
-          }),
-          type: true,
-        });
-        setShowNotificationModal(true);
-        setIsloadding(false);
-      })
-      .catch((error) => {
-        errorNotiTransaction({error, type: true});
-        setIsloadding(false);
+      .then((txHash) => ({ ok: true, result: txHash }))
+      .catch((error) => ({ ok: false, result: error }));
+
+    if (!transaction.ok) {
+      errorNotiTransaction({ error: transaction.result, type: true });
+      setIsloadding(false);
+    }
+
+    const txn = await fetch("/api/directus/request", {
+      method: "POST",
+      body: JSON.stringify({
+        type: "createItem",
+        collection: "txn",
+        items: {
+          status: "completed",
+          type: "stake_in",
+          app_id: process.env.NEXT_PUBLIC_APP_ID,
+          member_id: account?.id,
+          amount: stakeAmount,
+          currency: "IDS",
+          affect_balance: false,
+          stake_lock_days: lockPeriod,
+          stake_apy: stakingOptions[lockPeriod],
+          reference_url: `${ids_distribution_wallet.explorer_url}/tx/${transaction.result}`,
+          description: `Staked ${stakeAmount} IDS for ${lockPeriod} days at ${stakingOptions[lockPeriod]}% APY`,
+        },
+      }),
+    });
+    if (txn.ok) {
+      setNotificationData({
+        title: t("noti.success"),
+        message: t("noti.stakeSuccess", {
+          amount: stakeAmount,
+          days: lockPeriod,
+        }),
+        type: true,
       });
+      setShowNotificationModal(true);
+      setIsloadding(false);
+    } else {
+      setNotificationData({
+        title: t("noti.error"),
+        message: t("noti.addTransactionError", {
+          txHash: transaction.result.toString(),
+        }),
+      });
+      setShowNotificationModal(true);
+      setIsloadding(false);
+    }
   };
 
   const handleSwap = async () => {
@@ -156,7 +206,7 @@ export function StakingInterface({
         setIsloadding(false);
       })
       .catch((error) => {
-        errorNotiTransaction({error, type: false});
+        errorNotiTransaction({ error, type: false });
         setIsloadding(false);
       });
   };
@@ -243,7 +293,7 @@ export function StakingInterface({
                   {t("staking.lockPeriod")}
                 </Label>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mt-2">
-                  {["30", "90", "180", "360"].map((days) => (
+                  {Object.entries(stakingOptions).map(([days, apy]) => (
                     <Button
                       key={days}
                       variant={lockPeriod === days ? "default" : "outline"}
@@ -259,14 +309,7 @@ export function StakingInterface({
                           {days} {t("staking.days")}
                         </div>
                         <div className="text-xs opacity-80">
-                          {days === "30"
-                            ? "5%"
-                            : days === "90"
-                            ? "8%"
-                            : days === "180"
-                            ? "15%"
-                            : "25%"}{" "}
-                          {t("staking.apy")}
+                          {apy}% {t("staking.apy")}
                         </div>
                       </div>
                     </Button>
@@ -281,7 +324,7 @@ export function StakingInterface({
                   </span>
                   <span className="font-bold text-gray-900">
                     {stakeAmount && isConnected
-                      ? (Number.parseFloat(stakeAmount) * 0.0007).toFixed(4)
+                      ? (Number.parseFloat(stakeAmount) * Number(stakingOptions[lockPeriod])/36500).toFixed(2)
                       : "0.0000"}{" "}
                     IDS
                   </span>
@@ -291,13 +334,7 @@ export function StakingInterface({
                     {t("staking.apy")}
                   </span>
                   <span className="font-bold text-gray-900">
-                    {lockPeriod === "30"
-                      ? "5%"
-                      : lockPeriod === "90"
-                      ? "8%"
-                      : lockPeriod === "180"
-                      ? "15%"
-                      : "25%"}
+                    {stakingOptions[lockPeriod] || "--"}%
                   </span>
                 </div>
               </div>
@@ -348,7 +385,9 @@ export function StakingInterface({
                       ([key, value]) => (
                         <SelectItem key={key} value={key}>
                           <div className="flex items-center gap-2">
-                            <div className="font-semibold">{value.name}</div>
+                            <div className="font-semibold">
+                              {value?.name || "--"}
+                            </div>
                           </div>
                         </SelectItem>
                       )

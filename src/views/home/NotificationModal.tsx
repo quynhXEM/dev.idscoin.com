@@ -78,8 +78,8 @@ export function NotificationModal({
 
         <CardContent className="space-y-6">
           {/* Message Content */}
-          <div className={`p-4 rounded-lg border ${borderColor} ${bgGradient}`}>
-            <p className="text-gray-300 text-sm leading-relaxed">{message}</p>
+          <div className={`p-4 rounded-lg overflow-hidden border ${borderColor} ${bgGradient}`}>
+            <p className="text-gray-300 text-sm leading-relaxed text-wrap whitespace-pre-wrap">{message}</p>
           </div>
         </CardContent>
       </Card>

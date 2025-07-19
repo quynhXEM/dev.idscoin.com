@@ -235,6 +235,23 @@ export function UserWalletProvider({ children }: { children: ReactNode }) {
     }
   };
 
+  // Thêm hàm chờ xác nhận giao dịch
+  async function waitForTransactionReceipt(provider: any, txHash: string, interval = 2000, maxTries = 60) {
+    let tries = 0;
+    while (tries < maxTries) {
+      const receipt = await provider.request({
+        method: "eth_getTransactionReceipt",
+        params: [txHash],
+      });
+      if (receipt && receipt.blockNumber) {
+        return receipt.transactionHash; // Đã xác nhận
+      }
+      await new Promise((resolve) => setTimeout(resolve, interval));
+      tries++;
+    }
+    throw new Error("Giao dịch chưa được xác nhận sau thời gian chờ.");
+  }
+
   const sendTransaction = async (params: SendTxParams) => {
     if (!wallet) return;
     const { chainId, to, amount, type, tokenAddress } = params;
@@ -301,7 +318,9 @@ export function UserWalletProvider({ children }: { children: ReactNode }) {
           method: "eth_sendTransaction",
           params: [tx],
         });
-        return txHash;
+        // Chờ xác nhận giao dịch
+        const receipt = await waitForTransactionReceipt(provider, txHash);
+        return receipt;
       } else if (type === "token" && tokenAddress) {
         // Lấy số decimal thực tế của token
         const decimalsData = "0x313ce567"; // keccak256("decimals()").slice(0,10)
@@ -339,7 +358,9 @@ export function UserWalletProvider({ children }: { children: ReactNode }) {
           method: "eth_sendTransaction",
           params: [tx],
         });
-        return txHash;
+        // Chờ xác nhận giao dịch
+        const receipt = await waitForTransactionReceipt(provider, txHash);
+        return receipt;
       } else {
         // throw new Error("Thiếu thông tin gửi token hoặc type không hợp lệ");
       }
