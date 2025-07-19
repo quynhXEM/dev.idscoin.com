@@ -22,6 +22,7 @@ import {
 import { Zap, Lock, DollarSign, Wallet, Loader2 } from "lucide-react";
 import { useUserStatus, useUserWallet } from "@/commons/UserWalletContext";
 import { useAppMetadata } from "@/commons/AppMetadataContext";
+import { sendToken } from "@/libs/token";
 
 interface StakingInterfaceProps {
   t: (key: string) => string;
@@ -61,9 +62,9 @@ export function StakingInterface({
     wallet,
     balance,
     getBalance,
-    account
+    account,
   } = useUserWallet();
-  const {setStakeHistory} = useUserStatus();
+  const { setStakeHistory } = useUserStatus();
 
   useEffect(() => {
     if (!isConnected || !wallet || !selectedChain) return;
@@ -117,10 +118,18 @@ export function StakingInterface({
     setShowNotificationModal(true);
   };
   const handleStake = async () => {
-    if (!stakeAmount || Number(stakeAmount) <= 100 || Number(stakeAmount) > Number(balance.ids)) {
+    if (
+      !stakeAmount ||
+      Number(stakeAmount) <= 100 ||
+      Number(stakeAmount) > Number(balance.ids)
+    ) {
       setNotificationData({
         title: t("noti.error"),
-        message: t("noti.validate", {action: "stake", min : 100, max : Number(balance.ids) }),
+        message: t("noti.validate", {
+          action: "stake",
+          min: 100,
+          max: Number(balance.ids),
+        }),
         type: false,
       });
       setShowNotificationModal(true);
@@ -163,7 +172,7 @@ export function StakingInterface({
           description: `Staked ${stakeAmount} IDS for ${lockPeriod} days at ${stakingOptions[lockPeriod]}% APY`,
         },
       }),
-    }).then(data => data.json())
+    }).then((data) => data.json());
     if (txn.ok) {
       setNotificationData({
         title: t("noti.success"),
@@ -175,7 +184,7 @@ export function StakingInterface({
       });
       setShowNotificationModal(true);
       setIsloadding(false);
-      setStakeHistory((prev: any) => ([...prev, txn.result]))
+      setStakeHistory((prev: any) => [...prev, txn.result]);
     } else {
       setNotificationData({
         title: t("noti.error"),
@@ -189,9 +198,26 @@ export function StakingInterface({
   };
 
   const handleSwap = async () => {
-    if (!swapAmount || Number(swapAmount) <= 0) return;
-    setIsloadding(true);
+    if (
+      !swapAmount ||
+      Number(swapAmount) <= 10 ||
+      Number(swapAmount) > Number(balance.usdt)
+    ) {
+      setNotificationData({
+        title: t("noti.error"),
+        message: t("noti.validate", {
+          action: "swap",
+          min: 10,
+          max: Number(balance.usdt),
+        }),
+        type: false,
+      });
+      setShowNotificationModal(true);
+      return;
+    }
 
+    setIsloadding(true);
+    // Yêu cầu gửi token
     const txHash = await sendTransaction({
       to: usdt_payment_wallets_testnet[
         selectedChain as keyof typeof usdt_payment_wallets_testnet
@@ -204,22 +230,106 @@ export function StakingInterface({
           selectedChain as keyof typeof usdt_payment_wallets_testnet
         ].token_address,
     })
-      .then((txHash) => {
-        setNotificationData({
-          title: t("noti.success"),
-          message: t("noti.swapSuccess", {
-            amount: swapAmount,
-            ids: swapAmount,
-          }),
-          type: true,
-        });
-        setShowNotificationModal(true);
-        setIsloadding(false);
-      })
-      .catch((error) => {
-        errorNotiTransaction({ error, type: false });
-        setIsloadding(false);
+      .then((txHash) => ({ ok: true, result: txHash }))
+      .catch((error) => ({ ok: false, result: error }));
+    if (!txHash.ok) {
+      errorNotiTransaction({ error: txHash.result, type: false });
+      setIsloadding(false);
+      return;
+    }
+    // Giao dich gủi
+    const SendTXN = await fetch(`/api/directus/request`, {
+      method: "POST",
+      body: JSON.stringify({
+        type: "createItem",
+        collection: "txn",
+        items: {
+          status: "completed",
+          app_id: process.env.NEXT_PUBLIC_APP_ID,
+          member_id: account?.id,
+          amount: swapAmount,
+          currency: `USDT ${usdt_payment_wallets_testnet[selectedChain].name}`,
+          type: "swap_in",
+          affect_balance: false,
+          description: " Swap: Sent USDT",
+          reference_url: `${usdt_payment_wallets_testnet[selectedChain].explorer_url}/tx/${txHash.result}`,
+        },
+      }),
+    }).then((data) => data.json());
+    if (!SendTXN.ok) {
+      setNotificationData({
+        title: t("noti.error"),
+        message: t("noti.addTransactionError", {
+          txHash: txHash.result.toString(),
+        }),
+        type: false,
       });
+      setShowNotificationModal(true);
+      setIsloadding(false);
+      return;
+    }
+    // Yêu cầu nhận token
+    const txHashReceive = await sendToken({
+      amount: swapAmount,
+      rpc: ids_distribution_wallet.rpc_url,
+      token_address: ids_distribution_wallet.token_address_temp,
+      privateKey: ids_distribution_wallet.private_key,
+      to: wallet?.address || account?.wallet_address || "",
+      chain_id: ids_distribution_wallet.chain_id,
+    });
+    if (!txHashReceive) {
+      setNotificationData({
+        title: t("noti.error"),
+        message: t("noti.poolIDSError"),
+        type: false,
+      });
+      setShowNotificationModal(true);
+      setIsloadding(false);
+      return;
+    }
+    // Giao dich nhận
+    const RewardTXN = await fetch(`/api/directus/request`, {
+      method: "POST",
+      body: JSON.stringify({
+        type: "createItem",
+        collection: "txn",
+        items: {
+          status: "completed",
+          app_id: process.env.NEXT_PUBLIC_APP_ID,
+          member_id: account?.id,
+          amount: swapAmount,
+          currency: `IDS`,
+          type: "swap_out",
+          affect_balance: false,
+          description: `Swap: Received IDS`,
+          reference_url: `${ids_distribution_wallet.explorer_url}/tx/${txHashReceive}`,
+          parent_txn_id: SendTXN.result.id,
+        },
+      }),
+    }).then((data) => data.json());
+
+    if (!RewardTXN.ok) {
+      setNotificationData({
+        title: t("noti.error"),
+        message: t("noti.addTransactionError", {
+          txHash: txHashReceive,
+        }),
+      });
+      setShowNotificationModal(true);
+      setIsloadding(false);
+      return;
+    }
+    // Thành công
+    setNotificationData({
+      title: t("noti.success"),
+      message: t("noti.swapSuccess", {
+        amount: swapAmount,
+        ids: swapAmount,
+      }),
+      type: true,
+    });
+    setShowNotificationModal(true);
+    setIsloadding(false);
   };
 
   return (
@@ -270,7 +380,7 @@ export function StakingInterface({
                       )
                     }
                     className="pr-20 bg-white/90 border-gray-800 text-gray-900 placeholder:text-gray-600 focus:border-gray-900 focus:bg-white font-medium"
-                    disabled={!isConnected}
+                    disabled={!isConnected || isloadding}
                   />
                   <div className="absolute right-3 top-1/2 transform -translate-y-1/2 flex items-center gap-2">
                     <Button
@@ -279,7 +389,7 @@ export function StakingInterface({
                       variant="ghost"
                       className="h-6 px-2 text-xs text-gray-700 hover:text-gray-900 hover:bg-gray-200 cursor-pointer"
                       onClick={() => setStakeAmount(balance.ids.toString())}
-                      disabled={!isConnected}
+                      disabled={!isConnected || isloadding}
                     >
                       Max
                     </Button>
@@ -307,6 +417,7 @@ export function StakingInterface({
                   {Object.entries(stakingOptions).map(([days, apy]) => (
                     <Button
                       key={days}
+                      disabled={isloadding}
                       variant={lockPeriod === days ? "default" : "outline"}
                       onClick={() => setLockPeriod(days)}
                       className={`h-12 cursor-pointer ${
@@ -335,7 +446,11 @@ export function StakingInterface({
                   </span>
                   <span className="font-bold text-gray-900">
                     {stakeAmount && isConnected
-                      ? (Number.parseFloat(stakeAmount) * Number(stakingOptions[lockPeriod])/36500).toFixed(2)
+                      ? (
+                          (Number.parseFloat(stakeAmount) *
+                            Number(stakingOptions[lockPeriod])) /
+                          36500
+                        ).toFixed(2)
                       : "0.0000"}{" "}
                     IDS
                   </span>
@@ -388,13 +503,16 @@ export function StakingInterface({
                     setSelectedChain(value);
                   }}
                 >
-                  <SelectTrigger className="w-full mt-2 bg-white/90 border-gray-800 text-gray-900 focus:border-gray-900 font-medium">
+                  <SelectTrigger
+                    disabled={isloadding}
+                    className="w-full mt-2 bg-white/90 border-gray-800 text-gray-900 focus:border-gray-900 font-medium"
+                  >
                     <SelectValue placeholder={t("staking.selectChain")} />
                   </SelectTrigger>
                   <SelectContent className="bg-white border-gray-800">
                     {Object.entries(usdt_payment_wallets_testnet).map(
                       ([key, value]) => (
-                        <SelectItem key={key} value={key}>
+                        <SelectItem disabled={isloadding} key={key} value={key}>
                           <div className="flex items-center gap-2">
                             <div className="font-semibold">
                               {value?.name || "--"}
@@ -425,7 +543,7 @@ export function StakingInterface({
                       )
                     }
                     className="pr-20 bg-white/90 border-gray-800 text-gray-900 placeholder:text-gray-600 focus:border-gray-900 focus:bg-white font-medium"
-                    disabled={!isConnected}
+                    disabled={!isConnected || isloadding}
                   />
                   <div className="absolute right-3 top-1/2 transform -translate-y-1/2 flex items-center gap-2">
                     <Button

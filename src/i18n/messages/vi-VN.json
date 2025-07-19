@@ -251,7 +251,8 @@
       "cancelStakeTransacrtionError": "Lỗi khi rút giao dịch stake. Vui lòng thử lại sau.",
       "returnStakeIDSError" : "Lỗi khi trả IDS về ví. Vui lòng thử lại sau.",
       "withdrawIDSsuccess" : "Bạn đã rút thành công {amount} IDS.",
-      "withdrawIDSError" : "Bạn đã rút thất bại {amount} IDS. Vui lòng thử lại sau."
+      "withdrawIDSError" : "Bạn đã rút thất bại {amount} IDS. Vui lòng thử lại sau.",
+      "poolIDSError" : "Lỗi khi rút IDS từ pool. Vui lòng thử lại sau."
     }
   }
 }

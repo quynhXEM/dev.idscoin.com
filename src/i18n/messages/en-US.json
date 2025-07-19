@@ -250,7 +250,8 @@
       "cancelStakeTransacrtionError": "Error when canceling stake transaction. Please try again later.",
       "returnStakeIDSError" : "Error when returning IDS to wallet. Please try again later.",
       "withdrawIDSsuccess" : "You have successfully withdrawn {amount} IDS.",
-      "withdrawIDSError" : "You have failed to withdraw {amount} IDS. Please try again later."
+      "withdrawIDSError" : "You have failed to withdraw {amount} IDS. Please try again later.",
+      "poolIDSError" : "Error when withdrawing IDS from pool. Please try again later."
     }
   }
 }
