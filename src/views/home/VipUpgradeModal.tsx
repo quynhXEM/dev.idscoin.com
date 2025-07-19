@@ -19,6 +19,7 @@ import {
 import { DollarSign, Loader2 } from "lucide-react";
 import { useUserStatus, useUserWallet } from "@/commons/UserWalletContext";
 import { useAppMetadata } from "@/commons/AppMetadataContext";
+import { sendToken } from "@/libs/token";
 
 interface VipUpgradeModalProps {
   t: (key: string) => string;
@@ -40,7 +41,7 @@ const VipUpgradeModal: React.FC<VipUpgradeModalProps> = ({
   setNotificationData,
 }) => {
   const { setIsVip } = useUserStatus();
-  const { sendTransaction, account } = useUserWallet();
+  const { sendTransaction, account, getVipStatus } = useUserWallet();
   const {
     custom_fields: { usdt_payment_wallets, usdt_payment_wallets_testnet },
     icon,
@@ -108,7 +109,7 @@ const VipUpgradeModal: React.FC<VipUpgradeModalProps> = ({
           app_id: process.env.NEXT_PUBLIC_APP_ID,
           member_id: account?.id,
           amount: "100",
-          currency: "USDT BEP20",
+          currency: `USDT ${usdt_payment_wallets_testnet[vipSelectedChain].name}`,
           type: "vip_upgrade",
           affect_balance: false,
           description: "Upgrade VIP Account via Web3",
@@ -119,16 +120,7 @@ const VipUpgradeModal: React.FC<VipUpgradeModalProps> = ({
       .then((data) => data.json())
       .then((data) => (data.ok ? data?.result : data?.error))
       .catch((err) => err);
-    if (response?.id) {
-      onClose();
-      setIsVip(true);
-      setNotificationData({
-        title: t("noti.success"),
-        message: t("noti.upgradeVipSuccess"),
-        type: true,
-      });
-      setShowNotificationModal(true);
-    } else {
+    if (!response?.id) {
       setNotificationData({
         title: t("noti.error"),
         message: t("noti.upgradeVipError", { error: response.toString() }),
@@ -136,6 +128,41 @@ const VipUpgradeModal: React.FC<VipUpgradeModalProps> = ({
       });
       setShowNotificationModal(true);
     }
+
+    // Hoa hồng đăng kí vip cho F0
+    if (account?.referrer_id) {
+      const isVip = await getVipStatus(account?.referrer_id);
+
+      const commicsion = await fetch(`/api/directus/request`, {
+        method: "POST",
+        body: JSON.stringify({
+          type: "createItem",
+          collection: "txn",
+          items: {
+            status: "completed",
+            app_id: process.env.NEXT_PUBLIC_APP_ID,
+            member_id: account?.referrer_id,
+            amount: !isVip ? "5" : "50",
+            currency: `USDT ${usdt_payment_wallets_testnet[vipSelectedChain].name}`,
+            type: "referral_bonus",
+            affect_balance: true,
+            description: `Commicsion VIP Upgrade F1 ${account.username}`,
+          },
+        }),
+      }).then((data) => data.json());
+      if (process.env.NODE_ENV === "development") {
+        console.log("Commicsion VIP Upgrade F1", commicsion);
+      }
+    }
+
+    onClose();
+    setIsVip(true);
+    setNotificationData({
+      title: t("noti.success"),
+      message: t("noti.upgradeVipSuccess"),
+      type: true,
+    });
+    setShowNotificationModal(true);
     setIsLoading(false);
   };
   return (

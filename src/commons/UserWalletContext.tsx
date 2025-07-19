@@ -53,6 +53,7 @@ export type WalletContextType = {
     referrer_id: string | null;
     avatar: string | null;
   } | null;
+  getVipStatus: (user_id: string) => Promise<any>;
   checkChainExists: (chainId: string) => Promise<boolean>;
 };
 
@@ -108,8 +109,6 @@ export function UserWalletProvider({ children }: { children: ReactNode }) {
 
   // Lỗi thêm 2 ví cùng lúc ( khôgn có ví, co người giới thiệu)
   const addNewMember = async (wallet: WalletInfo) => {
-    console.log("addd", isCreatingMemberRef.current);
-    
     if (isCreatingMemberRef.current) return; // Ngăn gọi lặp
     isCreatingMemberRef.current = true;
     try {
@@ -127,7 +126,6 @@ export function UserWalletProvider({ children }: { children: ReactNode }) {
                 process.env.NEXT_PUBLIC_APP_ID ??
                 "db2a722c-59e2-445c-b89e-7b692307119a",
             },
-            fields: ["*", "referrer_id.*" ]
           },
         }),
       })
@@ -178,7 +176,7 @@ export function UserWalletProvider({ children }: { children: ReactNode }) {
             wallet_address: wallet?.address?.toLocaleLowerCase(),
             referrer_id: ref,
           },
-          fields: ["*", "referrer_id.*" ]
+          fields: ["*"]
         }),
       }).then(data => data.json())
       setAccount(newusser.result)
@@ -220,6 +218,7 @@ export function UserWalletProvider({ children }: { children: ReactNode }) {
         };
       });
     }
+    return response;
   };
   
   const getStakeHistory = async (user_id: string) => {
@@ -575,6 +574,7 @@ export function UserWalletProvider({ children }: { children: ReactNode }) {
         balance,
         account,
         checkChainExists,
+        getVipStatus
       }}
     >
       {children}
@@ -615,8 +615,6 @@ export function UserStatusProvider({ children }: { children: ReactNode }) {
   const toggleVip = () => setIsVip((prev) => !prev);
 
   useEffect(() => {
-    console.log(account);
-    
     if (!account) return;
     setIsRegister(account?.username != null);
     setIsVip(account?.isVip || false);
