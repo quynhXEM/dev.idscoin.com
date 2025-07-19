@@ -9,7 +9,7 @@ import { useState } from "react";
 
 export const StakeHistory = () => {
   const t = useTranslations("home");
-  const { stakeHistory } = useUserStatus();
+  const { stakeHistory, setStakeHistory } = useUserStatus();
   const {
     custom_fields: { ids_distribution_wallet },
   } = useAppMetadata();
@@ -93,7 +93,7 @@ export const StakeHistory = () => {
         }),
         type: true,
       });
-      connectWallet();
+      setStakeHistory((prev) => [...prev.filter((his) => his.id != item.id)]);
     } else {
       notify({
         title: t("noti.error"),
