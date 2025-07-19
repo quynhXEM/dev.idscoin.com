@@ -21,14 +21,17 @@ import { useAppMetadata } from "@/commons/AppMetadataContext";
 
 export default function IDSStakingPlatform() {
   const t = useTranslations("home");
-  const {custom_fields: {usdt_payment_wallets, usdt_payment_wallets_testnet}} = useAppMetadata();
+  const {
+    custom_fields: { usdt_payment_wallets, usdt_payment_wallets_testnet },
+  } = useAppMetadata();
   const [showVipModal, setShowVipModal] = useState(false);
   const [showCommissionModal, setShowCommissionModal] = useState(false);
   const [showRewardsModal, setShowRewardsModal] = useState(false);
   const [showInfoModal, setShowInfoModal] = useState(false);
   const [vipSelectedChain, setVipSelectedChain] = useState("97");
-  const { connectWallet, getBalance, isConnected, wallet, disconnect } = useUserWallet();
- 
+  const { connectWallet, getBalance, isConnected, wallet, disconnect } =
+    useUserWallet();
+
   const [showNotificationModal, setShowNotificationModal] = useState(false);
   const [notificationData, setNotificationData] = useState({
     title: "",
@@ -37,7 +40,17 @@ export default function IDSStakingPlatform() {
   });
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
+    if (
+      typeof window !== "undefined" &&
+      typeof window.ethereum !== "undefined"
+    ) {
+      window.ethereum.on("accountsChanged", (accounts: string[]) => {
+        if (accounts.length === 0) {
+          disconnect();
+        } else {
+          connectWallet();
+        }
+      });
       const connected = sessionStorage.getItem("idscoin_connected");
       if (connected) {
         connectWallet();
@@ -47,31 +60,13 @@ export default function IDSStakingPlatform() {
   }, []);
 
   useEffect(() => {
-    if (typeof window !== "undefined" && typeof window.ethereum !== "undefined") {
-      window.ethereum.on("accountsChanged", (accounts: string[]) => {
-        if (accounts.length === 0) {
-          disconnect();
-        } else {
-          connectWallet();
-        }
-      }); 
-    }
-  
-    return () => {
-      if (window.ethereum?.removeListener) {
-        window.ethereum.removeListener("accountsChanged", () => {
-        });
-      }
-    };
-  }, []);
-  
-
-  useEffect(() => {
     if (!isConnected || !wallet || !vipSelectedChain) return;
     getBalance(
       wallet.address,
       Number(vipSelectedChain),
-      usdt_payment_wallets_testnet[vipSelectedChain as keyof typeof usdt_payment_wallets_testnet].token_address
+      usdt_payment_wallets_testnet[
+        vipSelectedChain as keyof typeof usdt_payment_wallets_testnet
+      ].token_address
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [vipSelectedChain]);

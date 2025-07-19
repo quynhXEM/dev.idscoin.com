@@ -8,6 +8,7 @@ import React, {
   ReactNode,
   createContext,
   useEffect,
+  useRef,
 } from "react";
 import { useNotification } from "@/commons/NotificationContext";
 import { useTranslations } from "next-intl";
@@ -91,6 +92,7 @@ export function UserWalletProvider({ children }: { children: ReactNode }) {
   const isConnected = !!wallet;
   const path = usePathname();
   const { notify } = useNotification();
+  const isCreatingMemberRef = useRef(false);
 
   useEffect(() => {
     if (!wallet) return;
@@ -104,73 +106,85 @@ export function UserWalletProvider({ children }: { children: ReactNode }) {
 
   const disconnect = () => setWallet(null);
 
+  // Lỗi thêm 2 ví cùng lúc ( khôgn có ví, co người giới thiệu)
   const addNewMember = async (wallet: WalletInfo) => {
-    // Check user is exist
-    const exist = await fetch("/api/directus/request", {
-      method: "POST",
-      body: JSON.stringify({
-        type: "readItems",
-        collection: "member",
-        params: {
-          filter: {
-            wallet_address: wallet?.address?.toLocaleLowerCase(),
-            status: "active",
-            app_id:
-              process.env.NEXT_PUBLIC_APP_ID ??
-              "db2a722c-59e2-445c-b89e-7b692307119a",
-          },
-        },
-      }),
-    })
-      .then((data) => data.json())
-      .then((data) => data.result[0])
-      .catch(() => null);
-    if (exist) {
-      setAccount(exist);
-      getVipStatus(exist.id);
-      getStakeHistory(exist.id);
-      return;
-    }
-
-    let ref = null;
-    if (!path.includes("/home")) {
-      ref = await fetch("/api/directus/request", {
+    console.log("addd", isCreatingMemberRef.current);
+    
+    if (isCreatingMemberRef.current) return; // Ngăn gọi lặp
+    isCreatingMemberRef.current = true;
+    try {
+      // Check user is exist
+      const exist = await fetch("/api/directus/request", {
         method: "POST",
         body: JSON.stringify({
           type: "readItems",
           collection: "member",
           params: {
             filter: {
-              username: path.split("/")[1],
+              wallet_address: wallet?.address?.toLocaleLowerCase(),
               status: "active",
               app_id:
                 process.env.NEXT_PUBLIC_APP_ID ??
                 "db2a722c-59e2-445c-b89e-7b692307119a",
             },
-            fields: ["id"],
+            fields: ["*", "referrer_id.*" ]
           },
         }),
       })
         .then((data) => data.json())
-        .then((data) => data.result[0]?.id)
+        .then((data) => data.result[0])
         .catch(() => null);
+      if (exist) {
+        setAccount(exist);
+        getVipStatus(exist.id);
+        getStakeHistory(exist.id);
+        return;
+      }
+
+      let ref = null;
+      if (!path.includes("/home")) {
+        ref = await fetch("/api/directus/request", {
+          method: "POST",
+          body: JSON.stringify({
+            type: "readItems",
+            collection: "member",
+            params: {
+              filter: {
+                username: path.split("/")[1],
+                status: "active",
+                app_id:
+                  process.env.NEXT_PUBLIC_APP_ID ??
+                  "db2a722c-59e2-445c-b89e-7b692307119a",
+              },
+              fields: ["id"],
+            },
+          }),
+        })
+          .then((data) => data.json())
+          .then((data) => data.result[0]?.id)
+          .catch(() => null);
+      }
+      const newusser = await fetch("/api/directus/request", {
+        method: "POST",
+        body: JSON.stringify({
+          type: "createItem",
+          collection: "member",
+          ct_code: true,
+          items: {
+            status: "active",
+            app_id:
+              process.env.NEXT_PUBLIC_APP_ID ??
+              "db2a722c-59e2-445c-b89e-7b692307119a",
+            wallet_address: wallet?.address?.toLocaleLowerCase(),
+            referrer_id: ref,
+          },
+          fields: ["*", "referrer_id.*" ]
+        }),
+      }).then(data => data.json())
+      setAccount(newusser.result)
+    } finally {
+      isCreatingMemberRef.current = false;
     }
-    await fetch("/api/directus/request", {
-      method: "POST",
-      body: JSON.stringify({
-        type: "createItem",
-        collection: "member",
-        ct_code: true,
-        items: {
-          status: "active",
-          app_id:
-            process.env.NEXT_PUBLIC_APP_ID ??
-            "db2a722c-59e2-445c-b89e-7b692307119a",
-          wallet_address: wallet?.address?.toLocaleLowerCase(),
-          referrer_id: ref,
-        },
-      }),
-    });
   };
 
   const getVipStatus = async (user_id: string) => {
@@ -257,12 +271,8 @@ export function UserWalletProvider({ children }: { children: ReactNode }) {
         method: "eth_requestAccounts",
       });
       const chainId = await provider.request({ method: "eth_chainId" });
-      console.log("accounts[0]", accounts[0]);
-      
       addNewMember({ address: accounts[0], chainId: parseInt(chainId, 16) });
       setWallet({ address: accounts[0], chainId: parseInt(chainId, 16) });
-      
-      
       sessionStorage.setItem("idscoin_connected", "true");
       
     } catch (err) {
@@ -605,6 +615,8 @@ export function UserStatusProvider({ children }: { children: ReactNode }) {
   const toggleVip = () => setIsVip((prev) => !prev);
 
   useEffect(() => {
+    console.log(account);
+    
     if (!account) return;
     setIsRegister(account?.username != null);
     setIsVip(account?.isVip || false);

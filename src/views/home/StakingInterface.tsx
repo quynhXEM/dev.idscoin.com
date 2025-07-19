@@ -367,7 +367,7 @@ export function StakingInterface({
               ) : (
                 <Button
                   className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 cursor-pointer"
-                  onClick={connectWallet}
+                  onClick={() => connectWallet()}
                 >
                   <Wallet className="w-4 h-4 mr-2" />
                   {t("staking.connectWalletBtn")}
@@ -518,7 +518,7 @@ export function StakingInterface({
                       size="sm"
                       variant="outline"
                       className="border-gray-800 text-gray-900 hover:bg-gray-900 hover:text-white bg-white/60 cursor-pointer"
-                      onClick={connectWallet}
+                      onClick={() => connectWallet()}
                     >
                       {t("staking.connectwallet")}
                     </Button>

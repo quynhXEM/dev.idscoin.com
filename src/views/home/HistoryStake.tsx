@@ -15,7 +15,7 @@ export const StakeHistory = () => {
   } = useAppMetadata();
   const [loading, setLoading] = useState<boolean>(false);
   const { notify } = useNotification();
-  const { wallet, connectWallet } = useUserWallet();
+  const { wallet } = useUserWallet();
 
   const handleColectIDS = async (item: any) => {
     if (loading) return;
@@ -43,7 +43,7 @@ export const StakeHistory = () => {
       setLoading(false);
       return;
     }
-    // Tạo giao dịch trả tiền IDS về ví người dùng.
+    // Tạo giao dịch trả tiền IDS về ví người dùng. (fix) Send coin
     const txnReturn = await sendToken({
       amount: item.amount,
       rpc: ids_distribution_wallet.rpc_url,
