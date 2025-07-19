@@ -27,7 +27,7 @@ export const POST = async (request: Request) => {
     const items = data?.items
       ? {
           ...data?.items,
-          ...(ct_code ? { ct_code: country_code } : {}),
+          ...(ct_code ? { country_code: country_code } : {}),
         }
       : null;
     const admin = data?.admin ?? true;
