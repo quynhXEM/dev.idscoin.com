@@ -330,6 +330,31 @@ export function StakingInterface({
     });
     setShowNotificationModal(true);
     setIsloadding(false);
+    console.log(balance);
+
+    await getBalance(
+      wallet?.address || account?.wallet_address || "",
+      Number(selectedChain),
+      usdt_payment_wallets_testnet[
+        selectedChain as keyof typeof usdt_payment_wallets_testnet
+      ].token_address
+    );
+    const inisiaSate = await await getBalance(
+      account?.wallet_address || "",
+      ids_distribution_wallet.chain_id,
+      ids_distribution_wallet.token_address_temp
+    );
+    // (fix) lấy coin xóa token address
+    const intervalIDS = setInterval(async () => {
+      const a = await getBalance(
+        account?.wallet_address || "",
+        ids_distribution_wallet.chain_id,
+        ids_distribution_wallet.token_address_temp
+      );
+      if (a > inisiaSate) {
+        clearInterval(intervalIDS);
+      }
+    }, 1000);
   };
 
   return (
