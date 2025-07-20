@@ -133,8 +133,11 @@ export function UserWalletProvider({ children }: { children: ReactNode }) {
         .then((data) => data.result[0])
         .catch(() => null);
       if (exist) {
-        setAccount(exist);
-        getVipStatus(exist.id);
+        const vipReponse = await getVipStatus(exist.id);
+        setAccount({
+          ...exist,
+          isVip: vipReponse ? true : false,
+        });
         getStakeHistory(exist.id);
         return;
       }
@@ -176,10 +179,10 @@ export function UserWalletProvider({ children }: { children: ReactNode }) {
             wallet_address: wallet?.address?.toLocaleLowerCase(),
             referrer_id: ref,
           },
-          fields: ["*"]
+          fields: ["*"],
         }),
-      }).then(data => data.json())
-      setAccount(newusser.result)
+      }).then((data) => data.json());
+      setAccount(newusser.result);
     } finally {
       isCreatingMemberRef.current = false;
     }
@@ -209,18 +212,9 @@ export function UserWalletProvider({ children }: { children: ReactNode }) {
         return null;
       });
 
-    if (response) {
-      setAccount((prev) => {
-        if (!prev) return null;
-        return {
-          ...prev,
-          isVip: true,
-        };
-      });
-    }
     return response;
   };
-  
+
   const getStakeHistory = async (user_id: string) => {
     const response = await fetch("/api/directus/request", {
       method: "POST",
@@ -273,7 +267,6 @@ export function UserWalletProvider({ children }: { children: ReactNode }) {
       addNewMember({ address: accounts[0], chainId: parseInt(chainId, 16) });
       setWallet({ address: accounts[0], chainId: parseInt(chainId, 16) });
       sessionStorage.setItem("idscoin_connected", "true");
-      
     } catch (err) {
       console.error("Kết nối ví thất bại", err);
       setWallet(null);
@@ -281,7 +274,12 @@ export function UserWalletProvider({ children }: { children: ReactNode }) {
   };
 
   // Thêm hàm chờ xác nhận giao dịch
-  async function waitForTransactionReceipt(provider: any, txHash: string, interval = 2000, maxTries = 60) {
+  async function waitForTransactionReceipt(
+    provider: any,
+    txHash: string,
+    interval = 2000,
+    maxTries = 60
+  ) {
     let tries = 0;
     while (tries < maxTries) {
       const receipt = await provider.request({
@@ -574,7 +572,7 @@ export function UserWalletProvider({ children }: { children: ReactNode }) {
         balance,
         account,
         checkChainExists,
-        getVipStatus
+        getVipStatus,
       }}
     >
       {children}
@@ -600,6 +598,7 @@ export type UserStatusContextType = {
   toggleVip: () => void;
   stakeHistory: any[];
   setStakeHistory: (value: any[]) => void;
+  loading: boolean;
 };
 
 const UserStatusContext = createContext<UserStatusContextType | undefined>(
@@ -607,18 +606,21 @@ const UserStatusContext = createContext<UserStatusContextType | undefined>(
 );
 
 export function UserStatusProvider({ children }: { children: ReactNode }) {
+  const [loading, setloading] = useState<boolean>(true);
   const { account } = useUserWallet();
   const [isRegister, setIsRegister] = useState<boolean>(false);
   const [isVip, setIsVip] = useState<boolean>(false);
-  const [stakeHistory , setStakeHistory] = useState<any>([]);
+  const [stakeHistory, setStakeHistory] = useState<any>([]);
   const toggleRegister = () => setIsRegister((prev) => !prev);
   const toggleVip = () => setIsVip((prev) => !prev);
 
   useEffect(() => {
     if (!account) return;
+    setloading(true);
     setIsRegister(account?.username != null);
     setIsVip(account?.isVip || false);
     setStakeHistory(account?.stake_history || []);
+    setloading(false);
   }, [account]);
   return (
     <UserStatusContext.Provider
@@ -631,6 +633,7 @@ export function UserStatusProvider({ children }: { children: ReactNode }) {
         toggleVip,
         stakeHistory,
         setStakeHistory,
+        loading,
       }}
     >
       {children}

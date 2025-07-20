@@ -24,6 +24,7 @@ import {
   Loader2,
 } from "lucide-react";
 import { useUserStatus, useUserWallet } from "@/commons/UserWalletContext";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface ReferralSectionProps {
   t: (key: string, params?: Record<string, string>) => string;
@@ -51,7 +52,7 @@ export function ReferralSection({
   const [isloading, setIsLoading] = useState<boolean>(false);
   const [copied, setCopied] = useState(false);
   
-  const { isRegister, isVip, setIsRegister } = useUserStatus();
+  const { isRegister, isVip, setIsRegister, loading } = useUserStatus();
 
   const copyReferralLink = async () => {
     try {
@@ -93,6 +94,37 @@ export function ReferralSection({
     }
     setIsLoading(false);
   };
+
+  if (loading) {
+    return (
+      <Card className="bg-gray-900 border-gray-800">
+        <CardHeader>
+          <CardTitle className="flex items-center text-white">
+            <div className="w-8 h-8 mr-2">
+              <Skeleton className="w-full h-full rounded-full" />
+            </div>
+            <Skeleton className="h-6 w-32" />
+          </CardTitle>
+          <CardDescription>
+            <Skeleton className="h-4 w-48" />
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="p-8 bg-gray-800 rounded-lg border-2 border-dashed border-gray-700 flex flex-col items-center">
+            <Skeleton className="w-16 h-16 mb-4 rounded-full" />
+            <Skeleton className="h-5 w-40 mb-2" />
+            <Skeleton className="h-4 w-32 mb-4" />
+            <Skeleton className="h-10 w-48" />
+          </div>
+          <div className="grid grid-cols-2 gap-3">
+            <Skeleton className="h-16 w-full rounded-lg" />
+            <Skeleton className="h-16 w-full rounded-lg" />
+          </div>
+          <Skeleton className="h-24 w-full rounded-lg" />
+        </CardContent>
+      </Card>
+    );
+  }
 
   if (!isConnected) {
     return (
