@@ -389,7 +389,7 @@ export function ReferralSection({
           </div>
           <div className="text-center p-3 bg-gray-800 rounded-lg border border-gray-700">
             <div className="text-lg font-bold text-emerald-400">
-              ${account?.commicsion}
+              ${account?.commicsion?.all || 0}
             </div>
             <div className="text-xs text-gray-400">{t("referral.usdtEarnings")}</div>
           </div>
@@ -399,13 +399,13 @@ export function ReferralSection({
           <div className="flex justify-between text-sm">
             <span className="text-gray-300">{t("referral.todayEarnings")}</span>
             <span className="text-emerald-400">
-              +${!isVip ? "0.62" : "6.15"}
+              +${account?.commicsion?.day || 0}
             </span>
           </div>
           <div className="flex justify-between text-sm">
             <span className="text-gray-300">{t("referral.monthlyEarnings")}</span>
             <span className="text-emerald-400">
-              +${!isVip ? "14.23" : "142.25"}
+              +${account?.commicsion?.month || 0}
             </span>
           </div>
         </div>
