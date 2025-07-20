@@ -79,7 +79,7 @@ export const StakeHistory = () => {
           affect_balance: true,
           stake_lock_days: item.stake_lock_days,
           stake_apy: item.stake_apy,
-          reference_url: `${ids_distribution_wallet.explorer_url}/tx/${txnReturn.result}`,
+          external_ref: `${ids_distribution_wallet.explorer_url}/tx/${txnReturn.result}`,
           description: `Staked out ${item.amount} IDS `,
           parent_txn_id: item.id,
         },

@@ -113,7 +113,7 @@ const VipUpgradeModal: React.FC<VipUpgradeModalProps> = ({
           type: "vip_upgrade",
           affect_balance: false,
           description: "Upgrade VIP Account via Web3",
-          reference_url: `${usdt_payment_wallets_testnet[vipSelectedChain].explorer_url}/tx/${txn}`,
+          external_ref: `${usdt_payment_wallets_testnet[vipSelectedChain].explorer_url}/tx/${txn}`,
         },
       }),
     })
