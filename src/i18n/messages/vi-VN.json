@@ -250,9 +250,10 @@
       "validate": "Bạn cần {action} ít nhất {min} IDS và không được vượt quá {max} IDS số dư của bạn",
       "cancelStakeTransacrtionError": "Lỗi khi rút giao dịch stake. Vui lòng thử lại sau.",
       "returnStakeIDSError" : "Lỗi khi trả IDS về ví. Vui lòng thử lại sau.",
-      "withdrawIDSsuccess" : "Bạn đã rút thành công {amount} IDS.",
+      "withdrawIDSsuccess" : "{amount} IDS đã được chuyển về ví của bạn: {hash}",
       "withdrawIDSError" : "Bạn đã rút thất bại {amount} IDS. Vui lòng thử lại sau.",
-      "poolIDSError" : "Lỗi khi rút IDS từ pool. Vui lòng thử lại sau."
+      "poolIDSError" : "Lỗi khi rút IDS từ pool. Vui lòng thử lại sau.",
+      "stakeNotCompleted" : "Gói stake này đã được xử lý. Vui lòng thử lại sau."
     }
   }
 }

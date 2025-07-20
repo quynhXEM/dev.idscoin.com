@@ -8,6 +8,7 @@ import {
   updateItem,
   withToken,
   readMe,
+  updateItems,
 } from "@directus/sdk";
 import { getCountryCodeFromIp } from "@/libs/utils";
 
@@ -56,6 +57,12 @@ export const POST = async (request: Request) => {
           );
           break;
 
+        case "updateItems":
+          res = await directus.request(
+            withToken(APP_TOKEN, updateItems(collection, params, items))
+          );
+          break;
+
         case "createItem":
           res = await directus.request(
             withToken(APP_TOKEN, createItem(collection, items, params))
@@ -86,8 +93,11 @@ export const POST = async (request: Request) => {
         { status: 401 }
       );
     }
-    return NextResponse.json({
-      error: error,
-    } ,{ status: 400 });
+    return NextResponse.json(
+      {
+        error: error,
+      },
+      { status: 400 }
+    );
   }
 };

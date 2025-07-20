@@ -5,8 +5,9 @@ import { useTranslations } from "next-intl";
 
 interface NotificationData {
   title: string;
-  message: string;
+  message?: string;
   type: boolean; // true = success, false = error
+  children?: ReactNode;
 }
 
 interface NotificationContextType {
@@ -36,7 +37,8 @@ export const NotificationProvider = ({ children }: { children: ReactNode }) => {
         isOpen={show}
         onClose={handleClose}
         title={data.title}
-        message={data.message}
+        message={data?.message}
+        children={data?.children}
         type={data.type}
       />
     </NotificationContext.Provider>

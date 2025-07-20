@@ -120,7 +120,7 @@ export function StakingInterface({
   const handleStake = async () => {
     if (
       !stakeAmount ||
-      Number(stakeAmount) <= 100 ||
+      Number(stakeAmount) < 100 ||
       Number(stakeAmount) > Number(balance.ids)
     ) {
       setNotificationData({
@@ -195,6 +195,13 @@ export function StakingInterface({
       setShowNotificationModal(true);
       setIsloadding(false);
     }
+
+    // (fix) lấy coin xóa token address
+    const inisiaSate = await await getBalance(
+      account?.wallet_address || "",
+      ids_distribution_wallet.chain_id,
+      ids_distribution_wallet.token_address_temp
+    );
   };
 
   const handleSwap = async () => {
@@ -330,8 +337,6 @@ export function StakingInterface({
     });
     setShowNotificationModal(true);
     setIsloadding(false);
-    console.log(balance);
-
     await getBalance(
       wallet?.address || account?.wallet_address || "",
       Number(selectedChain),

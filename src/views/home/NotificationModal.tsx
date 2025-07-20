@@ -9,14 +9,16 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { CheckCircle, XCircle, X, WandSparklesIcon, CircleAlert } from "lucide-react";
+import { ReactNode } from "react";
 
 interface NotificationModalProps {
   t: (key: string) => string;
   isOpen: boolean;
   onClose: () => void;
   title: string;
-  message: string;
+  message?: string;
   type: boolean; // true = success, false = error
+  children?: ReactNode;
 }
 
 export function NotificationModal({
@@ -26,6 +28,7 @@ export function NotificationModal({
   title,
   message,
   type,
+  children
 }: NotificationModalProps) {
   if (!isOpen) return null;
   const isSuccess = type;
@@ -79,7 +82,7 @@ export function NotificationModal({
         <CardContent className="space-y-6">
           {/* Message Content */}
           <div className={`p-4 rounded-lg overflow-hidden border ${borderColor} ${bgGradient}`}>
-            <p className="text-gray-300 text-sm leading-relaxed text-wrap whitespace-pre-wrap">{message}</p>
+            <p className="text-gray-300 text-sm leading-relaxed text-wrap whitespace-pre-wrap">{message || children}</p>
           </div>
         </CardContent>
       </Card>

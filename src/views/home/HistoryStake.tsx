@@ -3,9 +3,11 @@ import { useNotification } from "@/commons/NotificationContext";
 import { useUserStatus, useUserWallet } from "@/commons/UserWalletContext";
 import { Badge } from "@/components/ui/badge";
 import { sendToken } from "@/libs/token";
-import { Clock, Loader2, Shield } from "lucide-react";
+import { Clock, Gift, HandCoins, Loader2, Shield } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
+import { Skeleton } from "@/components/ui/skeleton";
+import Link from "next/link";
 
 export const StakeHistory = () => {
   const t = useTranslations("home");
@@ -13,34 +15,39 @@ export const StakeHistory = () => {
   const {
     custom_fields: { ids_distribution_wallet },
   } = useAppMetadata();
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loadingAction, setLoadingAction] = useState<boolean>(false);
   const { notify } = useNotification();
-  const { wallet } = useUserWallet();
+  const { wallet, getBalance } = useUserWallet();
+  const { loading } = useUserStatus();
 
   const handleColectIDS = async (item: any) => {
-    if (loading) return;
-    setLoading(true);
-
+    if (loadingAction) return;
+    setLoadingAction(true);
     // Update
     const updateTxn = await fetch("/api/directus/request", {
       method: "POST",
       body: JSON.stringify({
-        type: "updateItem",
+        type: "updateItems",
         collection: "txn",
-        id: item.id,
+        params: {
+          filter: {
+            id: item.id,
+            status: "completed",
+          },
+        },
         items: {
           status: "canceled",
         },
       }),
     }).then((data) => data.json());
 
-    if (!updateTxn.ok) {
+    if (!updateTxn.ok || updateTxn.result?.length == 0) {
       notify({
         title: t("noti.error"),
         message: t("noti.cancelStakeTransacrtionError"),
         type: false,
       });
-      setLoading(false);
+      setLoadingAction(false);
       return;
     }
     // Tạo giao dịch trả tiền IDS về ví người dùng. (fix) Send coin
@@ -60,7 +67,7 @@ export const StakeHistory = () => {
         message: t("noti.returnStakeIDSError"),
         type: false,
       });
-      setLoading(false);
+      setLoadingAction(false);
       return;
     }
     // Lưu giao dịch stake out
@@ -76,7 +83,7 @@ export const StakeHistory = () => {
           member_id: item.member_id,
           amount: item.amount,
           currency: "IDS",
-          affect_balance: true,
+          affect_balance: false,
           stake_lock_days: item.stake_lock_days,
           stake_apy: item.stake_apy,
           external_ref: `${ids_distribution_wallet.explorer_url}/tx/${txnReturn.result}`,
@@ -88,12 +95,24 @@ export const StakeHistory = () => {
     if (txn.ok) {
       notify({
         title: t("noti.success"),
-        message: t("noti.withdrawIDSsuccess", {
-          amount: item.stakeAmount,
-        }),
+        children: (
+          <Link
+            href={`${ids_distribution_wallet.explorer_url}/tx/${txnReturn.result}`}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {t("noti.withdrawIDSsuccess", {
+              amount: item.stakeAmount,
+              hash: "",
+            })}
+            <span className="text-blue-400 underline">
+              {txnReturn.result.slice(0, 13)}
+            </span>
+          </Link>
+        ),
         type: true,
       });
-      setStakeHistory((prev) => [...prev.filter((his) => his.id != item.id)]);
+      setStakeHistory(stakeHistory.filter((his: any) => his.id != item.id));
     } else {
       notify({
         title: t("noti.error"),
@@ -104,8 +123,33 @@ export const StakeHistory = () => {
       });
     }
 
-    setLoading(false);
+    setLoadingAction(false);
+    // (fix) lấy coin xóa token address
+    const balance = await getBalance(
+      wallet?.address || "",
+      ids_distribution_wallet.chain_id,
+      ids_distribution_wallet.token_address_temp
+    );
   };
+
+  if (loading) {
+    return (
+      <div className="space-y-3">
+        {[1, 2, 3].map((i) => (
+          <div
+            key={i}
+            className="flex items-center justify-between p-3 bg-gray-800 rounded-lg border border-gray-700"
+          >
+            <div>
+              <Skeleton className="h-4 w-24 mb-2" />
+              <Skeleton className="h-3 w-32" />
+            </div>
+            <Skeleton className="h-8 w-32" />
+          </div>
+        ))}
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-3">
@@ -132,15 +176,15 @@ export const StakeHistory = () => {
                   </div>
                 </div>
                 <Badge
-                  aria-disabled={date || loading}
+                  aria-disabled={date || loadingAction}
                   onClick={() => handleColectIDS(item)}
                   variant="secondary"
                   className="bg-gray-700 text-gray-300 hover:bg-gray-600 hover:text-white cursor-pointer"
                 >
-                  {loading ? (
+                  {loadingAction ? (
                     <Loader2 className="w-3 h-3 mr-1 animate-spin" />
                   ) : (
-                    <Shield className="w-3 h-3 mr-1" />
+                    <HandCoins className="w-3 h-3 mr-1" />
                   )}
                   {t("history.collectIDS", { amount: item.amount })}
                 </Badge>

@@ -134,11 +134,12 @@ export function UserWalletProvider({ children }: { children: ReactNode }) {
         .catch(() => null);
       if (exist) {
         const vipReponse = await getVipStatus(exist.id);
+        const stakeHistory = await getStakeHistory(exist.id);
         setAccount({
           ...exist,
           isVip: vipReponse ? true : false,
+          stake_history: stakeHistory,
         });
-        getStakeHistory(exist.id);
         return;
       }
 
@@ -238,15 +239,7 @@ export function UserWalletProvider({ children }: { children: ReactNode }) {
         return null;
       });
 
-    if (response) {
-      setAccount((prev) => {
-        if (!prev) return null;
-        return {
-          ...prev,
-          stake_history: response,
-        };
-      });
-    }
+    return response;
   };
 
   const connectWallet = async () => {
