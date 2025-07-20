@@ -1,8 +1,8 @@
-import { clsx, type ClassValue } from "clsx"
-import { twMerge } from "tailwind-merge"
+import { clsx, type ClassValue } from "clsx";
+import { twMerge } from "tailwind-merge";
 
 export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs))
+  return twMerge(clsx(inputs));
 }
 
 export async function fetchAppMetadata() {
@@ -11,14 +11,15 @@ export async function fetchAppMetadata() {
 
   const requestOptions: RequestInit = {
     method: "GET",
-    headers: myHeaders
+    headers: myHeaders,
   };
 
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_API_URL}/items/app/${process.env.NEXT_PUBLIC_APP_ID}`,
     requestOptions
-  ).then(data => data.json())
-  .then(data => data.data)
+  )
+    .then((data) => data.json())
+    .then((data) => data.data);
   return response;
 }
 
@@ -33,3 +34,11 @@ export async function getCountryCodeFromIp(ip: string): Promise<string | null> {
     return null;
   }
 }
+
+export const timeFormat = (time: string) => {
+  const d = new Date(time);
+  const day = d.getDate().toString().padStart(2, "0");
+  const month = (d.getMonth() + 1).toString().padStart(2, "0");
+  const year = d.getFullYear();
+  return `${day}/${month}/${year}`;
+};

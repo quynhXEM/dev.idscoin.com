@@ -128,7 +128,10 @@
       "connecttoshow": "Kết nối ví để xem",
       "connecttoshowinfo": "Cần kết nối ví để hiển thị thông tin tài khoản",
       "connecttoshowreward" : "Cần kết nối ví để hiển thị phần thưởng",
-      "connecttoshowhistory" : "Cần kết nối ví để hiển thị lịch sử stake"
+      "connecttoshowhistory" : "Cần kết nối ví để hiển thị lịch sử stake",
+      "clamCommicsion": "Nhận hoa hồng",
+      "detailsCommicsionDescription": "Thống kê chi tiết về hoa hồng USDT từ việc F1 nâng cấp VIP",
+      "totalCommicsion": "Tổng hoa hồng"
     },
     "vip": {
       "upgrade": "Nâng cấp VIP",
@@ -253,7 +256,9 @@
       "withdrawIDSsuccess" : "{amount} IDS đã được chuyển về ví của bạn: {hash}",
       "withdrawIDSError" : "Bạn đã rút thất bại {amount} IDS. Vui lòng thử lại sau.",
       "poolIDSError" : "Lỗi khi rút IDS từ pool. Vui lòng thử lại sau.",
-      "stakeNotCompleted" : "Gói stake này đã được xử lý. Vui lòng thử lại sau."
+      "stakeNotCompleted" : "Gói stake này đã được xử lý. Vui lòng thử lại sau.",
+      "clamommicsionFailed" : "Nhận hoa hồng thất bại. Vui lòng thử lại sau.",
+      "clamommicsionSuccess" : "Bạn đã nhận thành công {amount} USDT hoa hồng."
     }
   }
 }
