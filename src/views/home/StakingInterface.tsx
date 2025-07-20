@@ -45,7 +45,7 @@ export function StakingInterface({
 }: StakingInterfaceProps) {
   const [isloadding, setIsloadding] = useState(false);
   const [stakeAmount, setStakeAmount] = useState("");
-  const [lockPeriod, setLockPeriod] = useState("30");
+  const [lockPeriod, setLockPeriod] = useState("360");
   const [selectedChain, setSelectedChain] = useState("97");
   const [swapAmount, setSwapAmount] = useState("");
   const {
@@ -53,6 +53,7 @@ export function StakingInterface({
       usdt_payment_wallets,
       usdt_payment_wallets_testnet,
       ids_distribution_wallet,
+      ids_stake_wallet,
     },
   } = useAppMetadata();
   const {
@@ -138,11 +139,11 @@ export function StakingInterface({
     setIsloadding(true);
 
     const transaction = await sendTransaction({
-      to: ids_distribution_wallet.address,
+      to: ids_stake_wallet.address,
       amount: stakeAmount,
       type: "token", // (fix) chuyển thành coin
-      chainId: ids_distribution_wallet.chain_id,
-      tokenAddress: ids_distribution_wallet.token_address_temp,
+      chainId: ids_stake_wallet.chain_id,
+      tokenAddress: ids_stake_wallet.token_address_temp,
     })
       .then((txHash) => ({ ok: true, result: txHash }))
       .catch((error) => ({ ok: false, result: error }));
@@ -168,7 +169,7 @@ export function StakingInterface({
           affect_balance: false,
           stake_lock_days: lockPeriod,
           stake_apy: stakingOptions[lockPeriod],
-          external_ref: `${ids_distribution_wallet.explorer_url}/tx/${transaction.result}`,
+          external_ref: `${ids_stake_wallet.explorer_url}/tx/${transaction.result}`,
           description: `Staked ${stakeAmount} IDS for ${lockPeriod} days at ${stakingOptions[lockPeriod]}% APY`,
         },
       }),
