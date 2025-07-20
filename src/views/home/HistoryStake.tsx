@@ -2,7 +2,6 @@ import { useAppMetadata } from "@/commons/AppMetadataContext";
 import { useNotification } from "@/commons/NotificationContext";
 import { useUserStatus, useUserWallet } from "@/commons/UserWalletContext";
 import { Badge } from "@/components/ui/badge";
-import { sendToken } from "@/libs/token";
 import { Clock, Gift, HandCoins, Loader2, Shield } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
@@ -51,16 +50,21 @@ export const StakeHistory = () => {
       return;
     }
     // Tạo giao dịch trả tiền IDS về ví người dùng. (fix) Send coin
-    const txnReturn = await sendToken({
-      amount: item.amount,
-      rpc: ids_distribution_wallet.rpc_url,
-      token_address: ids_distribution_wallet.token_address_temp,
-      privateKey: ids_distribution_wallet.private_key,
-      to: wallet?.address || "",
-      chain_id: ids_distribution_wallet.chain_id,
-    })
-      .then((data) => ({ ok: true, result: data }))
-      .catch((err) => ({ ok: false, result: err }));
+    const res = await fetch("/api/send/token", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        amount: item.amount,
+        rpc: ids_distribution_wallet.rpc_url,
+        token_address: ids_distribution_wallet.token_address_temp,
+        to: wallet?.address || "",
+        chain_id: ids_distribution_wallet.chain_id,
+      }),
+    });
+    const data = await res.json();
+    const txnReturn = data.success
+      ? { ok: true, result: data.txHash }
+      : { ok: false, result: data.error };
     if (!txnReturn.ok) {
       notify({
         title: t("noti.error"),

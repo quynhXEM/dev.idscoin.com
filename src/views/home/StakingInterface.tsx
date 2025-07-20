@@ -22,7 +22,6 @@ import {
 import { Zap, Lock, DollarSign, Wallet, Loader2 } from "lucide-react";
 import { useUserStatus, useUserWallet } from "@/commons/UserWalletContext";
 import { useAppMetadata } from "@/commons/AppMetadataContext";
-import { sendToken } from "@/libs/token";
 
 interface StakingInterfaceProps {
   t: (key: string) => string;
@@ -198,7 +197,7 @@ export function StakingInterface({
     }
 
     // (fix) lấy coin xóa token address
-    const inisiaSate = await await getBalance(
+    const inisiaSate = await getBalance(
       account?.wallet_address || "",
       ids_distribution_wallet.chain_id,
       ids_distribution_wallet.token_address_temp
@@ -277,14 +276,20 @@ export function StakingInterface({
       return;
     }
     // Yêu cầu nhận token
-    const txHashReceive = await sendToken({
-      amount: swapAmount,
-      rpc: ids_distribution_wallet.rpc_url,
-      token_address: ids_distribution_wallet.token_address_temp,
-      privateKey: ids_distribution_wallet.private_key,
-      to: wallet?.address || account?.wallet_address || "",
-      chain_id: ids_distribution_wallet.chain_id,
+    const res = await fetch("/api/send/token", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        amount: swapAmount,
+        rpc: ids_distribution_wallet.rpc_url,
+        token_address: ids_distribution_wallet.token_address_temp,
+        to: wallet?.address || account?.wallet_address || "",
+        chain_id: ids_distribution_wallet.chain_id,
+      }),
     });
+    const data = await res.json();
+    const txHashReceive = data.success ? data.txHash : null;
+
     if (!txHashReceive) {
       setNotificationData({
         title: t("noti.error"),
@@ -345,7 +350,7 @@ export function StakingInterface({
         selectedChain as keyof typeof usdt_payment_wallets_testnet
       ].token_address
     );
-    const inisiaSate = await await getBalance(
+    const inisiaSate = await getBalance(
       account?.wallet_address || "",
       ids_distribution_wallet.chain_id,
       ids_distribution_wallet.token_address_temp

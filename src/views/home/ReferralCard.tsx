@@ -384,12 +384,12 @@ export function ReferralSection({
 
         <div className="grid grid-cols-2 gap-3">
           <div className="text-center p-3 bg-gray-800 rounded-lg border border-gray-700">
-            <div className="text-lg font-bold text-blue-400">12</div>
+            <div className="text-lg font-bold text-blue-400">{account?.f1}</div>
             <div className="text-xs text-gray-400">{t("referral.friendsJoined")}</div>
           </div>
           <div className="text-center p-3 bg-gray-800 rounded-lg border border-gray-700">
             <div className="text-lg font-bold text-emerald-400">
-              ${!isVip ? "22.84" : "228.35"}
+              ${account?.commicsion}
             </div>
             <div className="text-xs text-gray-400">{t("referral.usdtEarnings")}</div>
           </div>

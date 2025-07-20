@@ -133,11 +133,28 @@ export function UserWalletProvider({ children }: { children: ReactNode }) {
         .then((data) => data.result[0])
         .catch(() => null);
       if (exist) {
-        const vipReponse = await getVipStatus(exist.id);
-        const stakeHistory = await getStakeHistory(exist.id);
+        const [vipReponse, stakeHistory, f1, commicsion] = await Promise.all([
+          await getVipStatus(exist.id),
+          await getStakeHistory(exist.id),
+          await fetch("/api/user/f1", {
+            method: "POST",
+            body: JSON.stringify({
+              id: exist.id,
+            }),
+          }).then((data) => data.json()),
+          await fetch("/api/user/commicsion", {
+            method: "POST",
+            body: JSON.stringify({
+              id: exist.id,
+            }),
+          }).then((data) => data.json()),
+        ]);
+
         setAccount({
           ...exist,
+          f1: f1?.result || 0,
           isVip: vipReponse ? true : false,
+          commicsion: commicsion?.result || 0,
           stake_history: stakeHistory,
         });
         return;

@@ -19,7 +19,6 @@ import {
 import { DollarSign, Loader2 } from "lucide-react";
 import { useUserStatus, useUserWallet } from "@/commons/UserWalletContext";
 import { useAppMetadata } from "@/commons/AppMetadataContext";
-import { sendToken } from "@/libs/token";
 
 interface VipUpgradeModalProps {
   t: (key: string) => string;
