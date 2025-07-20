@@ -99,7 +99,7 @@ export function ReferralSection({
 
   
 
-  if (!isConnected && !loading && !isRegister) {
+  if (!isConnected && !isRegister) {
     return (
       <Card className="bg-gray-900 border-gray-800">
         <CardHeader>
