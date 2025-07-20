@@ -73,82 +73,33 @@ export async function waitForTransactionSuccess(txPromise: Promise<any>, provide
 }
 
 export const getBalance = async (
-  metadata: any,
   address: string,
   chainId?: number,
-  tokenAddress?: string
+  tokenAddress?: string,
+  rpc?: string
 ): Promise<string> => {
-  if (typeof window === "undefined" || !(window as any).ethereum) {
-    throw new Error("Không tìm thấy provider");
-  }
   try {
-    const { custom_fields: {usdt_payment_wallets_testnet, ids_distribution_wallet}} = metadata;
-    const provider = (window as any).ethereum;
-
-    // Chuyển chain nếu cần
-    if (chainId) {
-      const currentChain = await provider.request({ method: "eth_chainId" });
-      if (parseInt(currentChain, 16) !== chainId) {
-        await provider.request({
-          method: "wallet_switchEthereumChain",
-          params: [
-            {
-              chainId:
-                usdt_payment_wallets_testnet[
-                  chainId as keyof typeof usdt_payment_wallets_testnet
-                ]?.chainId || "0x" + chainId.toString(16),
-            },
-          ],
-        });
-      }
-    }
+    // Ưu tiên lấy rpc từ tham số, nếu không có thì lấy từ metadata
+    const rpcUrl = rpc;
+    if (!rpcUrl) throw new Error("Thiếu RPC endpoint");
+    const provider = new ethers.JsonRpcProvider(rpcUrl, chainId);
 
     if (!tokenAddress) {
       // Lấy số dư coin
-      const balanceHex = await provider.request({
-        method: "eth_getBalance",
-        params: [address, "latest"],
-      });
-      if (!balanceHex || balanceHex === "0x") {
-        return "0.00";
-      }
-      return (Number(BigInt(balanceHex)) / 1e18).toFixed(2).toString();
+      const balanceBigInt = await provider.getBalance(address);
+      return (Number(balanceBigInt) / 1e18).toFixed(2).toString();
     } else {
       // Lấy số dư token ERC20
-      const methodId = "0x70a08231"; // balanceOf(address)
-      const addressPadded = address.replace("0x", "").padStart(64, "0");
-      const data = methodId + addressPadded;
-
-      const balanceHex = await provider.request({
-        method: "eth_call",
-        params: [
-          {
-            to: tokenAddress,
-            data,
-          },
-          "latest",
-        ],
-      });
-      if (!balanceHex || balanceHex === "0x") {
-        // (fix) xóa điều kiện này giữ lại để lấy số dư coin
-        return "0.00";
-      }
-      // Lấy số thập phân của token
-      const decimalsData = "0x313ce567"; // decimals()
-      const decimalsHex = await provider.request({
-        method: "eth_call",
-        params: [
-          {
-            to: tokenAddress,
-            data: decimalsData,
-          },
-          "latest",
-        ],
-      });
-      const decimals = parseInt(decimalsHex, 16);
-      return (Number(BigInt(balanceHex)) / 10 ** decimals)
-        .toFixed(2)
-        .toString();
+      const erc20Abi = [
+        "function balanceOf(address) view returns (uint256)",
+        "function decimals() view returns (uint8)",
+      ];
+      const token = new ethers.Contract(tokenAddress, erc20Abi, provider);
+      const [balance, decimals] = await Promise.all([
+        token.balanceOf(address),
+        token.decimals(),
+      ]);
+      return (Number(balance) / Math.pow(10, Number(decimals))).toFixed(2).toString();
     }
   } catch (error) {
     if (process.env.NODE_ENV === "development") {

@@ -1,5 +1,4 @@
 "use client";
-import { getBalance } from "@/libs/token";
 import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
 
 interface AppMetadata {
@@ -17,7 +16,15 @@ export function AppMetadataProvider({ initialMetadata, children }: { initialMeta
     if (!metadata) return;
     const fetchData = async () => {
       const [balance, apy, users] = await Promise.all([
-        await getBalance(metadata, metadata.custom_fields.ids_stake_wallet.address, metadata.custom_fields.ids_stake_wallet.chain_id, metadata.custom_fields.ids_stake_wallet.token_address_temp),
+        await fetch("/api/balance/token", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            address: metadata.custom_fields.ids_stake_wallet.address,
+            chainId: metadata.custom_fields.ids_stake_wallet.chain_id,
+            tokenAddress: metadata.custom_fields.ids_stake_wallet.token_address_temp,
+          }),
+        }).then(res => res.json()),
         await fetch("/api/stats/apy", {
           method: "GET",
         }).then((data) => data.json()),
@@ -27,10 +34,10 @@ export function AppMetadataProvider({ initialMetadata, children }: { initialMeta
       ]);
       setMetadata(prev => ({
         ...prev,
-        tvl: Number(balance),
+        tvl: Number(balance.balance),
         apy: Number(apy?.result?.stake_apy) || 0,
         users: users?.result || 0,
-        locked: Number(balance)
+        locked: Number(balance.balance)
       }));
     };
     fetchData();

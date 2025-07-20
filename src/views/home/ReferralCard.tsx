@@ -41,24 +41,26 @@ export function ReferralSection({
   setShowNotificationModal,
   setNotificationData,
 }: ReferralSectionProps) {
-  const {
-    connectWallet,
-    isConnected,
-    wallet,
-    account
-  } = useUserWallet();
-  const [registrationEmail, setRegistrationEmail] = useState(account?.email || "");
-  const [registrationUsername, setRegistrationUsername] = useState(account?.username || "");
+  const { connectWallet, isConnected, wallet, account, loading } =
+    useUserWallet();
+  const [registrationEmail, setRegistrationEmail] = useState(
+    account?.email || ""
+  );
+  const [registrationUsername, setRegistrationUsername] = useState(
+    account?.username || ""
+  );
   const [isloading, setIsLoading] = useState<boolean>(false);
   const [copied, setCopied] = useState(false);
-  
-  const { isRegister, isVip, setIsRegister, loading } = useUserStatus();
+
+  const { isRegister, isVip, setIsRegister } = useUserStatus();
 
   const copyReferralLink = async () => {
     try {
-      await navigator.clipboard.writeText(`${process.env.NEXT_PUBLIC_WEB_URL}${
-        registrationUsername || account?.username
-      }`);
+      await navigator.clipboard.writeText(
+        `${process.env.NEXT_PUBLIC_WEB_URL}${
+          registrationUsername || account?.username
+        }`
+      );
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch (err) {
@@ -80,7 +82,7 @@ export function ReferralSection({
           username: registrationUsername,
         },
       }),
-    }).then(data => data.json())
+    }).then((data) => data.json());
     if (update_info.ok) {
       setIsRegister(true);
       connectWallet();
@@ -95,38 +97,9 @@ export function ReferralSection({
     setIsLoading(false);
   };
 
-  if (loading) {
-    return (
-      <Card className="bg-gray-900 border-gray-800">
-        <CardHeader>
-          <CardTitle className="flex items-center text-white">
-            <div className="w-8 h-8 mr-2">
-              <Skeleton className="w-full h-full rounded-full" />
-            </div>
-            <Skeleton className="h-6 w-32" />
-          </CardTitle>
-          <CardDescription>
-            <Skeleton className="h-4 w-48" />
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="p-8 bg-gray-800 rounded-lg border-2 border-dashed border-gray-700 flex flex-col items-center">
-            <Skeleton className="w-16 h-16 mb-4 rounded-full" />
-            <Skeleton className="h-5 w-40 mb-2" />
-            <Skeleton className="h-4 w-32 mb-4" />
-            <Skeleton className="h-10 w-48" />
-          </div>
-          <div className="grid grid-cols-2 gap-3">
-            <Skeleton className="h-16 w-full rounded-lg" />
-            <Skeleton className="h-16 w-full rounded-lg" />
-          </div>
-          <Skeleton className="h-24 w-full rounded-lg" />
-        </CardContent>
-      </Card>
-    );
-  }
+  
 
-  if (!isConnected) {
+  if (!isConnected && !loading && !isRegister) {
     return (
       <Card className="bg-gray-900 border-gray-800">
         <CardHeader>
@@ -159,11 +132,15 @@ export function ReferralSection({
           <div className="grid grid-cols-2 gap-3">
             <div className="text-center p-3 bg-gray-800 rounded-lg border border-gray-700">
               <div className="text-lg font-bold text-blue-400">5% - 50%</div>
-              <div className="text-xs text-gray-400">{t("referral.commicsionusdt")}</div>
+              <div className="text-xs text-gray-400">
+                {t("referral.commicsionusdt")}
+              </div>
             </div>
             <div className="text-center p-3 bg-gray-800 rounded-lg border border-gray-700">
               <div className="text-lg font-bold text-emerald-400">$100</div>
-              <div className="text-xs text-gray-400">{t("referral.vipfee")}</div>
+              <div className="text-xs text-gray-400">
+                {t("referral.vipfee")}
+              </div>
             </div>
           </div>
 
@@ -185,7 +162,38 @@ export function ReferralSection({
     );
   }
 
-  if (!isRegister) {
+  if (loading) {
+    return (
+      <Card className="bg-gray-900 border-gray-800">
+        <CardHeader>
+          <CardTitle className="flex items-center text-white">
+            <div className="w-8 h-8 mr-2">
+              <Skeleton className="w-full h-full rounded-full" />
+            </div>
+            <Skeleton className="h-6 w-32" />
+          </CardTitle>
+          <CardDescription>
+            <Skeleton className="h-4 w-48" />
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="p-8 bg-gray-800 rounded-lg border-2 border-dashed border-gray-700 flex flex-col items-center">
+            <Skeleton className="w-16 h-16 mb-4 rounded-full" />
+            <Skeleton className="h-5 w-40 mb-2" />
+            <Skeleton className="h-4 w-32 mb-4" />
+            <Skeleton className="h-10 w-48" />
+          </div>
+          <div className="grid grid-cols-2 gap-3">
+            <Skeleton className="h-16 w-full rounded-lg" />
+            <Skeleton className="h-16 w-full rounded-lg" />
+          </div>
+          <Skeleton className="h-24 w-full rounded-lg" />
+        </CardContent>
+      </Card>
+    );
+  }
+
+  if (!isRegister && !loading && !isVip) {
     return (
       <Card className="bg-gray-900 border-gray-800">
         <CardHeader>
@@ -260,9 +268,15 @@ export function ReferralSection({
               <Button
                 className="w-full bg-gradient-to-r from-yellow-600 to-orange-600 hover:from-yellow-700 hover:to-orange-700 cursor-pointer"
                 onClick={handleRegistration}
-                disabled={!registrationEmail || !registrationUsername || isloading}
+                disabled={
+                  !registrationEmail || !registrationUsername || isloading
+                }
               >
-                {isloading ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <UserPlus className="w-4 h-4 mr-2" />}
+                {isloading ? (
+                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                ) : (
+                  <UserPlus className="w-4 h-4 mr-2" />
+                )}
                 {t("referral.createlink")}
               </Button>
             </div>
@@ -281,11 +295,15 @@ export function ReferralSection({
           <div className="grid grid-cols-2 gap-3">
             <div className="text-center p-3 bg-gray-800 rounded-lg border border-gray-700">
               <div className="text-lg font-bold text-blue-400">5% - 50%</div>
-              <div className="text-xs text-gray-400">{t("referral.earn5").replace(/\d+%/, "USDT")}</div>
+              <div className="text-xs text-gray-400">
+                {t("referral.earn5").replace(/\d+%/, "USDT")}
+              </div>
             </div>
             <div className="text-center p-3 bg-gray-800 rounded-lg border border-gray-700">
               <div className="text-lg font-bold text-emerald-400">$100</div>
-              <div className="text-xs text-gray-400">{t("vip.upgradeCost")}</div>
+              <div className="text-xs text-gray-400">
+                {t("vip.upgradeCost")}
+              </div>
             </div>
           </div>
         </CardContent>
@@ -315,9 +333,7 @@ export function ReferralSection({
           </div>
         </div>
         <CardDescription className="text-gray-400">
-          {!isVip
-            ? t("referral.earn5")
-            : t("referral.earn50")}
+          {!isVip ? t("referral.earn5") : t("referral.earn50")}
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
@@ -325,7 +341,9 @@ export function ReferralSection({
           <div className="p-4 bg-gray-800 rounded-lg border border-blue-700/50">
             <div className="flex items-center justify-between">
               <div>
-                <div className="font-semibold text-blue-300">{t("vip.upgrade")}</div>
+                <div className="font-semibold text-blue-300">
+                  {t("vip.upgrade")}
+                </div>
                 <div className="text-sm text-blue-400/80">
                   {t("vip.upgrade50")}
                 </div>
@@ -385,13 +403,17 @@ export function ReferralSection({
         <div className="grid grid-cols-2 gap-3">
           <div className="text-center p-3 bg-gray-800 rounded-lg border border-gray-700">
             <div className="text-lg font-bold text-blue-400">{account?.f1}</div>
-            <div className="text-xs text-gray-400">{t("referral.friendsJoined")}</div>
+            <div className="text-xs text-gray-400">
+              {t("referral.friendsJoined")}
+            </div>
           </div>
           <div className="text-center p-3 bg-gray-800 rounded-lg border border-gray-700">
             <div className="text-lg font-bold text-emerald-400">
               ${account?.commicsion?.all || 0}
             </div>
-            <div className="text-xs text-gray-400">{t("referral.usdtEarnings")}</div>
+            <div className="text-xs text-gray-400">
+              {t("referral.usdtEarnings")}
+            </div>
           </div>
         </div>
 
@@ -403,7 +425,9 @@ export function ReferralSection({
             </span>
           </div>
           <div className="flex justify-between text-sm">
-            <span className="text-gray-300">{t("referral.monthlyEarnings")}</span>
+            <span className="text-gray-300">
+              {t("referral.monthlyEarnings")}
+            </span>
             <span className="text-emerald-400">
               +${account?.commicsion?.month || 0}
             </span>

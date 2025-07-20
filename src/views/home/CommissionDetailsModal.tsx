@@ -28,7 +28,7 @@ const CommissionDetailsModal: React.FC<CommissionDetailsModalProps> = ({
           >
             <CardHeader>
               <CardTitle className="flex items-center text-white">
-                <Gift className="w-5 h-5 mr-2 text-cyan-400" />
+                <Gift className="w-5 h-5 mr-2 text-cyan-400 text-xl" />
                 {t('referral.details')}
               </CardTitle>
               <CardDescription className="text-gray-400">

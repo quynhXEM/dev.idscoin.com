@@ -16,8 +16,7 @@ export const StakeHistory = () => {
   } = useAppMetadata();
   const [loadingAction, setLoadingAction] = useState<boolean>(false);
   const { notify } = useNotification();
-  const { wallet, getBalance } = useUserWallet();
-  const { loading } = useUserStatus();
+  const { wallet, getBalance, loading } = useUserWallet();
 
   const handleColectIDS = async (item: any) => {
     if (loadingAction) return;

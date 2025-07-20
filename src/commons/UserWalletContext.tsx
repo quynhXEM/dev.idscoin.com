@@ -55,6 +55,7 @@ export type WalletContextType = {
   } | null;
   getVipStatus: (user_id: string) => Promise<any>;
   checkChainExists: (chainId: string) => Promise<boolean>;
+  loading: boolean;
 };
 
 const UserWalletContext = createContext<WalletContextType | undefined>(
@@ -63,6 +64,7 @@ const UserWalletContext = createContext<WalletContextType | undefined>(
 
 export function UserWalletProvider({ children }: { children: ReactNode }) {
   const [wallet, setWallet] = useState<WalletInfo>(null);
+  const [loading, setLoading] = useState<boolean>(true);
   const {
     custom_fields: {
       usdt_payment_wallets,
@@ -268,18 +270,21 @@ export function UserWalletProvider({ children }: { children: ReactNode }) {
       });
       return;
     }
+    setLoading(true);
     try {
       const provider = (window as any).ethereum;
       const accounts = await provider.request({
         method: "eth_requestAccounts",
       });
       const chainId = await provider.request({ method: "eth_chainId" });
-      addNewMember({ address: accounts[0], chainId: parseInt(chainId, 16) });
+      await addNewMember({ address: accounts[0], chainId: parseInt(chainId, 16) });
       setWallet({ address: accounts[0], chainId: parseInt(chainId, 16) });
       sessionStorage.setItem("idscoin_connected", "true");
+      setLoading(false);
     } catch (err) {
       console.error("Kết nối ví thất bại", err);
       setWallet(null);
+      setLoading(false);
     }
   };
 
@@ -583,6 +588,7 @@ export function UserWalletProvider({ children }: { children: ReactNode }) {
         account,
         checkChainExists,
         getVipStatus,
+        loading,
       }}
     >
       {children}
@@ -608,7 +614,6 @@ export type UserStatusContextType = {
   toggleVip: () => void;
   stakeHistory: any[];
   setStakeHistory: (value: any[]) => void;
-  loading: boolean;
 };
 
 const UserStatusContext = createContext<UserStatusContextType | undefined>(
@@ -616,21 +621,18 @@ const UserStatusContext = createContext<UserStatusContextType | undefined>(
 );
 
 export function UserStatusProvider({ children }: { children: ReactNode }) {
-  const [loading, setloading] = useState<boolean>(true);
   const { account } = useUserWallet();
-  const [isRegister, setIsRegister] = useState<boolean>(false);
-  const [isVip, setIsVip] = useState<boolean>(false);
-  const [stakeHistory, setStakeHistory] = useState<any>([]);
+  const [isRegister, setIsRegister] = useState<boolean>(account?.username != null);
+  const [isVip, setIsVip] = useState<boolean>(account?.isVip || false);
+  const [stakeHistory, setStakeHistory] = useState<any>(account?.stake_history || []);
   const toggleRegister = () => setIsRegister((prev) => !prev);
   const toggleVip = () => setIsVip((prev) => !prev);
 
   useEffect(() => {
     if (!account) return;
-    setloading(true);
     setIsRegister(account?.username != null);
     setIsVip(account?.isVip || false);
     setStakeHistory(account?.stake_history || []);
-    setloading(false);
   }, [account]);
   return (
     <UserStatusContext.Provider
@@ -643,7 +645,6 @@ export function UserStatusProvider({ children }: { children: ReactNode }) {
         toggleVip,
         stakeHistory,
         setStakeHistory,
-        loading,
       }}
     >
       {children}
