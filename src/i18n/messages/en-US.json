@@ -128,9 +128,11 @@
       "connecttoshowinfo": "Wallet connection required to show account information",
       "connecttoshowreward": "Wallet connection required to show rewards",
       "connecttoshowhistory": "Wallet connection required to show stake history",
-      "clamCommicsion": "Claim commission",
+      "clamCommicsion": "Claim {amount} USDT commission",
       "detailsCommicsionDescription": "Detailed statistics of USDT commission from F1 upgrading to VIP",
-      "totalCommicsion": "Total commission"
+      "totalCommicsion": "Total commission",
+      "withdrawCommicsion": "Withdrawn",
+      "activeCommission": "Available"
     },
     "vip": {
       "upgrade": "Upgrade VIP",
@@ -254,6 +256,8 @@
       "returnStakeIDSError" : "Error when returning IDS to wallet. Please try again later.",
       "withdrawIDSsuccess" : "{amount} IDS has been transferred to your wallet: {hash}",
       "withdrawIDSError" : "You have failed to withdraw {amount} IDS. Please try again later.",
+      "withdrawUSDTsuccess" : "{amount} USDT has been transferred to your wallet: {hash}",
+      "withdrawUSDTError" : "You have failed to withdraw {amount} USDT. Please try again later.",
       "poolIDSError" : "Error when withdrawing IDS from pool. Please try again later.",
       "stakeNotCompleted" : "This stake package has been processed. Please try again later.",
       "clamommicsionFailed" : "Failed to claim commission. Please try again later.",

@@ -62,6 +62,7 @@ export type WalletContextType = {
   setIsVip: (isVip: boolean) => void;
   stakeHistory: any;
   setStakeHistory: (stakeHistory: any) => void;
+  setAccount: (account: any) => void;
 };
 
 const UserWalletContext = createContext<WalletContextType | undefined>(
@@ -145,7 +146,7 @@ export function UserWalletProvider({ children }: { children: ReactNode }) {
         .then((data) => data.result[0])
         .catch(() => null);
       if (exist) {
-        const [vipReponse, stakeHistory, f1, commicsion] = await Promise.all([
+        const [vipReponse, stakeHistory, f1, commission] = await Promise.all([
           await getVipStatus(exist.id),
           await getStakeHistory(exist.id),
           await fetch("/api/user/f1", {
@@ -154,7 +155,7 @@ export function UserWalletProvider({ children }: { children: ReactNode }) {
               id: exist.id,
             }),
           }).then((data) => data.json()),
-          await fetch("/api/user/commicsion", {
+          await fetch("/api/user/commission", {
             method: "POST",
             body: JSON.stringify({
               id: exist.id,
@@ -166,7 +167,7 @@ export function UserWalletProvider({ children }: { children: ReactNode }) {
           ...exist,
           f1: f1?.result || 0,
           isVip: vipReponse ? true : false,
-          commicsion: commicsion?.result || 0,
+          commission: commission?.result || 0,
           stake_history: stakeHistory,
         });
         return;
@@ -604,6 +605,7 @@ export function UserWalletProvider({ children }: { children: ReactNode }) {
         setIsVip,
         stakeHistory,
         setStakeHistory,
+        setAccount,
       }}
     >
       {children}

@@ -131,7 +131,7 @@ const VipUpgradeModal: React.FC<VipUpgradeModalProps> = ({
     if (account?.referrer_id) {
       const isVip = await getVipStatus(account?.referrer_id);
 
-      const commicsion = await fetch(`/api/directus/request`, {
+      const commission = await fetch(`/api/directus/request`, {
         method: "POST",
         body: JSON.stringify({
           type: "createItem",
@@ -144,13 +144,13 @@ const VipUpgradeModal: React.FC<VipUpgradeModalProps> = ({
             currency: `USDT ${usdt_payment_wallets_testnet[vipSelectedChain].name}`,
             type: "referral_bonus",
             affect_balance: true,
-            description: `Commicsion VIP Upgrade F1 ${account.username}`,
+            description: `Commission VIP Upgrade F1 ${account.username}`,
             parent_txn_id: response?.id
           },
         }),
       }).then((data) => data.json());
       if (process.env.NODE_ENV === "development") {
-        console.log("Commicsion VIP Upgrade F1", commicsion);
+        console.log("Commission VIP Upgrade F1", commission);
       }
     }
 

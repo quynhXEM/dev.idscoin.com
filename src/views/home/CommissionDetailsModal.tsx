@@ -14,12 +14,22 @@ import { timeFormat } from "@/libs/utils";
 import { Separator } from "@/components/ui/separator";
 import { useAppMetadata } from "@/commons/AppMetadataContext";
 import { useUserWallet } from "@/commons/UserWalletContext";
+import {
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectItem,
+} from "@/components/ui/select";
+import { Label } from "@/components/ui/label";
+import Link from "next/link";
 
 interface CommissionDetailsModalProps {
   t: (key: string) => string;
   show: boolean;
   onClose: () => void;
   setShowVipModal: (v: boolean) => void;
+  onSelectChain?: (chainId: string) => void; // thêm prop callback khi chọn chain
 }
 
 const CommissionDetailsModal: React.FC<CommissionDetailsModalProps> = ({
@@ -27,39 +37,103 @@ const CommissionDetailsModal: React.FC<CommissionDetailsModalProps> = ({
   show,
   onClose,
   setShowVipModal,
+  onSelectChain, // thêm prop callback khi chọn chain
 }) => {
   const [loading, setLoading] = useState(false);
   const { notify } = useNotification();
-  const { account, isVip } = useUserWallet();
-  // const { custom_fields: {ids_distribution_wallet}} = useAppMetadata()
+  const { account, isVip, setAccount } = useUserWallet();
+  const {
+    custom_fields: { usdt_payment_wallets_testnet } = {
+      usdt_payment_wallets_testnet: {},
+    },
+  } = useAppMetadata();
+  const [showChainModal, setShowChainModal] = useState(false);
+  const [selectedChain, setSelectedChain] = useState<string>("");
   const [txnCommicsion, setTxnCommicsion] = useState<any[]>([]);
   const handleCommicsion = async () => {
     if (txnCommicsion.length === 0) return;
     setLoading(true);
     try {
-      const total_amount = txnCommicsion.reduce(
-        (acc, item) => acc + Number(item.amount),
-        0
-      );
-      setTimeout(() => {
-        setLoading(false);
+      const amount =
+        Number(account?.commission?.all) +
+          Number(account?.commission?.withdraw) || 0;
+
+      const txn = await fetch("/api/send/usdt", {
+        method: "POST",
+        body: JSON.stringify({
+          amount: amount,
+          rpc: usdt_payment_wallets_testnet[selectedChain].rpc_url,
+          token_address:
+            usdt_payment_wallets_testnet[selectedChain].token_address,
+          to: account?.wallet_address,
+          chain_id: Number(selectedChain),
+        }),
+      }).then((data) => data.json());
+      if (!txn.success) {
         notify({
-          title: t("noti.success"),
-          message: t("noti.clamommicsionSuccess", {amount: total_amount}),
-          type: true,
+          title: t("noti.error"),
+          message: t("noti.clamommicsionFailed"),
+          type: false,
         });
-        onClose()
-      }, 2000);
-      // const txn = await fetch("/api/send/token", {
-      //   method: "POST",
-      //   body: JSON.stringify({
-      //     amount: total_amount,
-      //     rpc: ,
-      //     token_address: "0x0000000000000000000000000000000000000000",
-      //     to: account?.id,
-      //     chain_id: 100,
-      //   }),
-      // });
+        setLoading(false);
+        return;
+      }
+      const clamCommission = await fetch("/api/directus/request", {
+        method: "POST",
+        body: JSON.stringify({
+          type: "createItem",
+          collection: "txn",
+          items: {
+            status: "completed",
+            app_id: "db2a722c-59e2-445c-b89e-7b692307119a",
+            member_id: account?.id,
+            amount: -amount,
+            currency: `USDT ${usdt_payment_wallets_testnet[selectedChain].name}`,
+            type: "withdraw",
+            affect_balance: false,
+            description: `Withdraw ${amount} USDT ${usdt_payment_wallets_testnet[selectedChain].name} commission`,
+            external_ref: `${usdt_payment_wallets_testnet[selectedChain].explorer_url}/tx/${txn.txHash}`,
+          },
+        }),
+      }).then((data) => data.json());
+
+      if (!clamCommission.ok) {
+        notify({
+          title: t("noti.error"),
+          message: t("noti.withdrawUSDTError", { amount: amount }),
+          type: false,
+        });
+        setLoading(false);
+        return;
+      }
+      setAccount(prev => ({
+        ...prev,
+        commission: {
+          ...prev.commission,
+          withdraw: Number(prev.commission.withdraw) - Number(amount),
+        },
+      }))
+      notify({
+        title: t("noti.success"),
+        children: (
+          <Link
+            href={`${usdt_payment_wallets_testnet[selectedChain].explorer_url}/tx/${txn.txHash}`}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {t("noti.withdrawUSDTsuccess", {
+              amount: amount,
+              hash: "",
+            })}
+            <span className="text-blue-400 underline">
+              {txn.txHash.slice(0, 13)}
+            </span>
+          </Link>
+        ),
+        type: true,
+      });
+      setLoading(false);
+      onClose();
     } catch (error) {
       notify({
         title: t("noti.error"),
@@ -67,6 +141,7 @@ const CommissionDetailsModal: React.FC<CommissionDetailsModalProps> = ({
         type: false,
       });
       setLoading(false);
+      onClose();
     }
   };
 
@@ -93,7 +168,6 @@ const CommissionDetailsModal: React.FC<CommissionDetailsModalProps> = ({
 
   useEffect(() => {
     if (!account) return;
-
     getData();
   }, [account]);
 
@@ -170,15 +244,12 @@ const CommissionDetailsModal: React.FC<CommissionDetailsModalProps> = ({
                       {timeFormat(item.date_created)}
                     </div>
                     <div className="text-sm text-gray-400">
-                      {item.description.slice(0, 15)}
+                      {item.description}
                     </div>
                   </div>
                   <div className="text-right">
                     <div className="font-bold text-emerald-400">
                       +${item.amount}
-                    </div>
-                    <div className="text-xs text-gray-500">
-                      {t("referral.fromUpgrade100")}
                     </div>
                   </div>
                 </div>
@@ -186,17 +257,33 @@ const CommissionDetailsModal: React.FC<CommissionDetailsModalProps> = ({
             </div>
           </div>
           <Separator className="bg-gray-700" />
-          <div className="flex justify-between">
-            <span className="text-gray-400 text-md">
-              {t("referral.totalCommicsion")}:
-            </span>
-            <span className="font-semibold text-white">
-              {txnCommicsion.reduce(
-                (acc, item) => acc + Number(item.amount),
-                0
-              )}{" "}
-              USDT
-            </span>
+          <div className="gap-2">
+            <div className="flex justify-between">
+              <span className="text-gray-400 text-md">
+                {t("referral.totalCommicsion")}:
+              </span>
+              <span className="font-semibold text-white">
+                {account?.commission?.all || 0} USDT
+              </span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-gray-400 text-md">
+                {t("referral.withdrawCommicsion")}:
+              </span>
+              <span className="font-semibold text-blue-400">
+                {account?.commission?.withdraw || 0} USDT
+              </span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-gray-400 text-md">
+                {t("referral.activeCommission")}:
+              </span>
+              <span className="font-semibold text-white">
+                {Number(account?.commission?.all) +
+                  Number(account?.commission?.withdraw) || 0}{" "}
+                USDT
+              </span>
+            </div>
           </div>
 
           {/* Top Referrals */}
@@ -290,16 +377,26 @@ const CommissionDetailsModal: React.FC<CommissionDetailsModalProps> = ({
           <div className="flex justify-center gap-3">
             <Button
               variant="outline"
-              disabled={loading || txnCommicsion.length === 0}
+              disabled={
+                loading ||
+                txnCommicsion.length === 0 ||
+                Number(account?.commission?.all) +
+                  Number(account?.commission?.withdraw) ==
+                  0
+              }
               className="flex-2 border-gray-700 text-gray-300 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-700 hover:to-blue-700 hover:text-gray-200 cursor-pointer"
-              onClick={() => handleCommicsion()}
+              onClick={() => setShowChainModal(true)}
             >
               {loading ? (
                 <Loader2 className="w-4 h-4 mr-2 animate-spin" />
               ) : (
                 <HandCoins className="w-4 h-4 mr-2" />
               )}
-              {t("referral.clamCommicsion")}
+              {t("referral.clamCommicsion", {
+                amount:
+                  Number(account?.commission?.all) +
+                    Number(account?.commission?.withdraw) || 0,
+              })}
             </Button>
             <Button
               variant="outline"
@@ -312,6 +409,75 @@ const CommissionDetailsModal: React.FC<CommissionDetailsModalProps> = ({
           </div>
         </CardContent>
       </Card>
+      {/* Modal chọn chain */}
+      {showChainModal && (
+        <div
+          className="fixed inset-0 bg-black/80 flex items-center justify-center z-50"
+          onClick={() => setShowChainModal(false)}
+        >
+          <Card
+            className="w-full max-w-md mx-4 bg-gray-900 border-gray-800"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <CardHeader>
+              <CardTitle className="text-white text-xl">
+                {t("vip.selectChain")}
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <div>
+                <Select value={selectedChain} onValueChange={setSelectedChain}>
+                  <SelectTrigger className="w-full mt-2 bg-gray-800 border-gray-700 text-white focus:border-blue-500">
+                    <SelectValue placeholder={t("vip.selectChain")} />
+                  </SelectTrigger>
+                  <SelectContent className="bg-gray-800 border-gray-700 text-white">
+                    {usdt_payment_wallets_testnet &&
+                      Object.entries(usdt_payment_wallets_testnet).map(
+                        ([key, value]) => {
+                          const v = value as { name: string };
+                          return (
+                            <SelectItem
+                              key={key}
+                              value={key}
+                              className="text-white hover:bg-gray-700 focus:bg-gray-700"
+                            >
+                              <div className="flex items-center gap-2">
+                                <div className="font-semibold text-white">
+                                  {v.name}
+                                </div>
+                              </div>
+                            </SelectItem>
+                          );
+                        }
+                      )}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="flex space-x-3">
+                <Button
+                  variant="outline"
+                  className="flex-1 border-gray-700 text-gray-300 hover:bg-gray-800 hover:text-gray-200 bg-transparent cursor-pointer"
+                  onClick={() => setShowChainModal(false)}
+                >
+                  {t("vip.cancel")}
+                </Button>
+                <Button
+                  disabled={!selectedChain}
+                  className="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 cursor-pointer"
+                  onClick={() => {
+                    if (onSelectChain && selectedChain)
+                      onSelectChain(selectedChain);
+                    setShowChainModal(false);
+                    handleCommicsion();
+                  }}
+                >
+                  {t("noti.continue")}
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      )}
     </div>
   );
 };
