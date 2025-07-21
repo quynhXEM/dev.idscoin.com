@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Gift, Loader2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { useUserWallet } from "@/commons/UserWalletContext";
-import { roundToFirstSignificantDecimal } from "@/libs/utils";
+import { roundToFirstSignificantDecimal, formatNumber } from "@/libs/utils";
 import { useAppMetadata } from "@/commons/AppMetadataContext";
 import Link from "next/link";
 import { useNotification } from "@/commons/NotificationContext";
@@ -191,7 +191,7 @@ const RewardsModal: React.FC<RewardsModalProps> = ({
             <div className="grid grid-cols-2 gap-4">
               <div className="text-center">
                 <div className="text-2xl font-bold text-cyan-400">
-                  {account?.stake?.stake_dont_claw} {t("staking.ids")}
+                  {formatNumber(account?.stake?.stake_dont_claw)} {t("staking.ids")}
                 </div>
                 <div className="text-sm text-gray-400">
                   {t("rewards.pending")}
@@ -199,7 +199,7 @@ const RewardsModal: React.FC<RewardsModalProps> = ({
               </div>
               <div className="text-center">
                 <div className="text-2xl font-bold text-blue-400">
-                  {account?.stake?.stake_in} {t("staking.ids")}
+                  {formatNumber(account?.stake?.stake_in)} {t("staking.ids")}
                 </div>
                 <div className="text-sm text-gray-400">
                   {t("rewards.staking")}
@@ -220,15 +220,15 @@ const RewardsModal: React.FC<RewardsModalProps> = ({
                     {t("rewards.today")}
                   </div>
                   <div className="text-sm text-gray-400">
-                    Stake {account?.stake?.stake_in} IDS
+                    Stake {formatNumber(account?.stake?.stake_in)} IDS
                   </div>
                 </div>
                 <div className="text-right">
                   <div className="font-bold text-cyan-400">
-                    +{account?.stake?.stake_dont_claw_24h} {t("staking.ids")}
+                    +{formatNumber(account?.stake?.stake_dont_claw_24h)} {t("staking.ids")}
                   </div>
                   <div className="text-xs text-gray-500">
-                    ~${account?.stake?.stake_dont_claw_24h}
+                    ~${formatNumber(account?.stake?.stake_dont_claw_24h)}
                   </div>
                 </div>
               </div>
@@ -244,10 +244,10 @@ const RewardsModal: React.FC<RewardsModalProps> = ({
                 </div>
                 <div className="text-right">
                   <div className="font-bold text-cyan-400">
-                    +{account?.stake?.stake_dont_claw_week} {t("staking.ids")}
+                    +{formatNumber(account?.stake?.stake_dont_claw_week)} {t("staking.ids")}
                   </div>
                   <div className="text-xs text-gray-500">
-                    ~${account?.stake?.stake_dont_claw_week}
+                    ~${formatNumber(account?.stake?.stake_dont_claw_week)}
                   </div>
                 </div>
               </div>
@@ -263,11 +263,10 @@ const RewardsModal: React.FC<RewardsModalProps> = ({
                 </div>
                 <div className="text-right">
                   <div className="font-bold text-cyan-400">
-                    +{account?.stake?.stake_dont_claw_month}
-                    {t("staking.ids")}
+                    +{formatNumber(account?.stake?.stake_dont_claw_month)}{t("staking.ids")}
                   </div>
                   <div className="text-xs text-gray-500">
-                    ~${account?.stake?.stake_dont_claw_month}
+                    ~${formatNumber(account?.stake?.stake_dont_claw_month)}
                   </div>
                 </div>
               </div>
@@ -283,10 +282,10 @@ const RewardsModal: React.FC<RewardsModalProps> = ({
                 </div>
                 <div className="text-right">
                   <div className="font-bold text-cyan-400">
-                    +{account?.stake?.stake_dont_claw} {t("staking.ids")}
+                    +{formatNumber(account?.stake?.stake_dont_claw)} {t("staking.ids")}
                   </div>
                   <div className="text-xs text-gray-500">
-                    ~${account?.stake?.stake_dont_claw}
+                    ~${formatNumber(account?.stake?.stake_dont_claw)}
                   </div>
                 </div>
               </div>
@@ -311,7 +310,7 @@ const RewardsModal: React.FC<RewardsModalProps> = ({
                       </div>
                       <div>
                         <div className="font-medium text-white">
-                          {item.amount} {t("staking.ids")}
+                          {formatNumber(item.amount)} {t("staking.ids")}
                         </div>
                         <div className="text-sm text-gray-400">
                           {item?.description}

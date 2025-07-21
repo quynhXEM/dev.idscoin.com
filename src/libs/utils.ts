@@ -52,3 +52,18 @@ export function roundToFirstSignificantDecimal(value: number | string) {
 
   return Number(Number(value).toFixed(decimals));
 }
+
+/**
+ * Định dạng số với dấu phân cách phần nghìn, tối đa 2 số thập phân nếu có phần thập phân.
+ * @param value Số hoặc chuỗi số cần định dạng
+ * @param options Tuỳ chọn: giữ lại phần thập phân hay không (default: true)
+ */
+export function formatNumber(value: number | string, options?: { decimal?: boolean }): string {
+  if (value === null || value === undefined || value === "") return "0";
+  const num = Number(value);
+  if (isNaN(num)) return String(value);
+  if (options?.decimal === false) {
+    return num.toLocaleString("en-US", { maximumFractionDigits: 0 });
+  }
+  return num.toLocaleString("en-US", { maximumFractionDigits: 2 });
+}

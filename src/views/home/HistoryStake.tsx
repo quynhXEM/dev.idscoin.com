@@ -7,6 +7,7 @@ import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import Link from "next/link";
+import { formatNumber } from "@/libs/utils";
 
 export const StakeHistory = () => {
   const t = useTranslations("home");
@@ -205,7 +206,7 @@ export const StakeHistory = () => {
               className="flex items-center justify-between p-3 bg-gray-800 rounded-lg border border-gray-700"
             >
               <div>
-                <div className="font-medium text-white">{item.amount} IDS</div>
+                <div className="font-medium text-white">{formatNumber(item.amount)} IDS</div>
                 <div className="text-sm text-gray-400">
                   {t("history.DaysApy", {
                     day: item.stake_lock_days,
@@ -226,7 +227,7 @@ export const StakeHistory = () => {
                 ) : (
                   <HandCoins className="w-3 h-3 mr-1" />
                 )}
-                {t("history.collectIDS", { amount: item.amount })}
+                {t("history.collectIDS", { amount: formatNumber(item.amount) })}
               </button>
             </div>
           );

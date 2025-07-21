@@ -22,6 +22,7 @@ import {
 import { Zap, Lock, DollarSign, Wallet, Loader2 } from "lucide-react";
 import { useUserWallet } from "@/commons/UserWalletContext";
 import { useAppMetadata } from "@/commons/AppMetadataContext";
+import { formatNumber } from "@/libs/utils";
 
 interface StakingInterfaceProps {
   t: (key: string) => string;
@@ -446,8 +447,7 @@ export function StakingInterface({
                 </div>
                 <div className="flex justify-between text-sm mt-1">
                   <p className="text-gray-800 font-medium">
-                    {t("staking.availableBalance")}:{" "}
-                    {isConnected ? `${balance.ids} IDS` : "--- IDS"}
+                    {t("staking.availableBalance")}: {isConnected ? `${formatNumber(balance.ids)} IDS` : "--- IDS"}
                   </p>
                   <p className="text-gray-800 font-medium">
                     {t("staking.min")}: 100 IDS
@@ -610,8 +610,7 @@ export function StakingInterface({
                 </div>
                 <div className="flex justify-between text-sm mt-1">
                   <p className="text-gray-800 font-medium">
-                    {t("staking.availableBalance")}:{" "}
-                    {isConnected ? `${balance.usdt} USDT` : "--- USDT"}
+                    {t("staking.availableBalance")}: {isConnected ? `${formatNumber(balance.usdt)} USDT` : "--- USDT"}
                   </p>
                   <p className="text-gray-800 font-medium">
                     {t("staking.min")}: 10 USDT
@@ -641,11 +640,7 @@ export function StakingInterface({
                     {t("staking.receivedIds")}
                   </span>
                   <span className="font-bold text-gray-900">
-                    ~
-                    {swapAmount && isConnected
-                      ? Number.parseFloat(swapAmount).toFixed(2)
-                      : "0.00"}{" "}
-                    IDS
+                    ~{swapAmount && isConnected ? formatNumber(Number.parseFloat(swapAmount)) : "0.00"} IDS
                   </span>
                 </div>
                 <div className="flex items-center justify-between text-sm border-t border-gray-800 pt-2">

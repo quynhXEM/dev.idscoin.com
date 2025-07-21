@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Gift, HandCoins, Loader2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { useNotification } from "@/commons/NotificationContext";
-import { timeFormat } from "@/libs/utils";
+import { timeFormat, formatNumber } from "@/libs/utils";
 import { Separator } from "@/components/ui/separator";
 import { useAppMetadata } from "@/commons/AppMetadataContext";
 import { useUserWallet } from "@/commons/UserWalletContext";
@@ -284,7 +284,7 @@ const CommissionDetailsModal: React.FC<CommissionDetailsModalProps> = ({
                 {t("referral.totalCommicsion")}:
               </span>
               <span className="font-semibold text-white">
-                {account?.commission?.all || 0} USDT
+                {formatNumber(account?.commission?.all)} USDT
               </span>
             </div>
             <div className="flex justify-between">
@@ -292,7 +292,7 @@ const CommissionDetailsModal: React.FC<CommissionDetailsModalProps> = ({
                 {t("referral.withdrawCommicsion")}:
               </span>
               <span className="font-semibold text-blue-400">
-                {account?.commission?.withdraw || 0} USDT
+                {formatNumber(account?.commission?.withdraw)} USDT
               </span>
             </div>
             <div className="flex justify-between">
@@ -300,9 +300,7 @@ const CommissionDetailsModal: React.FC<CommissionDetailsModalProps> = ({
                 {t("referral.activeCommission")}:
               </span>
               <span className="font-semibold text-white">
-                {Number(account?.commission?.all) +
-                  Number(account?.commission?.withdraw) || 0}{" "}
-                USDT
+                {formatNumber(Number(account?.commission?.all) + Number(account?.commission?.withdraw))} USDT
               </span>
             </div>
           </div>

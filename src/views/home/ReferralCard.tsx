@@ -25,6 +25,7 @@ import {
 } from "lucide-react";
 import { useUserWallet } from "@/commons/UserWalletContext";
 import { Skeleton } from "@/components/ui/skeleton";
+import { formatNumber } from "@/libs/utils";
 
 interface ReferralSectionProps {
   t: (key: string, params?: Record<string, string>) => string;
@@ -403,14 +404,14 @@ export function ReferralSection({
 
         <div className="grid grid-cols-2 gap-3">
           <div className="text-center p-3 bg-gray-800 rounded-lg border border-gray-700">
-            <div className="text-lg font-bold text-blue-400">{account?.f1}</div>
+            <div className="text-lg font-bold text-blue-400">{formatNumber(account?.f1, { decimal: false })}</div>
             <div className="text-xs text-gray-400">
               {t("referral.friendsJoined")}
             </div>
           </div>
           <div className="text-center p-3 bg-gray-800 rounded-lg border border-gray-700">
             <div className="text-lg font-bold text-emerald-400">
-              ${account?.commission?.all || 0}
+              ${formatNumber(account?.commission?.all)}
             </div>
             <div className="text-xs text-gray-400">
               {t("referral.usdtEarnings")}
@@ -422,7 +423,7 @@ export function ReferralSection({
           <div className="flex justify-between text-sm">
             <span className="text-gray-300">{t("referral.todayEarnings")}</span>
             <span className="text-emerald-400">
-              +${account?.commission?.day || 0}
+              +${formatNumber(account?.commission?.day)}
             </span>
           </div>
           <div className="flex justify-between text-sm">
@@ -430,7 +431,7 @@ export function ReferralSection({
               {t("referral.monthlyEarnings")}
             </span>
             <span className="text-emerald-400">
-              +${account?.commission?.month || 0}
+              +${formatNumber(account?.commission?.month)}
             </span>
           </div>
         </div>

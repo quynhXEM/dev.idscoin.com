@@ -11,6 +11,7 @@ import { useUserWallet } from "@/commons/UserWalletContext";
 import { Tooltip } from "react-tooltip";
 import { StakeHistory } from "./HistoryStake";
 import { Skeleton } from "@/components/ui/skeleton";
+import { formatNumber } from "@/libs/utils";
 
 interface PortfolioOverviewProps {
   t: (key: string) => string;
@@ -122,13 +123,13 @@ export function PortfolioOverview({
                     {t("overview.totalBalance")}:
                   </span>
                   <span className="font-semibold text-white">
-                    {Number(balance.ids) + Number(account?.stake?.stake_in)} IDS
+                    {formatNumber(Number(balance.ids) + Number(account?.stake?.stake_in))} IDS
                   </span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-400">{t("overview.staked")}:</span>
                   <span className="font-semibold text-blue-400">
-                    {Number(account?.stake?.stake_in)} IDS
+                    {formatNumber(account?.stake?.stake_in)} IDS
                   </span>
                 </div>
                 <div className="flex justify-between">
@@ -136,7 +137,7 @@ export function PortfolioOverview({
                     {t("overview.available")}:
                   </span>
                   <span className="font-semibold text-white">
-                    {Number(balance.ids)} IDS
+                    {formatNumber(balance.ids)} IDS
                   </span>
                 </div>
                 <Separator className="bg-gray-700" />
@@ -145,7 +146,7 @@ export function PortfolioOverview({
                     {t("overview.totalRewards")}:
                   </span>
                   <span className="font-semibold text-cyan-400">
-                    {Number(account?.stake?.stake_reward)} IDS
+                    {formatNumber(account?.stake?.stake_reward)} IDS
                   </span>
                 </div>
               </div>
@@ -173,8 +174,7 @@ export function PortfolioOverview({
                           Number(balance.ids) + Number(account?.stake?.stake_in)
                         )) *
                       100
-                    ).toFixed(2)}
-                    %
+                    ).toFixed(2)}%
                   </span>
                 </div>
                 <Progress
@@ -250,7 +250,7 @@ export function PortfolioOverview({
             <div className="space-y-4">
               <div className="text-center p-4 bg-gray-800 rounded-lg border border-gray-700">
                 <div className="text-2xl font-bold text-blue-400">
-                  {Number(account?.stake?.stake_dont_claw)} IDS
+                  {formatNumber(account?.stake?.stake_dont_claw)} IDS
                 </div>
                 <div className="text-sm text-gray-400">
                   {t("rewards.pending")}
@@ -261,7 +261,7 @@ export function PortfolioOverview({
                 <div className="flex justify-between text-sm">
                   <span className="text-gray-300">{t("rewards.today")}:</span>
                   <span className="text-blue-400">
-                    +{account?.stake?.stake_dont_claw_24h} IDS
+                    +{formatNumber(account?.stake?.stake_dont_claw_24h)} IDS
                   </span>
                 </div>
                 <div className="flex justify-between text-sm">
@@ -269,7 +269,7 @@ export function PortfolioOverview({
                     {t("rewards.last7Days")}:
                   </span>
                   <span className="text-blue-400">
-                    +{account?.stake?.stake_dont_claw_week} IDS
+                    +{formatNumber(account?.stake?.stake_dont_claw_week)} IDS
                   </span>
                 </div>
                 <div className="flex justify-between text-sm">
@@ -277,7 +277,7 @@ export function PortfolioOverview({
                     {t("rewards.last30Days")}:
                   </span>
                   <span className="text-blue-400">
-                    +{account?.stake?.stake_dont_claw_month} IDS
+                    +{formatNumber(account?.stake?.stake_dont_claw_month)} IDS
                   </span>
                 </div>
               </div>

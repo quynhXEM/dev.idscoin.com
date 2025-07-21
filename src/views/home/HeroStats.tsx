@@ -3,6 +3,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { TrendingUp, BarChart3, Users, Lock, Info } from "lucide-react";
 import { Tooltip } from "react-tooltip";
 import { useAppMetadata } from "@/commons/AppMetadataContext";
+import { formatNumber } from "@/libs/utils";
 
 interface HeroStatsProps {
   t: (key: string) => string;
@@ -65,7 +66,7 @@ const HeroStats: React.FC<HeroStatsProps> = ({ t, tooltips }) => {
                   {tooltips.tvl}
                 </Tooltip>
               </div>
-              <p className="text-2xl font-bold">${animatedTvl.toLocaleString(undefined, {maximumFractionDigits: 2})}</p>
+              <p className="text-2xl font-bold">${formatNumber(animatedTvl)}</p>
             </div>
             <TrendingUp className="w-8 h-8 text-blue-400" />
           </div>
@@ -90,7 +91,7 @@ const HeroStats: React.FC<HeroStatsProps> = ({ t, tooltips }) => {
                   {tooltips.apy}
                 </Tooltip>
               </div>
-              <p className="text-2xl font-bold">{animatedApy.toFixed(2)}%</p>
+              <p className="text-2xl font-bold">{formatNumber(animatedApy)}%</p>
             </div>
             <BarChart3 className="w-8 h-8 text-cyan-400" />
           </div>
@@ -115,7 +116,7 @@ const HeroStats: React.FC<HeroStatsProps> = ({ t, tooltips }) => {
                   {tooltips.users}
                 </Tooltip>
               </div>
-              <p className="text-2xl font-bold">{animatedUsers.toLocaleString()}</p>
+              <p className="text-2xl font-bold">{formatNumber(animatedUsers, { decimal: false })}</p>
             </div>
             <Users className="w-8 h-8 text-blue-500" />
           </div>
@@ -140,7 +141,7 @@ const HeroStats: React.FC<HeroStatsProps> = ({ t, tooltips }) => {
                   {tooltips.locked}
                 </Tooltip>
               </div>
-              <p className="text-2xl font-bold">{animatedLocked.toLocaleString(undefined, {maximumFractionDigits: 2})}</p>
+              <p className="text-2xl font-bold">{formatNumber(animatedLocked)}</p>
             </div>
             <Lock className="w-8 h-8 text-cyan-500" />
           </div>
