@@ -42,3 +42,13 @@ export const timeFormat = (time: string) => {
   const year = d.getFullYear();
   return `${day}/${month}/${year}`;
 };
+
+export function roundToFirstSignificantDecimal(value: number | string) {
+  if (value === 0) return 0;
+
+  const abs = Math.abs(Number(value));
+  const digits = Math.floor(Math.log10(abs));
+  const decimals = digits >= 0 ? 1 : Math.abs(digits) + 1;
+
+  return Number(Number(value).toFixed(decimals));
+}

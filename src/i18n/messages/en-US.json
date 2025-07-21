@@ -185,7 +185,7 @@
       "canClaimAnytime": "• Can be claimed anytime",
       "noTransactionFee": "• No transaction fee when claiming",
       "rewardsWillBeAdded": "• Rewards will be added to available balance",
-      "claim12Ids": "Claim 12.34 IDS",
+      "claimIds": "Claim {amount} IDS",
       "close": "Close"
     },
     "history": {

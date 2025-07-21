@@ -63,6 +63,7 @@ export type WalletContextType = {
   stakeHistory: any;
   setStakeHistory: (stakeHistory: any) => void;
   setAccount: (account: any) => void;
+  addNewMember: (wallet: WalletInfo) => Promise<void>;
 };
 
 const UserWalletContext = createContext<WalletContextType | undefined>(
@@ -75,7 +76,13 @@ export function UserWalletProvider({ children }: { children: ReactNode }) {
   const [isVip, setIsVip] = useState<boolean | null>(null);
   const [stakeHistory, setStakeHistory] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(true);
-  const { custom_fields: { usdt_payment_wallets, usdt_payment_wallets_testnet, ids_distribution_wallet } } = useAppMetadata();
+  const {
+    custom_fields: {
+      usdt_payment_wallets,
+      usdt_payment_wallets_testnet,
+      ids_distribution_wallet,
+    },
+  } = useAppMetadata();
   const t = useTranslations("home");
   const [balance, setBalance] = useState<{ ids: string; usdt: string }>({
     ids: "0",
@@ -146,7 +153,7 @@ export function UserWalletProvider({ children }: { children: ReactNode }) {
         .then((data) => data.result[0])
         .catch(() => null);
       if (exist) {
-        const [vipReponse, stakeHistory, f1, commission] = await Promise.all([
+        const [vipReponse, stakeHistory, f1, commission, stake] = await Promise.all([
           await getVipStatus(exist.id),
           await getStakeHistory(exist.id),
           await fetch("/api/user/f1", {
@@ -161,14 +168,34 @@ export function UserWalletProvider({ children }: { children: ReactNode }) {
               id: exist.id,
             }),
           }).then((data) => data.json()),
+          await fetch("/api/user/stake", {
+            method: "POST",
+            body: JSON.stringify({
+              id: exist.id,
+            }),
+          }).then((data) => data.json()),
         ]);
 
         setAccount({
           ...exist,
           f1: f1?.result || 0,
           isVip: vipReponse ? true : false,
-          commission: commission?.result || 0,
+          commission: commission?.result || {
+            all: 0,
+            day: 0,
+            month: 0,
+            withdraw: 0,
+          },
           stake_history: stakeHistory,
+          stake: stake?.result || {
+            stake_dont_claw: 0,
+            stake_dont_claw_24h: 0,
+            stake_dont_claw_week: 0,
+            stake_dont_claw_month: 0,
+            stake_in: 0,
+            stake_out: 0,
+            stake_reward: 0,
+          },
         });
         return;
       }
@@ -213,7 +240,27 @@ export function UserWalletProvider({ children }: { children: ReactNode }) {
           fields: ["*"],
         }),
       }).then((data) => data.json());
-      setAccount(newusser.result);
+      setAccount({
+        ...newusser.result,
+        f1: 0,
+        isVip: false,
+        commission: {
+          all: 0,
+          day: 0,
+          month: 0,
+          withdraw: 0,
+        },
+        stake_history: [],
+        stake: {
+          stake_dont_claw: 0,
+          stake_dont_claw_24h: 0,
+          stake_dont_claw_week: 0,
+          stake_dont_claw_month: 0,
+          stake_in: 0,
+          stake_out: 0,
+          stake_reward: 0,
+        },
+      });
     } finally {
       isCreatingMemberRef.current = false;
     }
@@ -288,7 +335,10 @@ export function UserWalletProvider({ children }: { children: ReactNode }) {
         method: "eth_requestAccounts",
       });
       const chainId = await provider.request({ method: "eth_chainId" });
-      await addNewMember({ address: accounts[0], chainId: parseInt(chainId, 16) });
+      await addNewMember({
+        address: accounts[0],
+        chainId: parseInt(chainId, 16),
+      });
       setWallet({ address: accounts[0], chainId: parseInt(chainId, 16) });
       sessionStorage.setItem("idscoin_connected", "true");
     } catch (err) {
@@ -606,6 +656,7 @@ export function UserWalletProvider({ children }: { children: ReactNode }) {
         stakeHistory,
         setStakeHistory,
         setAccount,
+        addNewMember
       }}
     >
       {children}
@@ -620,4 +671,3 @@ export function useUserWallet() {
   }
   return context;
 }
-

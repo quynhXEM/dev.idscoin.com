@@ -186,7 +186,7 @@
       "canClaimAnytime": "• Có thể nhận bất kỳ lúc nào",
       "noTransactionFee": "• Không có phí giao dịch khi nhận",
       "rewardsWillBeAdded": "• Phần thưởng sẽ được chuyển vào số dư khả dụng",
-      "claim12Ids": "Nhận 12.34 IDS",
+      "claimIds": "Nhận {amount} IDS",
       "close": "Đóng"
     },
     "history": {

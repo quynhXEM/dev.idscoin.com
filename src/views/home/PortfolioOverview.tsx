@@ -26,7 +26,7 @@ export function PortfolioOverview({
   setShowNotificationModal,
   setNotificationData,
 }: PortfolioOverviewProps) {
-  const { isConnected, connectWallet, balance } = useUserWallet();
+  const { isConnected, connectWallet, balance, account } = useUserWallet();
   const WalletConnectionPrompt = ({
     title,
     icon,
@@ -69,20 +69,22 @@ export function PortfolioOverview({
                     {t("overview.totalBalance")}:
                   </span>
                   <span className="font-semibold text-white">
-                    {balance.ids} IDS
+                    {Number(balance.ids) + Number(account?.stake?.stake_in)} IDS
                   </span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-400">{t("overview.staked")}:</span>
                   <span className="font-semibold text-blue-400">
-                    850.00 IDS
+                    {Number(account?.stake?.stake_in)} IDS
                   </span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-400">
                     {t("overview.available")}:
                   </span>
-                  <span className="font-semibold text-white">400.00 IDS</span>
+                  <span className="font-semibold text-white">
+                    {Number(balance.ids)} IDS
+                  </span>
                 </div>
                 <Separator className="bg-gray-700" />
                 <div className="flex justify-between">
@@ -90,7 +92,7 @@ export function PortfolioOverview({
                     {t("overview.totalRewards")}:
                   </span>
                   <span className="font-semibold text-cyan-400">
-                    127.45 IDS
+                    {Number(account?.stake?.stake_reward)} IDS
                   </span>
                 </div>
               </div>
@@ -111,9 +113,27 @@ export function PortfolioOverview({
                       {tooltips.stakeProgress}
                     </Tooltip>
                   </div>
-                  <span className="text-gray-300">68%</span>
+                  <span className="text-gray-300">
+                    {(
+                      (Number(account?.stake?.stake_in) /
+                        Number(
+                          Number(balance.ids) + Number(account?.stake?.stake_in)
+                        )) *
+                      100
+                    ).toFixed(2)}
+                    %
+                  </span>
                 </div>
-                <Progress value={68} className="h-2 bg-gray-800" />
+                <Progress
+                  value={
+                    (Number(account?.stake?.stake_in) /
+                      Number(
+                        Number(balance.ids) + Number(account?.stake?.stake_in)
+                      )) *
+                    100
+                  }
+                  className="h-2 bg-gray-800"
+                />
               </div>
             </div>
           ) : (
@@ -139,7 +159,7 @@ export function PortfolioOverview({
             <div className="space-y-4">
               <div className="text-center p-4 bg-gray-800 rounded-lg border border-gray-700">
                 <div className="text-2xl font-bold text-blue-400">
-                  12.34 IDS
+                  {Number(account?.stake?.stake_dont_claw)} IDS
                 </div>
                 <div className="text-sm text-gray-400">
                   {t("rewards.pending")}
@@ -149,24 +169,31 @@ export function PortfolioOverview({
               <div className="space-y-2">
                 <div className="flex justify-between text-sm">
                   <span className="text-gray-300">{t("rewards.today")}:</span>
-                  <span className="text-blue-400">+2.45 IDS</span>
+                  <span className="text-blue-400">
+                    +{account?.stake?.stake_dont_claw_24h} IDS
+                  </span>
                 </div>
                 <div className="flex justify-between text-sm">
                   <span className="text-gray-300">
                     {t("rewards.last7Days")}:
                   </span>
-                  <span className="text-blue-400">+17.23 IDS</span>
+                  <span className="text-blue-400">
+                    +{account?.stake?.stake_dont_claw_week} IDS
+                  </span>
                 </div>
                 <div className="flex justify-between text-sm">
                   <span className="text-gray-300">
                     {t("rewards.last30Days")}:
                   </span>
-                  <span className="text-blue-400">+73.89 IDS</span>
+                  <span className="text-blue-400">
+                    +{account?.stake?.stake_dont_claw_month} IDS
+                  </span>
                 </div>
               </div>
 
               <Button
                 variant="outline"
+                disabled={Number(account?.stake?.stake_dont_claw) == 0}
                 className="w-full border-gray-700 text-gray-300 hover:bg-blue-900/30 hover:border-blue-600 hover:text-blue-300 bg-transparent cursor-pointer"
                 onClick={onShowRewardsModal}
               >

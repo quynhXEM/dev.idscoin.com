@@ -63,7 +63,8 @@ export function StakingInterface({
     balance,
     getBalance,
     account,
-    setStakeHistory
+    setStakeHistory,
+    setAccount,
   } = useUserWallet();
 
   useEffect(() => {
@@ -196,8 +197,15 @@ export function StakingInterface({
       setIsloadding(false);
     }
 
+    setAccount(prev => ({
+      ...prev,
+      stake: {
+        ...prev.stake,
+        stake_in: Number(prev.stake.stake_in) + Number(stakeAmount),
+      },
+    }))
     // (fix) lấy coin xóa token address
-    const inisiaSate = await getBalance(
+    await getBalance(
       account?.wallet_address || "",
       ids_distribution_wallet.chain_id,
       ids_distribution_wallet.token_address_temp
