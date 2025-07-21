@@ -1,6 +1,6 @@
 import { useAppMetadata } from "@/commons/AppMetadataContext";
 import { useNotification } from "@/commons/NotificationContext";
-import { useUserStatus, useUserWallet } from "@/commons/UserWalletContext";
+import { useUserWallet } from "@/commons/UserWalletContext";
 import { Badge } from "@/components/ui/badge";
 import { Clock, Gift, HandCoins, Loader2, Shield } from "lucide-react";
 import { useTranslations } from "next-intl";
@@ -10,13 +10,13 @@ import Link from "next/link";
 
 export const StakeHistory = () => {
   const t = useTranslations("home");
-  const { stakeHistory, setStakeHistory } = useUserStatus();
   const {
     custom_fields: { ids_distribution_wallet },
   } = useAppMetadata();
   const [loadingAction, setLoadingAction] = useState<boolean>(false);
   const { notify } = useNotification();
-  const { wallet, getBalance, loading } = useUserWallet();
+  const { wallet, getBalance, loading, stakeHistory, setStakeHistory } =
+    useUserWallet();
 
   const handleColectIDS = async (item: any) => {
     if (loadingAction) return;
@@ -154,77 +154,77 @@ export const StakeHistory = () => {
     );
   }
 
-  return (
-    <div className="space-y-3">
-      {stakeHistory.length != 0 ? (
-        stakeHistory?.map((item, key) => {
-          const date =
-            new Date().getDate() <
-            new Date(item?.date_created).getDate() + item?.stake_lock_days;
-          if (date)
-            return (
-              <div
-                key={key}
-                className="flex items-center justify-between p-3 bg-gray-800 rounded-lg border border-gray-700"
-              >
-                <div>
-                  <div className="font-medium text-white">
-                    {item.amount} IDS
-                  </div>
-                  <div className="text-sm text-gray-400">
-                    {t("history.DaysApy", {
-                      day: item.stake_lock_days,
-                      apy: Number(item.stake_apy).toFixed(0),
-                    })}
-                  </div>
-                </div>
-                <Badge
-                  aria-disabled={date || loadingAction}
-                  onClick={() => handleColectIDS(item)}
-                  variant="secondary"
-                  className="bg-gray-700 text-gray-300 hover:bg-gray-600 hover:text-white cursor-pointer"
-                >
-                  {loadingAction ? (
-                    <Loader2 className="w-3 h-3 mr-1 animate-spin" />
-                  ) : (
-                    <HandCoins className="w-3 h-3 mr-1" />
-                  )}
-                  {t("history.collectIDS", { amount: item.amount })}
-                </Badge>
-              </div>
-            );
-          else
-            return (
-              <div
-                key={key}
-                className="flex items-center justify-between p-3 bg-gray-800 rounded-lg border border-gray-700"
-              >
-                <div>
-                  <div className="font-medium text-white">
-                    {item.amount} IDS
-                  </div>
-                  <div className="text-sm text-gray-400">
-                    {t("history.DaysApy", {
-                      day: item.stake_lock_days,
-                      apy: Number(item.stake_apy).toFixed(0),
-                    })}
-                  </div>
-                </div>
-                <Badge
-                  variant="outline"
-                  className="border-blue-600 text-blue-400"
-                >
-                  <Clock className="w-3 h-3 mr-1" />
-                  {t("history.DaysLeft", { day: item.stake_lock_days - date })}
-                </Badge>
-              </div>
-            );
-        })
-      ) : (
+  if (!loading && stakeHistory?.length == 0) {
+    return (
+      <div className="space-y-3">
         <div className="flex items-center justify-center p-3 bg-gray-800 rounded-lg border border-gray-700">
           <p className="text-gray-400">{t("history.noHistory")}</p>
         </div>
-      )}
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-3">
+      {stakeHistory?.map((item, key) => {
+        const date =
+          new Date().getDate() <
+          new Date(item?.date_created).getDate() + item?.stake_lock_days;
+        if (date)
+          return (
+            <div
+              key={key}
+              className="flex items-center justify-between p-3 bg-gray-800 rounded-lg border border-gray-700"
+            >
+              <div>
+                <div className="font-medium text-white">{item.amount} IDS</div>
+                <div className="text-sm text-gray-400">
+                  {t("history.DaysApy", {
+                    day: item.stake_lock_days,
+                    apy: Number(item.stake_apy).toFixed(0),
+                  })}
+                </div>
+              </div>
+              <Badge
+                aria-disabled={date || loadingAction}
+                onClick={() => handleColectIDS(item)}
+                variant="secondary"
+                className="bg-gray-700 text-gray-300 hover:bg-gray-600 hover:text-white cursor-pointer"
+              >
+                {loadingAction ? (
+                  <Loader2 className="w-3 h-3 mr-1 animate-spin" />
+                ) : (
+                  <HandCoins className="w-3 h-3 mr-1" />
+                )}
+                {t("history.collectIDS", { amount: item.amount })}
+              </Badge>
+            </div>
+          );
+        else
+          return (
+            <div
+              key={key}
+              className="flex items-center justify-between p-3 bg-gray-800 rounded-lg border border-gray-700"
+            >
+              <div>
+                <div className="font-medium text-white">{item.amount} IDS</div>
+                <div className="text-sm text-gray-400">
+                  {t("history.DaysApy", {
+                    day: item.stake_lock_days,
+                    apy: Number(item.stake_apy).toFixed(0),
+                  })}
+                </div>
+              </div>
+              <Badge
+                variant="outline"
+                className="border-blue-600 text-blue-400"
+              >
+                <Clock className="w-3 h-3 mr-1" />
+                {t("history.DaysLeft", { day: item.stake_lock_days - date })}
+              </Badge>
+            </div>
+          );
+      })}
     </div>
   );
 };

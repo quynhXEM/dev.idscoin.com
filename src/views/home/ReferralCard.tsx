@@ -23,7 +23,7 @@ import {
   User,
   Loader2,
 } from "lucide-react";
-import { useUserStatus, useUserWallet } from "@/commons/UserWalletContext";
+import { useUserWallet } from "@/commons/UserWalletContext";
 import { Skeleton } from "@/components/ui/skeleton";
 
 interface ReferralSectionProps {
@@ -52,7 +52,7 @@ export function ReferralSection({
   const [isloading, setIsLoading] = useState<boolean>(false);
   const [copied, setCopied] = useState(false);
 
-  const { isRegister, isVip, setIsRegister } = useUserStatus();
+  const { isRegister, isVip, setIsRegister } = useUserWallet();
 
   const copyReferralLink = async () => {
     try {

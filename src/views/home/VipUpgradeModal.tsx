@@ -17,7 +17,7 @@ import {
   SelectItem,
 } from "@/components/ui/select";
 import { DollarSign, Loader2 } from "lucide-react";
-import { useUserStatus, useUserWallet } from "@/commons/UserWalletContext";
+import { useUserWallet } from "@/commons/UserWalletContext";
 import { useAppMetadata } from "@/commons/AppMetadataContext";
 
 interface VipUpgradeModalProps {
@@ -39,8 +39,7 @@ const VipUpgradeModal: React.FC<VipUpgradeModalProps> = ({
   setShowNotificationModal,
   setNotificationData,
 }) => {
-  const { setIsVip } = useUserStatus();
-  const { sendTransaction, account, getVipStatus } = useUserWallet();
+  const { sendTransaction, account, getVipStatus, setIsVip } = useUserWallet();
   const {
     custom_fields: { usdt_payment_wallets, usdt_payment_wallets_testnet },
     icon,

@@ -56,6 +56,12 @@ export type WalletContextType = {
   getVipStatus: (user_id: string) => Promise<any>;
   checkChainExists: (chainId: string) => Promise<boolean>;
   loading: boolean;
+  isRegister: boolean | null;
+  setIsRegister: (isRegister: boolean) => void;
+  isVip: boolean | null;
+  setIsVip: (isVip: boolean) => void;
+  stakeHistory: any;
+  setStakeHistory: (stakeHistory: any) => void;
 };
 
 const UserWalletContext = createContext<WalletContextType | undefined>(
@@ -64,14 +70,11 @@ const UserWalletContext = createContext<WalletContextType | undefined>(
 
 export function UserWalletProvider({ children }: { children: ReactNode }) {
   const [wallet, setWallet] = useState<WalletInfo>(null);
+  const [isRegister, setIsRegister] = useState<boolean | null>(null);
+  const [isVip, setIsVip] = useState<boolean | null>(null);
+  const [stakeHistory, setStakeHistory] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(true);
-  const {
-    custom_fields: {
-      usdt_payment_wallets,
-      usdt_payment_wallets_testnet,
-      ids_distribution_wallet,
-    },
-  } = useAppMetadata();
+  const { custom_fields: { usdt_payment_wallets, usdt_payment_wallets_testnet, ids_distribution_wallet } } = useAppMetadata();
   const t = useTranslations("home");
   const [balance, setBalance] = useState<{ ids: string; usdt: string }>({
     ids: "0",
@@ -99,12 +102,19 @@ export function UserWalletProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     if (!wallet) return;
-    // Lấy số dư coin => (fix) xóa địa chỉ token
-    getBalance(
-      wallet.address,
-      ids_distribution_wallet.chain_id,
-      ids_distribution_wallet.token_address_temp
-    );
+    const getWalletInfo = async () => {
+      // Lấy số dư coin => (fix) xóa địa chỉ token
+      await getBalance(
+        wallet.address,
+        ids_distribution_wallet.chain_id,
+        ids_distribution_wallet.token_address_temp
+      );
+      setIsRegister(account?.username != null);
+      setIsVip(account?.isVip || false);
+      setStakeHistory(account?.stake_history || []);
+      setLoading(false);
+    };
+    getWalletInfo();
   }, [wallet]);
 
   const disconnect = () => setWallet(null);
@@ -280,7 +290,6 @@ export function UserWalletProvider({ children }: { children: ReactNode }) {
       await addNewMember({ address: accounts[0], chainId: parseInt(chainId, 16) });
       setWallet({ address: accounts[0], chainId: parseInt(chainId, 16) });
       sessionStorage.setItem("idscoin_connected", "true");
-      setLoading(false);
     } catch (err) {
       console.error("Kết nối ví thất bại", err);
       setWallet(null);
@@ -589,6 +598,12 @@ export function UserWalletProvider({ children }: { children: ReactNode }) {
         checkChainExists,
         getVipStatus,
         loading,
+        isRegister,
+        setIsRegister,
+        isVip,
+        setIsVip,
+        stakeHistory,
+        setStakeHistory,
       }}
     >
       {children}
@@ -604,58 +619,3 @@ export function useUserWallet() {
   return context;
 }
 
-// Provider lưu trạng thái isRegister và isVip
-export type UserStatusContextType = {
-  isRegister: boolean;
-  isVip: boolean;
-  setIsRegister: (value: boolean) => void;
-  setIsVip: (value: boolean) => void;
-  toggleRegister: () => void;
-  toggleVip: () => void;
-  stakeHistory: any[];
-  setStakeHistory: (value: any[]) => void;
-};
-
-const UserStatusContext = createContext<UserStatusContextType | undefined>(
-  undefined
-);
-
-export function UserStatusProvider({ children }: { children: ReactNode }) {
-  const { account } = useUserWallet();
-  const [isRegister, setIsRegister] = useState<boolean>(account?.username != null);
-  const [isVip, setIsVip] = useState<boolean>(account?.isVip || false);
-  const [stakeHistory, setStakeHistory] = useState<any>(account?.stake_history || []);
-  const toggleRegister = () => setIsRegister((prev) => !prev);
-  const toggleVip = () => setIsVip((prev) => !prev);
-
-  useEffect(() => {
-    if (!account) return;
-    setIsRegister(account?.username != null);
-    setIsVip(account?.isVip || false);
-    setStakeHistory(account?.stake_history || []);
-  }, [account]);
-  return (
-    <UserStatusContext.Provider
-      value={{
-        isRegister,
-        isVip,
-        setIsRegister,
-        setIsVip,
-        toggleRegister,
-        toggleVip,
-        stakeHistory,
-        setStakeHistory,
-      }}
-    >
-      {children}
-    </UserStatusContext.Provider>
-  );
-}
-
-export function useUserStatus() {
-  const context = useContext(UserStatusContext);
-  if (!context) {
-    throw new Error("useUserStatus must be used within a UserStatusProvider");
-  }
-  return context;
-}

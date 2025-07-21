@@ -9,11 +9,11 @@ import {
 import { Button } from "@/components/ui/button";
 import { Gift, HandCoins, Loader2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import { useUserStatus, useUserWallet } from "@/commons/UserWalletContext";
 import { useNotification } from "@/commons/NotificationContext";
 import { timeFormat } from "@/libs/utils";
 import { Separator } from "@/components/ui/separator";
 import { useAppMetadata } from "@/commons/AppMetadataContext";
+import { useUserWallet } from "@/commons/UserWalletContext";
 
 interface CommissionDetailsModalProps {
   t: (key: string) => string;
@@ -28,10 +28,9 @@ const CommissionDetailsModal: React.FC<CommissionDetailsModalProps> = ({
   onClose,
   setShowVipModal,
 }) => {
-  const { isVip } = useUserStatus();
   const [loading, setLoading] = useState(false);
   const { notify } = useNotification();
-  const { account } = useUserWallet();
+  const { account, isVip } = useUserWallet();
   // const { custom_fields: {ids_distribution_wallet}} = useAppMetadata()
   const [txnCommicsion, setTxnCommicsion] = useState<any[]>([]);
   const handleCommicsion = async () => {

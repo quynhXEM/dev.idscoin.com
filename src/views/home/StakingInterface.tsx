@@ -20,7 +20,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Zap, Lock, DollarSign, Wallet, Loader2 } from "lucide-react";
-import { useUserStatus, useUserWallet } from "@/commons/UserWalletContext";
+import { useUserWallet } from "@/commons/UserWalletContext";
 import { useAppMetadata } from "@/commons/AppMetadataContext";
 
 interface StakingInterfaceProps {
@@ -63,8 +63,8 @@ export function StakingInterface({
     balance,
     getBalance,
     account,
+    setStakeHistory
   } = useUserWallet();
-  const { setStakeHistory } = useUserStatus();
 
   useEffect(() => {
     if (!isConnected || !wallet || !selectedChain) return;
