@@ -144,7 +144,7 @@ const VipUpgradeModal: React.FC<VipUpgradeModalProps> = ({
             currency: `USDT ${usdt_payment_wallets_testnet[vipSelectedChain].name}`,
             type: "referral_bonus",
             affect_balance: true,
-            description: `Commission VIP Upgrade F1 ${account.username}`,
+            description: `${account.username} Upgraded to VIP`,
             parent_txn_id: response?.id
           },
         }),
