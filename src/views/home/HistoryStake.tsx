@@ -14,6 +14,7 @@ export const StakeHistory = () => {
     custom_fields: { ids_distribution_wallet },
   } = useAppMetadata();
   const [loadingAction, setLoadingAction] = useState<boolean>(false);
+  const [itemLoading, setItemLoading] = useState<any>(null);
   const { notify } = useNotification();
   const { wallet, getBalance, loading, stakeHistory, setStakeHistory } =
     useUserWallet();
@@ -185,19 +186,21 @@ export const StakeHistory = () => {
                   })}
                 </div>
               </div>
-              <Badge
-                aria-disabled={date || loadingAction}
-                onClick={() => handleColectIDS(item)}
-                variant="secondary"
-                className="bg-gray-700 text-gray-300 hover:bg-gray-600 hover:text-white cursor-pointer"
+              <button
+                disabled={loadingAction}
+                onClick={() => {
+                  setItemLoading(item);
+                  handleColectIDS(item);
+                }}
+                className="text-xs bg-gray-700 text-gray-300 hover:bg-gray-600 hover:text-white cursor-pointer flex flex-row justify-center items-center px-3 py-1 rounded-xs disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {loadingAction ? (
+                {loadingAction && itemLoading?.id == item.id ? (
                   <Loader2 className="w-3 h-3 mr-1 animate-spin" />
                 ) : (
                   <HandCoins className="w-3 h-3 mr-1" />
                 )}
                 {t("history.collectIDS", { amount: item.amount })}
-              </Badge>
+              </button>
             </div>
           );
         else
