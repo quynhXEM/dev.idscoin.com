@@ -283,6 +283,7 @@ export function StakingInterface({
       setIsloadding(false);
       return;
     }
+    
     // Yêu cầu nhận token
     const res = await fetch("/api/send/token", {
       method: "POST",

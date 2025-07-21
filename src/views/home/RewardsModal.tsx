@@ -42,6 +42,36 @@ const RewardsModal: React.FC<RewardsModalProps> = ({
     setIsLoading(true);
 
     try {
+      const transaction = await fetch("/api/directus/request", {
+        method: "POST",
+        body: JSON.stringify({
+          type: "createItem",
+          collection: "txn",
+          items: {
+            status: "completed",
+            app_id: process.env.NEXT_PUBLIC_APP_ID,
+            member_id: account?.id,
+            amount: -account?.stake?.stake_dont_claw,
+            currency: `IDS`,
+            type: "stake_reward",
+            affect_balance: true,
+            description: `Claim: Received ${account?.stake?.stake_dont_claw} IDS`,
+          },
+        }),
+      }).then((data) => data.json());
+
+      if (!transaction.ok) {
+        setNotificationData({
+          title: t("noti.error"),
+          message: t("noti.addTransactionError", {
+            hash: txn.txHash,
+          }),
+          type: true,
+        });
+        setShowNotificationModal(true);
+        return;
+      }
+
       const txn = await fetch("/api/send/token", {
         method: "POST",
         body: JSON.stringify({
@@ -67,26 +97,20 @@ const RewardsModal: React.FC<RewardsModalProps> = ({
         return;
       }
 
-      const transaction = await fetch("/api/directus/request", {
+      const transaction_update = await fetch("/api/directus/request", {
         method: "POST",
         body: JSON.stringify({
-          type: "createItem",
+          type: "updateItem",
           collection: "txn",
+          id: transaction.result.id,
           items: {
-            status: "completed",
-            app_id: process.env.NEXT_PUBLIC_APP_ID,
-            member_id: account?.id,
-            amount: -account?.stake?.stake_dont_claw,
-            currency: `IDS`,
-            type: "stake_reward",
             affect_balance: false,
-            description: `Claim: Received ${account?.stake?.stake_dont_claw} IDS`,
             external_ref: `${ids_distribution_wallet.explorer_url}/tx/${txn.txHash}`,
           },
         }),
       }).then((data) => data.json());
 
-      if (!transaction.ok) {
+      if (!transaction_update.ok) {
         setNotificationData({
           title: t("noti.error"),
           message: t("noti.addTransactionError", {

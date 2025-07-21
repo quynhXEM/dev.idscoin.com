@@ -49,6 +49,40 @@ export const StakeHistory = () => {
       setLoadingAction(false);
       return;
     }
+
+    // Lưu giao dịch stake out
+    const txn = await fetch("/api/directus/request", {
+      method: "POST",
+      body: JSON.stringify({
+        type: "createItem",
+        collection: "txn",
+        items: {
+          status: "completed",
+          type: "stake_out",
+          app_id: process.env.NEXT_PUBLIC_APP_ID,
+          member_id: item.member_id,
+          amount: item.amount,
+          currency: "IDS",
+          affect_balance: true,
+          stake_lock_days: item.stake_lock_days,
+          stake_apy: item.stake_apy,
+          description: `Staked out ${item.amount} IDS `,
+          parent_txn_id: item.id,
+        },
+      }),
+    }).then((data) => data.json());
+
+    if (!txn.ok) {
+      notify({
+        title: t("noti.error"),
+        message: t("noti.addTransactionError", {
+          hash: txn.txHash,
+        }),
+        type: false,
+      });
+      setLoadingAction(false);
+    }
+
     // Tạo giao dịch trả tiền IDS về ví người dùng. (fix) Send coin
     const res = await fetch("/api/send/token", {
       method: "POST",
@@ -74,29 +108,22 @@ export const StakeHistory = () => {
       setLoadingAction(false);
       return;
     }
+    
     // Lưu giao dịch stake out
-    const txn = await fetch("/api/directus/request", {
+    const txn_update = await fetch("/api/directus/request", {
       method: "POST",
       body: JSON.stringify({
-        type: "createItem",
+        type: "updateItem",
         collection: "txn",
+        id: item.id,
         items: {
-          status: "completed",
-          type: "stake_out",
-          app_id: process.env.NEXT_PUBLIC_APP_ID,
-          member_id: item.member_id,
-          amount: item.amount,
-          currency: "IDS",
           affect_balance: false,
-          stake_lock_days: item.stake_lock_days,
-          stake_apy: item.stake_apy,
           external_ref: `${ids_distribution_wallet.explorer_url}/tx/${txnReturn.result}`,
-          description: `Staked out ${item.amount} IDS `,
-          parent_txn_id: item.id,
         },
       }),
     }).then((data) => data.json());
-    if (txn.ok) {
+
+    if (txn_update.ok) {
       notify({
         title: t("noti.success"),
         children: (
@@ -129,7 +156,7 @@ export const StakeHistory = () => {
 
     setLoadingAction(false);
     // (fix) lấy coin xóa token address
-    const balance = await getBalance(
+    await getBalance(
       wallet?.address || "",
       ids_distribution_wallet.chain_id,
       ids_distribution_wallet.token_address_temp

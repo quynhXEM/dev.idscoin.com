@@ -58,6 +58,33 @@ const CommissionDetailsModal: React.FC<CommissionDetailsModalProps> = ({
         Number(account?.commission?.all) +
           Number(account?.commission?.withdraw) || 0;
 
+      const clamCommission = await fetch("/api/directus/request", {
+        method: "POST",
+        body: JSON.stringify({
+          type: "createItem",
+          collection: "txn",
+          items: {
+            status: "completed",
+            app_id: "db2a722c-59e2-445c-b89e-7b692307119a",
+            member_id: account?.id,
+            amount: -amount,
+            currency: `USDT ${usdt_payment_wallets_testnet[selectedChain].name}`,
+            type: "withdraw",
+            affect_balance: true,
+            description: `Withdraw ${amount} USDT ${usdt_payment_wallets_testnet[selectedChain].name} commission`,
+          },
+        }),
+      }).then((data) => data.json());
+
+      if (!clamCommission.ok) {
+        notify({
+          title: t("noti.error"),
+          message: t("noti.withdrawUSDTError", { amount: amount }),
+          type: false,
+        });
+        setLoading(false);
+        return;
+      }
       const txn = await fetch("/api/send/usdt", {
         method: "POST",
         body: JSON.stringify({
@@ -78,26 +105,20 @@ const CommissionDetailsModal: React.FC<CommissionDetailsModalProps> = ({
         setLoading(false);
         return;
       }
-      const clamCommission = await fetch("/api/directus/request", {
+      const clamCommission_update = await fetch("/api/directus/request", {
         method: "POST",
         body: JSON.stringify({
-          type: "createItem",
+          type: "updateItem",
           collection: "txn",
+          id: clamCommission.result.id,
           items: {
-            status: "completed",
-            app_id: "db2a722c-59e2-445c-b89e-7b692307119a",
-            member_id: account?.id,
-            amount: -amount,
-            currency: `USDT ${usdt_payment_wallets_testnet[selectedChain].name}`,
-            type: "withdraw",
             affect_balance: false,
-            description: `Withdraw ${amount} USDT ${usdt_payment_wallets_testnet[selectedChain].name} commission`,
             external_ref: `${usdt_payment_wallets_testnet[selectedChain].explorer_url}/tx/${txn.txHash}`,
           },
         }),
       }).then((data) => data.json());
 
-      if (!clamCommission.ok) {
+      if (!clamCommission_update.ok) {
         notify({
           title: t("noti.error"),
           message: t("noti.withdrawUSDTError", { amount: amount }),
@@ -106,13 +127,13 @@ const CommissionDetailsModal: React.FC<CommissionDetailsModalProps> = ({
         setLoading(false);
         return;
       }
-      setAccount(prev => ({
+      setAccount((prev) => ({
         ...prev,
         commission: {
           ...prev.commission,
           withdraw: Number(prev.commission.withdraw) - Number(amount),
         },
-      }))
+      }));
       notify({
         title: t("noti.success"),
         children: (
