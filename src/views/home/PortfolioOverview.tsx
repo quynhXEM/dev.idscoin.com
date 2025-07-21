@@ -311,7 +311,43 @@ export function PortfolioOverview({
           </CardTitle>
         </CardHeader>
         <CardContent>
-          {isConnected ? (
+          {loading ? (
+            <div className="space-y-3">
+              <div className="flex items-center justify-between p-3 bg-gray-800 rounded-lg border border-gray-700">
+                <div>
+                  <div className="font-medium text-white">
+                    <Skeleton className="h-4 w-24" />
+                  </div>
+                  <div className="text-sm text-gray-400">
+                    <Skeleton className="h-3 w-32 mt-2" />
+                  </div>
+                </div>
+                <Skeleton className="h-8 w-24" />
+              </div>
+              <div className="flex items-center justify-between p-3 bg-gray-800 rounded-lg border border-gray-700">
+                <div>
+                  <div className="font-medium text-white">
+                    <Skeleton className="h-4 w-24" />
+                  </div>
+                  <div className="text-sm text-gray-400">
+                    <Skeleton className="h-3 w-32 mt-2" />
+                  </div>
+                </div>
+                <Skeleton className="h-8 w-24" />
+              </div>
+              <div className="flex items-center justify-between p-3 bg-gray-800 rounded-lg border border-gray-700">
+                <div>
+                  <div className="font-medium text-white">
+                    <Skeleton className="h-4 w-24" />
+                  </div>
+                  <div className="text-sm text-gray-400">
+                    <Skeleton className="h-3 w-32 mt-2" />
+                  </div>
+                </div>
+                <Skeleton className="h-8 w-24" />
+              </div>
+            </div>
+          ) : isConnected ? (
             <StakeHistory />
           ) : (
             <WalletConnectionPrompt
