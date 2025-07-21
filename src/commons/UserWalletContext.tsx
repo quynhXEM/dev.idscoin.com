@@ -64,6 +64,7 @@ export type WalletContextType = {
   setStakeHistory: (stakeHistory: any) => void;
   setAccount: (account: any) => void;
   addNewMember: (wallet: WalletInfo) => Promise<void>;
+  setLoading: (loading: boolean) => void;
 };
 
 const UserWalletContext = createContext<WalletContextType | undefined>(
@@ -656,7 +657,8 @@ export function UserWalletProvider({ children }: { children: ReactNode }) {
         stakeHistory,
         setStakeHistory,
         setAccount,
-        addNewMember
+        addNewMember,
+        setLoading
       }}
     >
       {children}

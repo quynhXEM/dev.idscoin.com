@@ -26,7 +26,7 @@ export function PortfolioOverview({
   setShowNotificationModal,
   setNotificationData,
 }: PortfolioOverviewProps) {
-  const { isConnected, connectWallet, balance, account } = useUserWallet();
+  const { isConnected, connectWallet, balance, account, loading } = useUserWallet();
   const WalletConnectionPrompt = ({
     title,
     icon,
@@ -41,6 +41,7 @@ export function PortfolioOverview({
       <h3 className="text-lg font-semibold text-white mb-2">{title}</h3>
       <p className="text-gray-400 text-sm mb-4">{description}</p>
       <Button
+        disabled={loading}
         className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 cursor-pointer"
         onClick={() => connectWallet()}
       >

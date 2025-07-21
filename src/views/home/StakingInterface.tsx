@@ -65,6 +65,7 @@ export function StakingInterface({
     account,
     setStakeHistory,
     setAccount,
+    loading
   } = useUserWallet();
 
   useEffect(() => {
@@ -526,6 +527,7 @@ export function StakingInterface({
                 </Button>
               ) : (
                 <Button
+                  disabled={loading}
                   className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 cursor-pointer"
                   onClick={() => connectWallet()}
                 >
@@ -680,6 +682,7 @@ export function StakingInterface({
                     <Button
                       size="sm"
                       variant="outline"
+                      disabled={loading}
                       className="border-gray-800 text-gray-900 hover:bg-gray-900 hover:text-white bg-white/60 cursor-pointer"
                       onClick={() => connectWallet()}
                     >

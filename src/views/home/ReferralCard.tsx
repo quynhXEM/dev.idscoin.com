@@ -121,6 +121,7 @@ export function ReferralSection({
               {t("referral.connectWalletSub")}
             </p>
             <Button
+              disabled={loading}
               className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 cursor-pointer"
               onClick={() => connectWallet()}
             >

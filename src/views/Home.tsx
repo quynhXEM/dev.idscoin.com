@@ -29,7 +29,7 @@ export default function IDSStakingPlatform() {
   const [showRewardsModal, setShowRewardsModal] = useState(false);
   const [showInfoModal, setShowInfoModal] = useState(false);
   const [vipSelectedChain, setVipSelectedChain] = useState("97");
-  const { connectWallet, getBalance, isConnected, wallet, disconnect } =
+  const { connectWallet, getBalance, isConnected, wallet, disconnect, loading, setLoading } =
     useUserWallet();
 
   const [showNotificationModal, setShowNotificationModal] = useState(false);
@@ -54,8 +54,12 @@ export default function IDSStakingPlatform() {
       const connected = sessionStorage.getItem("idscoin_connected");
       if (connected) {
         connectWallet();
+      } else {
+        setLoading(false)
       }
     }
+
+    
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
