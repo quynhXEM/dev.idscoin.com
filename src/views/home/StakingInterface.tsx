@@ -435,7 +435,7 @@ export function StakingInterface({
                       variant="ghost"
                       className="h-6 px-2 text-xs text-gray-700 hover:text-gray-900 hover:bg-gray-200 cursor-pointer"
                       onClick={() => setStakeAmount(balance.ids.toString())}
-                      disabled={!isConnected || isloadding}
+                      disabled={!isConnected || isloadding || loading}
                     >
                       Max
                     </Button>
@@ -463,7 +463,7 @@ export function StakingInterface({
                   {Object.entries(stakingOptions).map(([days, apy]) => (
                     <Button
                       key={days}
-                      disabled={isloadding}
+                      disabled={isloadding || loading}
                       variant={lockPeriod === days ? "default" : "outline"}
                       onClick={() => setLockPeriod(days)}
                       className={`h-12 cursor-pointer ${
@@ -515,7 +515,7 @@ export function StakingInterface({
                 <Button
                   className="w-full bg-gray-900 hover:bg-gray-800 text-white font-bold shadow-lg cursor-pointer"
                   size="lg"
-                  disabled={!isConnected || isloadding}
+                  disabled={!isConnected || isloadding || loading}
                   onClick={handleStake}
                 >
                   {isloadding ? (
@@ -551,7 +551,7 @@ export function StakingInterface({
                   }}
                 >
                   <SelectTrigger
-                    disabled={isloadding}
+                    disabled={isloadding || loading}
                     className="w-full mt-2 bg-white/90 border-gray-800 text-gray-900 focus:border-gray-900 font-medium"
                   >
                     <SelectValue placeholder={t("staking.selectChain")} />
@@ -559,7 +559,7 @@ export function StakingInterface({
                   <SelectContent className="bg-white border-gray-800">
                     {Object.entries(usdt_payment_wallets_testnet).map(
                       ([key, value]) => (
-                        <SelectItem disabled={isloadding} key={key} value={key}>
+                        <SelectItem disabled={isloadding || loading} key={key} value={key}>
                           <div className="flex items-center gap-2">
                             <div className="font-semibold">
                               {value?.name || "--"}
@@ -599,7 +599,7 @@ export function StakingInterface({
                       variant="ghost"
                       className="h-6 px-2 text-xs text-gray-700 hover:text-gray-900 hover:bg-gray-200 cursor-pointer"
                       onClick={() => setSwapAmount(balance.usdt)}
-                      disabled={!isConnected}
+                      disabled={!isConnected || loading || isloadding}
                     >
                       Max
                     </Button>
@@ -709,7 +709,7 @@ export function StakingInterface({
               <Button
                 className="w-full bg-gray-900 hover:bg-gray-800 text-white font-bold shadow-lg cursor-pointer"
                 size="lg"
-                disabled={!isConnected || isloadding}
+                disabled={!isConnected || isloadding || loading}
                 onClick={handleSwap}
               >
                 {isloadding ? (

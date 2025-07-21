@@ -10,6 +10,7 @@ import { Wallet, Gift, Clock, Info } from "lucide-react";
 import { useUserWallet } from "@/commons/UserWalletContext";
 import { Tooltip } from "react-tooltip";
 import { StakeHistory } from "./HistoryStake";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface PortfolioOverviewProps {
   t: (key: string) => string;
@@ -62,7 +63,58 @@ export function PortfolioOverview({
           </CardTitle>
         </CardHeader>
         <CardContent>
-          {isConnected ? (
+          {loading ? (
+            <div className="space-y-4">
+              <div className="space-y-3">
+                <div className="flex justify-between">
+                  <span className="text-gray-400">
+                    <Skeleton className="h-4 w-32" />
+                  </span>
+                  <span className="font-semibold text-white">
+                    <Skeleton className="h-4 w-20" />
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-400">
+                    <Skeleton className="h-4 w-24" />
+                  </span>
+                  <span className="font-semibold text-blue-400">
+                    <Skeleton className="h-4 w-16" />
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-400">
+                    <Skeleton className="h-4 w-24" />
+                  </span>
+                  <span className="font-semibold text-white">
+                    <Skeleton className="h-4 w-16" />
+                  </span>
+                </div>
+                <Separator className="bg-gray-700" />
+                <div className="flex justify-between">
+                  <span className="text-gray-400">
+                    <Skeleton className="h-4 w-28" />
+                  </span>
+                  <span className="font-semibold text-cyan-400">
+                    <Skeleton className="h-4 w-16" />
+                  </span>
+                </div>
+              </div>
+              <div className="pt-2">
+                <div className="flex justify-between text-sm mb-2">
+                  <div className="flex items-center gap-1">
+                    <span className="text-gray-300 inline-flex gap-1 items-center">
+                      <Skeleton className="h-4 w-24" />
+                    </span>
+                  </div>
+                  <span className="text-gray-300">
+                    <Skeleton className="h-4 w-10" />
+                  </span>
+                </div>
+                <Skeleton className="h-2 w-full" />
+              </div>
+            </div>
+          ) : isConnected ? (
             <div className="space-y-4">
               <div className="space-y-3">
                 <div className="flex justify-between">
@@ -156,7 +208,45 @@ export function PortfolioOverview({
           </CardTitle>
         </CardHeader>
         <CardContent>
-          {isConnected ? (
+          {loading ? (
+            <div className="space-y-4">
+              <div className="text-center p-4 bg-gray-800 rounded-lg border border-gray-700">
+                <div className="text-2xl font-bold text-blue-400">
+                  <Skeleton className="h-8 w-24 mx-auto" />
+                </div>
+                <div className="text-sm text-gray-400">
+                  <Skeleton className="h-4 w-20 mx-auto" />
+                </div>
+              </div>
+              <div className="space-y-2">
+                <div className="flex justify-between text-sm">
+                  <span className="text-gray-300">
+                    <Skeleton className="h-4 w-16" />
+                  </span>
+                  <span className="text-blue-400">
+                    <Skeleton className="h-4 w-12" />
+                  </span>
+                </div>
+                <div className="flex justify-between text-sm">
+                  <span className="text-gray-300">
+                    <Skeleton className="h-4 w-20" />
+                  </span>
+                  <span className="text-blue-400">
+                    <Skeleton className="h-4 w-12" />
+                  </span>
+                </div>
+                <div className="flex justify-between text-sm">
+                  <span className="text-gray-300">
+                    <Skeleton className="h-4 w-20" />
+                  </span>
+                  <span className="text-blue-400">
+                    <Skeleton className="h-4 w-12" />
+                  </span>
+                </div>
+              </div>
+              <Skeleton className="h-10 w-full mt-4" />
+            </div>
+          ) : isConnected ? (
             <div className="space-y-4">
               <div className="text-center p-4 bg-gray-800 rounded-lg border border-gray-700">
                 <div className="text-2xl font-bold text-blue-400">
