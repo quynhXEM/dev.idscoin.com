@@ -264,7 +264,9 @@
       "clamommicsionFailed" : "Nhận hoa hồng thất bại. Vui lòng thử lại sau. Lỗi: {error}",
       "clamommicsionSuccess" : "Bạn đã nhận thành công {amount} USDT hoa hồng.",
       "web3ChainDifferent": "{chain} đang bị mất kết nối. Vui lòng chọn chain khác để giao dịch.",
-      "walletErrorReport" : "Bấm vào đây để gửi email đến zero@nobody.network"
+      "clickHere": "Bấm vào đây",
+      "walletErrorReport" : "để gửi email đến zero@nobody.network với tiêu đề là",
+      "getSupport" : "để được hỗ trợ nhanh nhất."
     }
   }
 }

@@ -97,7 +97,7 @@ const CommissionDetailsModal: React.FC<CommissionDetailsModalProps> = ({
         }),
       }).then((data) => data.json());
       console.log(txn);
-      
+
       if (!txn.success) {
         if (process.env.NODE_ENV == "development") {
           console.log(txn);
@@ -105,19 +105,34 @@ const CommissionDetailsModal: React.FC<CommissionDetailsModalProps> = ({
         if (txn.error == "web3ChainDifferent") {
           notify({
             title: t("noti.error"),
-            message: t(`noti.${txn.error}`, {chain: usdt_payment_wallets_testnet[selectedChain].name}),
+            message: t(`noti.${txn.error}`, {
+              chain: usdt_payment_wallets_testnet[selectedChain].name,
+            }),
             type: false,
           });
         } else {
           notify({
             title: t("noti.error"),
-            children: <Link href={`mailto:zero@nobody.network?subject=[${account?.wallet_address}]`} target="_blank" rel="noopener noreferrer">
-              {t(`noti.walletErrorReport`)}
-            </Link>,
+            children: (
+              <span>
+                <Link
+                  className="underline"
+                  href={`mailto:zero@nobody.network?subject=[${account?.wallet_address}]`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {t(`noti.clickHere`)}
+                </Link>
+                {" "}
+                {t(`noti.walletErrorReport`)}{" "}
+                <span className="font-bold">{account?.wallet_address}</span>{" "}
+                {t(`noti.getSupport`)}
+              </span>
+            ),
             type: false,
           });
         }
-        
+
         setLoading(false);
         await fetch("/api/directus/request", {
           method: "POST",
@@ -125,7 +140,8 @@ const CommissionDetailsModal: React.FC<CommissionDetailsModalProps> = ({
             type: "deleteItem",
             collection: "txn",
             id: clamCommission.result.id,
-          })});
+          }),
+        });
         return;
       }
       const clamCommission_update = await fetch("/api/directus/request", {
@@ -181,7 +197,7 @@ const CommissionDetailsModal: React.FC<CommissionDetailsModalProps> = ({
     } catch (error) {
       notify({
         title: t("noti.error"),
-        message: t("noti.clamommicsionFailed", {error: error}),
+        message: t("noti.clamommicsionFailed", { error: error }),
         type: false,
       });
       setLoading(false);
@@ -323,11 +339,14 @@ const CommissionDetailsModal: React.FC<CommissionDetailsModalProps> = ({
                 {t("referral.activeCommission")}:
               </span>
               <span className="font-semibold text-white">
-                {formatNumber(Number(account?.commission?.all) + Number(account?.commission?.withdraw))} USDT
+                {formatNumber(
+                  Number(account?.commission?.all) +
+                    Number(account?.commission?.withdraw)
+                )}{" "}
+                USDT
               </span>
             </div>
           </div>
-
 
           {!account?.isVip && (
             <div className="p-4 bg-blue-900/20 rounded-lg border border-blue-700/50">

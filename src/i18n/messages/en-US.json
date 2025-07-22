@@ -263,7 +263,9 @@
       "clamommicsionFailed" : "Failed to claim commission. Please try again later. Error: {error}",
       "clamommicsionSuccess" : "You have successfully claimed {amount} USDT commission.",
       "web3ChainDifferent": "{chain} is disconnected. Please select a different chain to make transactions.",
-      "walletErrorReport" : "Click here to send an email to zero@nobody.network"
+      "clickHere": "Click here",
+      "walletErrorReport" : "to send an email to zero@nobody.network with the subject",
+      "getSupport" : "to get the fastest support."
     }
   }
 }
