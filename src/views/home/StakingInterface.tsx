@@ -22,7 +22,7 @@ import {
 import { Zap, Lock, DollarSign, Wallet, Loader2 } from "lucide-react";
 import { useUserWallet } from "@/commons/UserWalletContext";
 import { useAppMetadata } from "@/commons/AppMetadataContext";
-import { formatNumber } from "@/libs/utils";
+import { formatNumber, roundToFirstSignificantDecimal } from "@/libs/utils";
 
 interface StakingInterfaceProps {
   t: (key: string) => string;
@@ -141,7 +141,8 @@ export function StakingInterface({
         message: t("noti.validate", {
           action: "stake",
           min: 100,
-          max: Number(balance.ids),
+          max: formatNumber(balance.ids),
+          currency: "IDS"
         }),
         type: false,
       });
@@ -228,7 +229,7 @@ export function StakingInterface({
   const handleSwap = async () => {
     if (
       !swapAmount ||
-      Number(swapAmount) <= 10 ||
+      Number(swapAmount) < 10 ||
       Number(swapAmount) > Number(balance.usdt)
     ) {
       setNotificationData({
@@ -236,7 +237,8 @@ export function StakingInterface({
         message: t("noti.validate", {
           action: "swap",
           min: 10,
-          max: Number(balance.usdt),
+          max: formatNumber(balance.usdt),
+          currency: "USDT",
         }),
         type: false,
       });

@@ -252,7 +252,7 @@
       "web3ChainNotFound" : "Ví của bạn chưa được thêm chain {chain}. Thêm vào để sử dụng dịch vụ của chúng tôi.",
       "web3BalanceError" : "Lỗi khi lấy số dư ví. Vui lòng thử lại sau.",
       "addTransactionError": "Lỗi thêm dữ liệu giao dịch! Mã giao dịch: {txHash}",
-      "validate": "Bạn cần {action} ít nhất {min} IDS và không được vượt quá {max} IDS số dư của bạn",
+      "validate": "Bạn cần {action} ít nhất {min} {currency} và không được vượt quá {max} {currency} số dư của bạn",
       "cancelStakeTransacrtionError": "Lỗi khi rút giao dịch stake. Vui lòng thử lại sau.",
       "returnStakeIDSError" : "Lỗi khi trả IDS về ví. Vui lòng thử lại sau.",
       "withdrawIDSsuccess" : "{amount} IDS đã được chuyển về ví của bạn: {hash}",
