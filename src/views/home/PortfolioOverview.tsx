@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Separator } from "@/components/ui/separator";
-import { Wallet, Gift, Clock, Info } from "lucide-react";
+import { Wallet, Gift, Clock, Info, Loader2 } from "lucide-react";
 import { useUserWallet } from "@/commons/UserWalletContext";
 import { Tooltip } from "react-tooltip";
 import { StakeHistory } from "./HistoryStake";
@@ -47,7 +47,7 @@ export function PortfolioOverview({
         className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 cursor-pointer disabled:cursor-not-allowed"
         onClick={() => connectWallet()}
       >
-        <Wallet className="w-4 h-4 mr-2" />
+        {loading ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Wallet className="w-4 h-4 mr-2" />}
         {t("staking.connectWalletBtn")}
       </Button>
     </div>
