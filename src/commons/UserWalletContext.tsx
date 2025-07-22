@@ -58,8 +58,6 @@ export type WalletContextType = {
   loading: boolean;
   isRegister: boolean | null;
   setIsRegister: (isRegister: boolean) => void;
-  isVip: boolean | null;
-  setIsVip: (isVip: boolean) => void;
   stakeHistory: any;
   setStakeHistory: (stakeHistory: any) => void;
   setAccount: (account: any) => void;
@@ -74,7 +72,6 @@ const UserWalletContext = createContext<WalletContextType | undefined>(
 export function UserWalletProvider({ children }: { children: ReactNode }) {
   const [wallet, setWallet] = useState<WalletInfo>(null);
   const [isRegister, setIsRegister] = useState<boolean | null>(null);
-  const [isVip, setIsVip] = useState<boolean | null>(null);
   const [stakeHistory, setStakeHistory] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const {
@@ -119,7 +116,6 @@ export function UserWalletProvider({ children }: { children: ReactNode }) {
         ids_distribution_wallet.token_address_temp
       );
       setIsRegister(account?.username != null);
-      setIsVip(account?.isVip || false);
       setStakeHistory(account?.stake_history || []);
       setLoading(false);
     };
@@ -652,8 +648,6 @@ export function UserWalletProvider({ children }: { children: ReactNode }) {
         loading,
         isRegister,
         setIsRegister,
-        isVip,
-        setIsVip,
         stakeHistory,
         setStakeHistory,
         setAccount,

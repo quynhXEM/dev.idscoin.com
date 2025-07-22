@@ -39,7 +39,7 @@ const VipUpgradeModal: React.FC<VipUpgradeModalProps> = ({
   setShowNotificationModal,
   setNotificationData,
 }) => {
-  const { sendTransaction, account, getVipStatus, setIsVip } = useUserWallet();
+  const { sendTransaction, account, getVipStatus, setAccount } = useUserWallet();
   const {
     custom_fields: { usdt_payment_wallets, usdt_payment_wallets_testnet },
     icon,
@@ -155,7 +155,7 @@ const VipUpgradeModal: React.FC<VipUpgradeModalProps> = ({
     }
 
     onClose();
-    setIsVip(true);
+    setAccount({ ...account, isVip: true });
     setNotificationData({
       title: t("noti.success"),
       message: t("noti.upgradeVipSuccess"),

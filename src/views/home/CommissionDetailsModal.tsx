@@ -41,7 +41,7 @@ const CommissionDetailsModal: React.FC<CommissionDetailsModalProps> = ({
 }) => {
   const [loading, setLoading] = useState(false);
   const { notify } = useNotification();
-  const { account, isVip, setAccount } = useUserWallet();
+  const { account, setAccount } = useUserWallet();
   const {
     custom_fields: { usdt_payment_wallets_testnet } = {
       usdt_payment_wallets_testnet: {},
@@ -219,20 +219,20 @@ const CommissionDetailsModal: React.FC<CommissionDetailsModalProps> = ({
                 {t("referral.currentStatus")}
               </h3>
               <Badge
-                variant={isVip ? "default" : "secondary"}
+                variant={account?.isVip ? "default" : "secondary"}
                 className={
-                  isVip
+                  account?.isVip
                     ? "bg-gradient-to-r from-blue-500 to-purple-500 text-white"
                     : "bg-gray-700 text-gray-300 hover:bg-gray-600 hover:text-gray-200"
                 }
               >
-                {isVip ? "VIP" : "Miễn phí"}
+                {account?.isVip ? "VIP" : "Miễn phí"}
               </Badge>
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div className="text-center">
                 <div className="text-2xl font-bold text-emerald-400">
-                  {!isVip ? "5%" : "50%"}
+                  {!account?.isVip ? "5%" : "50%"}
                 </div>
                 <div className="text-sm text-gray-400">
                   {t("referral.usdtRate")}
@@ -305,72 +305,8 @@ const CommissionDetailsModal: React.FC<CommissionDetailsModalProps> = ({
             </div>
           </div>
 
-          {/* Top Referrals */}
-          {/* <div>
-            <h3 className="font-semibold text-white mb-3">
-              {t("referral.topReferrals")}
-            </h3>
-            <div className="space-y-2">
-              <div className="flex items-center justify-between p-3 bg-gray-800 rounded-lg border border-gray-700">
-                <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center text-white text-sm font-bold">
-                    1
-                  </div>
-                  <div>
-                    <div className="font-medium text-white">User***123</div>
-                    <div className="text-sm text-gray-400">
-                      {t("referral.5VipUpgrades")}
-                    </div>
-                  </div>
-                </div>
-                <div className="text-right">
-                  <div className="font-bold text-emerald-400">
-                    +${!isVip ? "25.00" : "250.00"}
-                  </div>
-                </div>
-              </div>
 
-              <div className="flex items-center justify-between p-3 bg-gray-800 rounded-lg border border-gray-700">
-                <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 bg-cyan-600 rounded-full flex items-center justify-center text-white text-sm font-bold">
-                    2
-                  </div>
-                  <div>
-                    <div className="font-medium text-white">User***456</div>
-                    <div className="text-sm text-gray-400">
-                      {t("referral.4VipUpgrades")}
-                    </div>
-                  </div>
-                </div>
-                <div className="text-right">
-                  <div className="font-bold text-emerald-400">
-                    +${!isVip ? "20.00" : "200.00"}
-                  </div>
-                </div>
-              </div>
-
-              <div className="flex items-center justify-between p-3 bg-gray-800 rounded-lg border border-gray-700">
-                <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 bg-purple-600 rounded-full flex items-center justify-center text-white text-sm font-bold">
-                    3
-                  </div>
-                  <div>
-                    <div className="font-medium text-white">User***789</div>
-                    <div className="text-sm text-gray-400">
-                      {t("referral.3VipUpgrades")}
-                    </div>
-                  </div>
-                </div>
-                <div className="text-right">
-                  <div className="font-bold text-emerald-400">
-                    +${!isVip ? "15.00" : "150.00"}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div> */}
-
-          {!isVip && (
+          {!account?.isVip && (
             <div className="p-4 bg-blue-900/20 rounded-lg border border-blue-700/50">
               <div className="text-center">
                 <div className="text-blue-300 font-semibold mb-2">

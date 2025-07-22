@@ -53,7 +53,7 @@ export function ReferralSection({
   const [isloading, setIsLoading] = useState<boolean>(false);
   const [copied, setCopied] = useState(false);
 
-  const { isRegister, isVip, setIsRegister } = useUserWallet();
+  const { isRegister, setIsRegister } = useUserWallet();
 
   const copyReferralLink = async () => {
     try {
@@ -195,7 +195,7 @@ export function ReferralSection({
 
   
 
-  if (!isRegister && !loading && !isVip) {
+  if (!isRegister && !loading && !account?.isVip) {
     return (
       <Card className="bg-gray-900 border-gray-800">
         <CardHeader>
@@ -323,23 +323,23 @@ export function ReferralSection({
           </CardTitle>
           <div className="flex items-center gap-2">
             <Badge
-              variant={isVip ? "default" : "secondary"}
+              variant={account?.isVip ? "default" : "secondary"}
               className={
-                isVip
+                account?.isVip
                   ? "bg-gradient-to-r from-blue-500 to-purple-500 text-white"
                   : "bg-gray-800 text-gray-300 hover:bg-gray-700 hover:text-gray-200"
               }
             >
-              {isVip ? "VIP" : t("referral.free")}
+              {account?.isVip ? "VIP" : t("referral.free")}
             </Badge>
           </div>
         </div>
         <CardDescription className="text-gray-400">
-          {!isVip ? t("referral.earn5") : t("referral.earn50")}
+          {!account?.isVip ? t("referral.earn5") : t("referral.earn50")}
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
-        {!isVip && (
+        {!account?.isVip && (
           <div className="p-4 bg-gray-800 rounded-lg border border-blue-700/50">
             <div className="flex items-center justify-between">
               <div>
@@ -368,7 +368,7 @@ export function ReferralSection({
               {t("referral.yourLink")}
             </div>
             <div className="text-xs text-gray-400">
-              {t("referral.earn", { percent: !isVip ? "5%" : "50%" })}
+              {t("referral.earn", { percent: !account?.isVip ? "5%" : "50%" })}
             </div>
           </div>
 
