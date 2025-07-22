@@ -262,7 +262,8 @@
       "poolIDSError" : "Lỗi khi rút IDS từ pool. Vui lòng thử lại sau.",
       "stakeNotCompleted" : "Gói stake này đã được xử lý. Vui lòng thử lại sau.",
       "clamommicsionFailed" : "Nhận hoa hồng thất bại. Vui lòng thử lại sau.",
-      "clamommicsionSuccess" : "Bạn đã nhận thành công {amount} USDT hoa hồng."
+      "clamommicsionSuccess" : "Bạn đã nhận thành công {amount} USDT hoa hồng.",
+      "web3ChainDifferent": "{chain} đang xảy ra vấn đề. Xử dụng chain khác để giao dịch."
     }
   }
 }

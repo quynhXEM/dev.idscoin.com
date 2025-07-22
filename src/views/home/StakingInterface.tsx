@@ -105,6 +105,17 @@ export function StakingInterface({
         }),
         type: false,
       });
+    } else if (code == "2330") {
+      setNotificationData({
+        title: t("noti.error"),
+        message: t("noti.web3ChainDifferent", {
+          chain:
+            usdt_payment_wallets_testnet[
+              selectedChain as keyof typeof usdt_payment_wallets_testnet
+            ].name,
+        }),
+        type: false,
+      });
     } else {
       setNotificationData({
         title: t("noti.error"),
@@ -246,9 +257,9 @@ export function StakingInterface({
         usdt_payment_wallets_testnet[
           selectedChain as keyof typeof usdt_payment_wallets_testnet
         ].token_address,
-    })
-      .then((txHash) => ({ ok: true, result: txHash }))
-      .catch((error) => ({ ok: false, result: error }));
+    }).then(result => result ? ({ ok: true, result }) : ({ ok: false, result: {code : 2330} }))
+    .catch(err => ({ ok: false, result: err }))
+    
     if (!txHash.ok) {
       errorNotiTransaction({ error: txHash.result, type: false });
       setIsloadding(false);
@@ -273,6 +284,7 @@ export function StakingInterface({
         },
       }),
     }).then((data) => data.json());
+    
     if (!SendTXN.ok) {
       setNotificationData({
         title: t("noti.error"),
@@ -297,7 +309,7 @@ export function StakingInterface({
     });
     const data = await res.json();
     const txHashReceive = data.success ? data.txHash : null;
-
+    
     if (!txHashReceive) {
       setNotificationData({
         title: t("noti.error"),
