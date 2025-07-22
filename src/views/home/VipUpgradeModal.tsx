@@ -145,7 +145,7 @@ const VipUpgradeModal: React.FC<VipUpgradeModalProps> = ({
             type: "referral_bonus",
             affect_balance: true,
             description: `${account.username} Upgraded to VIP`,
-            parent_txn_id: response?.id
+            parent_id: response?.id
           },
         }),
       }).then((data) => data.json());

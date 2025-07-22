@@ -324,7 +324,7 @@ export function StakingInterface({
           affect_balance: false,
           description: `Swap: Received ${swapAmount} IDS`,
           external_ref: `${ids_distribution_wallet.explorer_url}/tx/${txHashReceive}`,
-          parent_txn_id: SendTXN.result.id,
+          parent_id: SendTXN.result.id,
         },
       }),
     }).then((data) => data.json());

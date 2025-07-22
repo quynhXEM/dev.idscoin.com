@@ -68,7 +68,7 @@ export const StakeHistory = () => {
           stake_lock_days: item.stake_lock_days,
           stake_apy: item.stake_apy,
           description: `Staked out ${item.amount} IDS `,
-          parent_txn_id: item.id,
+          parent_id: item.id,
         },
       }),
     }).then((data) => data.json());

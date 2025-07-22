@@ -179,7 +179,7 @@ const CommissionDetailsModal: React.FC<CommissionDetailsModalProps> = ({
               status: "completed",
               type: "referral_bonus",
             },
-            fields: ["*", "parent_txn_id.*"],
+            fields: ["*", "parent_id.*"],
           },
         }),
       }).then((data) => data.json()),
