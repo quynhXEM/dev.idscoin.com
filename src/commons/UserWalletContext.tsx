@@ -109,10 +109,14 @@ export function UserWalletProvider({ children }: { children: ReactNode }) {
         ids_distribution_wallet.chain_id,
         ids_distribution_wallet.token_address_temp
       );
-      setLoading(false);
     };
     getWalletInfo();
   }, [wallet]);
+
+  useEffect(() => {
+    console.log("loading", loading);
+    
+  }, [loading]);
 
   const disconnect = () => setWallet(null);
 
@@ -252,6 +256,7 @@ export function UserWalletProvider({ children }: { children: ReactNode }) {
       });
     } finally {
       isCreatingMemberRef.current = false;
+      setLoading(false);
     }
   };
 
