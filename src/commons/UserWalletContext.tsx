@@ -67,7 +67,7 @@ const UserWalletContext = createContext<WalletContextType | undefined>(
 
 export function UserWalletProvider({ children }: { children: ReactNode }) {
   const [wallet, setWallet] = useState<WalletInfo>(null);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(false);
   const {
     custom_fields: {
       usdt_payment_wallets,

@@ -29,7 +29,7 @@ export default function IDSStakingPlatform() {
   const [showRewardsModal, setShowRewardsModal] = useState(false);
   const [showInfoModal, setShowInfoModal] = useState(false);
   const [vipSelectedChain, setVipSelectedChain] = useState("97");
-  const { connectWallet, getBalance, isConnected, wallet, disconnect, loading, setLoading } =
+  const { connectWallet, getBalance, isConnected, wallet, disconnect, setLoading } =
     useUserWallet();
 
   const [showNotificationModal, setShowNotificationModal] = useState(false);
@@ -44,6 +44,13 @@ export default function IDSStakingPlatform() {
       typeof window !== "undefined" &&
       typeof window.ethereum !== "undefined"
     ) {
+      const connected = sessionStorage.getItem("idscoin_connected");
+      if (connected) {
+        connectWallet();
+      } else {
+        setLoading(false)
+      }
+
       window.ethereum.on("accountsChanged", (accounts: string[]) => {
         if (accounts.length === 0) {
           disconnect();
@@ -51,12 +58,7 @@ export default function IDSStakingPlatform() {
           connectWallet();
         }
       });
-      const connected = sessionStorage.getItem("idscoin_connected");
-      if (connected) {
-        connectWallet();
-      } else {
-        setLoading(false)
-      }
+      
     }
 
     
