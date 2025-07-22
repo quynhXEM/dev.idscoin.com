@@ -44,7 +44,7 @@ export function PortfolioOverview({
       <p className="text-gray-400 text-sm mb-4">{description}</p>
       <Button
         disabled={loading}
-        className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 cursor-pointer"
+        className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 cursor-pointer disabled:cursor-not-allowed"
         onClick={() => connectWallet()}
       >
         <Wallet className="w-4 h-4 mr-2" />

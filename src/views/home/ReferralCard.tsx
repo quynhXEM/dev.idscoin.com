@@ -102,9 +102,9 @@ export function ReferralSection({
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="text-center p-8 bg-gray-800 rounded-lg border-2 border-dashed border-gray-700">
+          <div className="text-center p-8 bg-gray-800 rounded-lg border-2 border-dashed border-gray-700 ">
             <Wallet className="w-16 h-16 mx-auto text-gray-500 mb-4" />
-            <h3 className="text-lg font-semibold text-white mb-2">
+            <h3 className="text-lg font-semibold text-white mb-2">  
               {t("referral.connectWallet")}
             </h3>
             <p className="text-gray-400 text-sm mb-4">
@@ -112,7 +112,7 @@ export function ReferralSection({
             </p>
             <Button
               disabled={loading}
-              className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 cursor-pointer"
+              className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 cursor-pointer disabled:cursor-not-allowed"
               onClick={() => connectWallet()}
             >
               <Wallet className="w-4 h-4 mr-2" />

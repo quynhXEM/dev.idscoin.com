@@ -530,7 +530,7 @@ export function StakingInterface({
               ) : (
                 <Button
                   disabled={loading}
-                  className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 cursor-pointer"
+                  className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 cursor-pointer disabled:cursor-not-allowed"
                   onClick={() => connectWallet()}
                 >
                   <Wallet className="w-4 h-4 mr-2" />
