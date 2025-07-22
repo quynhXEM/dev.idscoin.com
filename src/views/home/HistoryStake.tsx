@@ -116,7 +116,7 @@ export const StakeHistory = () => {
       body: JSON.stringify({
         type: "updateItem",
         collection: "txn",
-        id: item.id,
+        id: txn.result.id,
         items: {
           affect_balance: false,
           external_ref: `${ids_distribution_wallet.explorer_url}/tx/${txnReturn.result}`,
