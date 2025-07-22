@@ -260,9 +260,10 @@
       "withdrawUSDTError" : "You have failed to withdraw {amount} USDT. Please try again later.",
       "poolIDSError" : "Error when withdrawing IDS from pool. Please try again later.",
       "stakeNotCompleted" : "This stake package has been processed. Please try again later.",
-      "clamommicsionFailed" : "Failed to claim commission. Please try again later.",
+      "clamommicsionFailed" : "Failed to claim commission. Please try again later. Error: {error}",
       "clamommicsionSuccess" : "You have successfully claimed {amount} USDT commission.",
-      "web3ChainDifferent": "{chain} is disconnected. Please select a different chain to make transactions."
+      "web3ChainDifferent": "{chain} is disconnected. Please select a different chain to make transactions.",
+      "walletErrorReport" : "Click here to send an email to zero@nobody.network"
     }
   }
 }

@@ -64,11 +64,11 @@ export async function waitForTransactionSuccess(txPromise: Promise<any>, provide
     if (receipt && receipt.status === 1) {
       return receipt.hash;
     } else {
-      throw new Error("Giao dịch thất bại hoặc bị từ chối trên blockchain");
+      throw new Error("Transaction failed or rejected on blockchain");
     }
   } catch (err) {
     const errorMsg = err instanceof Error ? err.message : String(err);
-    throw new Error("Giao dịch không thành công: " + errorMsg);
+    throw new Error("Transaction failed: " + errorMsg);
   }
 }
 

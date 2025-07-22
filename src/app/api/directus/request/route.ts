@@ -71,7 +71,7 @@ export const POST = async (request: Request) => {
 
         case "deleteItem":
           res = await directus.request(
-            withToken(APP_TOKEN, deleteItem(collection, items))
+            withToken(APP_TOKEN, deleteItem(collection, id))
           );
           break;
       }

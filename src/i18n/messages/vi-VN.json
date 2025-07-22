@@ -261,9 +261,10 @@
       "withdrawUSDTError" : "Bạn đã rút thất bại {amount} USDT. Vui lòng thử lại sau.",
       "poolIDSError" : "Lỗi khi rút IDS từ pool. Vui lòng thử lại sau.",
       "stakeNotCompleted" : "Gói stake này đã được xử lý. Vui lòng thử lại sau.",
-      "clamommicsionFailed" : "Nhận hoa hồng thất bại. Vui lòng thử lại sau.",
+      "clamommicsionFailed" : "Nhận hoa hồng thất bại. Vui lòng thử lại sau. Lỗi: {error}",
       "clamommicsionSuccess" : "Bạn đã nhận thành công {amount} USDT hoa hồng.",
-      "web3ChainDifferent": "{chain} đang bị mất kết nối. Vui lòng chọn chain khác để giao dịch."
+      "web3ChainDifferent": "{chain} đang bị mất kết nối. Vui lòng chọn chain khác để giao dịch.",
+      "walletErrorReport" : "Bấm vào đây để gửi email đến zero@nobody.network"
     }
   }
 }

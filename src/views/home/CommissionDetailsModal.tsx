@@ -96,13 +96,36 @@ const CommissionDetailsModal: React.FC<CommissionDetailsModalProps> = ({
           chain_id: Number(selectedChain),
         }),
       }).then((data) => data.json());
+      console.log(txn);
+      
       if (!txn.success) {
-        notify({
-          title: t("noti.error"),
-          message: t("noti.clamommicsionFailed"),
-          type: false,
-        });
+        if (process.env.NODE_ENV == "development") {
+          console.log(txn);
+        }
+        if (txn.error == "web3ChainDifferent") {
+          notify({
+            title: t("noti.error"),
+            message: t(`noti.${txn.error}`, {chain: usdt_payment_wallets_testnet[selectedChain].name}),
+            type: false,
+          });
+        } else {
+          notify({
+            title: t("noti.error"),
+            children: <Link href={`mailto:zero@nobody.network?subject=[${account?.wallet_address}]`} target="_blank" rel="noopener noreferrer">
+              {t(`noti.walletErrorReport`)}
+            </Link>,
+            type: false,
+          });
+        }
+        
         setLoading(false);
+        await fetch("/api/directus/request", {
+          method: "POST",
+          body: JSON.stringify({
+            type: "deleteItem",
+            collection: "txn",
+            id: clamCommission.result.id,
+          })});
         return;
       }
       const clamCommission_update = await fetch("/api/directus/request", {
@@ -158,7 +181,7 @@ const CommissionDetailsModal: React.FC<CommissionDetailsModalProps> = ({
     } catch (error) {
       notify({
         title: t("noti.error"),
-        message: t("noti.clamommicsionFailed"),
+        message: t("noti.clamommicsionFailed", {error: error}),
         type: false,
       });
       setLoading(false);
