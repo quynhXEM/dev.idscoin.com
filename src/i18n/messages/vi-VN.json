@@ -59,7 +59,7 @@
       "notConnected": "Cần kết nối ví để stake",
       "notConnectedBtn": "Cần kết nối ví",
       "connectWallet": "Kết nối ví để xem số dư thực tế và thực hiện giao dịch để stake IDS coin",
-      "connectWalletBtn": "Kết nối ví ngay",
+      "connectWalletBtn": "Kết nối ví",
       "swapInstructions": "📋 Hướng dẫn swap",
       "step1": "1. Chọn blockchain và kết nối ví",
       "step2": "2. Nhập số USDT muốn swap",
@@ -76,7 +76,7 @@
     },
     "referral": {
       "connectWallet": "Cần kết nối ví",
-      "connectWalletBtn": "Kết nối ví ngay",
+      "connectWalletBtn": "Kết nối ví",
       "connectWalletSub": "Kết nối ví để tạo link giới thiệu và bắt đầu kiếm hoa hồng",
       "connectWallettoRef": "Kết nối ví để bắt đầu kiếm hoa hồng từ việc giới thiệu bạn bè",
       "introduce": "Giới thiệu bạn bè",

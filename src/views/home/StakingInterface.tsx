@@ -64,7 +64,6 @@ export function StakingInterface({
     balance,
     getBalance,
     account,
-    setStakeHistory,
     setAccount,
     loading
   } = useUserWallet();
@@ -187,7 +186,10 @@ export function StakingInterface({
       });
       setShowNotificationModal(true);
       setIsloadding(false);
-      setStakeHistory((prev: any) => [...prev, txn.result]);
+      setAccount((prev: any) => ({
+        ...prev,
+        stake_history: [...prev.stake_history, txn.result]
+      }));
     } else {
       setNotificationData({
         title: t("noti.error"),

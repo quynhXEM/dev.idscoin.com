@@ -56,10 +56,6 @@ export type WalletContextType = {
   getVipStatus: (user_id: string) => Promise<any>;
   checkChainExists: (chainId: string) => Promise<boolean>;
   loading: boolean;
-  isRegister: boolean | null;
-  setIsRegister: (isRegister: boolean) => void;
-  stakeHistory: any;
-  setStakeHistory: (stakeHistory: any) => void;
   setAccount: (account: any) => void;
   addNewMember: (wallet: WalletInfo) => Promise<void>;
   setLoading: (loading: boolean) => void;
@@ -71,8 +67,6 @@ const UserWalletContext = createContext<WalletContextType | undefined>(
 
 export function UserWalletProvider({ children }: { children: ReactNode }) {
   const [wallet, setWallet] = useState<WalletInfo>(null);
-  const [isRegister, setIsRegister] = useState<boolean | null>(null);
-  const [stakeHistory, setStakeHistory] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const {
     custom_fields: {
@@ -115,8 +109,6 @@ export function UserWalletProvider({ children }: { children: ReactNode }) {
         ids_distribution_wallet.chain_id,
         ids_distribution_wallet.token_address_temp
       );
-      setIsRegister(account?.username != null);
-      setStakeHistory(account?.stake_history || []);
       setLoading(false);
     };
     getWalletInfo();
@@ -646,10 +638,6 @@ export function UserWalletProvider({ children }: { children: ReactNode }) {
         checkChainExists,
         getVipStatus,
         loading,
-        isRegister,
-        setIsRegister,
-        stakeHistory,
-        setStakeHistory,
         setAccount,
         addNewMember,
         setLoading

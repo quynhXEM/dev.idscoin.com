@@ -58,7 +58,7 @@
       "notConnected": "Wallet connection required to stake",
       "notConnectedBtn": "Wallet connection required",
       "connectWallet": "Connect wallet to view actual balance and make transactions to stake IDS coin",
-      "connectWalletBtn": "Connect wallet now",
+      "connectWalletBtn": "Connect wallet",
       "swapInstructions": "📋 Swap instructions",
       "step1": "1. Select blockchain and connect wallet",
       "step2": "2. Enter USDT amount to swap",
@@ -75,7 +75,7 @@
     },
     "referral": {
       "connectWallet": "Need to connect wallet",
-      "connectWalletBtn": "Connect wallet now",
+      "connectWalletBtn": "Connect wallet",
       "connectWalletSub": "Connect wallet to create referral link and start earning commission",
       "connectWallettoRef": "Connect wallet to start earning commission from referring friends",
       "introduce": "Refer friends",

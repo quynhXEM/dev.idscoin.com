@@ -17,7 +17,7 @@ export const StakeHistory = () => {
   const [loadingAction, setLoadingAction] = useState<boolean>(false);
   const [itemLoading, setItemLoading] = useState<any>(null);
   const { notify } = useNotification();
-  const { wallet, getBalance, loading, stakeHistory, setStakeHistory } =
+  const { wallet, getBalance, loading, setAccount, account } =
     useUserWallet();
 
   const handleColectIDS = async (item: any) => {
@@ -144,7 +144,10 @@ export const StakeHistory = () => {
         ),
         type: true,
       });
-      setStakeHistory(stakeHistory.filter((his: any) => his.id != item.id));
+      setAccount(prev => ({
+        ...prev,
+        stake_history: prev.stake_history.filter((his: any) => his.id != item.id)
+      }));
     } else {
       notify({
         title: t("noti.error"),
@@ -164,26 +167,7 @@ export const StakeHistory = () => {
     );
   };
 
-  if (loading) {
-    return (
-      <div className="space-y-3">
-        {[1, 2, 3].map((i) => (
-          <div
-            key={i}
-            className="flex items-center justify-between p-3 bg-gray-800 rounded-lg border border-gray-700"
-          >
-            <div>
-              <Skeleton className="h-4 w-24 mb-2" />
-              <Skeleton className="h-3 w-32" />
-            </div>
-            <Skeleton className="h-8 w-32" />
-          </div>
-        ))}
-      </div>
-    );
-  }
-
-  if (!loading && stakeHistory?.length == 0) {
+  if (!loading && account?.stake_history?.length == 0) {
     return (
       <div className="space-y-3">
         <div className="flex items-center justify-center p-3 bg-gray-800 rounded-lg border border-gray-700">
@@ -195,7 +179,7 @@ export const StakeHistory = () => {
 
   return (
     <div className="space-y-3">
-      {stakeHistory?.map((item, key) => {
+      {account?.stake_history?.map((item, key) => {
         const date =
           new Date().getDate() <
           new Date(item?.date_created).getDate() + item?.stake_lock_days;

@@ -32,7 +32,7 @@ const RewardsModal: React.FC<RewardsModalProps> = ({
 }) => {
   if (!show) return null;
   const [isloading, setIsLoading] = useState<boolean>(false);
-  const { account, stakeHistory, addNewMember, wallet } = useUserWallet();
+  const { account, addNewMember, wallet } = useUserWallet();
   const { notify } = useNotification();
   const {
     custom_fields: { ids_distribution_wallet },
@@ -298,8 +298,8 @@ const RewardsModal: React.FC<RewardsModalProps> = ({
               {t("rewards.currentPositions")}
             </h3>
             <div className="space-y-2">
-              {stakeHistory?.lenght != 0 &&
-                stakeHistory.map((item: any, index: number) => (
+              {account?.stake_history?.lenght != 0 &&
+                account?.stake_history.map((item: any, index: number) => (
                   <div
                     key={index}
                     className="flex items-center justify-between p-3 bg-gray-800 rounded-lg border border-gray-700"
