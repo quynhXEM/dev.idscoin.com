@@ -72,14 +72,10 @@ const RewardsModal: React.FC<RewardsModalProps> = ({
         return;
       }
 
-      const txn = await fetch("/api/send/token", {
+      const txn = await fetch("/api/send/coin", {
         method: "POST",
         body: JSON.stringify({
-          token: "IDS",
           amount: account?.stake?.stake_dont_claw,
-          rpc: ids_distribution_wallet.rpc_url,
-          token_address: ids_distribution_wallet.token_address_temp,
-          chain_id: ids_distribution_wallet.chain_id,
           to: account?.wallet_address,
         }),
       }).then((data) => data.json());

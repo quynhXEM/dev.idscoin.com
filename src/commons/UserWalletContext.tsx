@@ -104,18 +104,13 @@ export function UserWalletProvider({ children }: { children: ReactNode }) {
     if (!wallet) return;
     const getWalletInfo = async () => {
       // Lấy số dư coin => (fix) xóa địa chỉ token
-      await getBalance(
-        wallet.address,
-        ids_distribution_wallet.chain_id,
-        ids_distribution_wallet.token_address_temp
-      );
+      await getBalance(wallet.address, ids_distribution_wallet.chain_id);
     };
     getWalletInfo();
   }, [wallet]);
 
   useEffect(() => {
     console.log("loading", loading);
-    
   }, [loading]);
 
   const disconnect = () => setWallet(null);
@@ -146,28 +141,29 @@ export function UserWalletProvider({ children }: { children: ReactNode }) {
         .then((data) => data.result[0])
         .catch(() => null);
       if (exist) {
-        const [vipReponse, stakeHistory, f1, commission, stake] = await Promise.all([
-          await getVipStatus(exist.id),
-          await getStakeHistory(exist.id),
-          await fetch("/api/user/f1", {
-            method: "POST",
-            body: JSON.stringify({
-              id: exist.id,
-            }),
-          }).then((data) => data.json()),
-          await fetch("/api/user/commission", {
-            method: "POST",
-            body: JSON.stringify({
-              id: exist.id,
-            }),
-          }).then((data) => data.json()),
-          await fetch("/api/user/stake", {
-            method: "POST",
-            body: JSON.stringify({
-              id: exist.id,
-            }),
-          }).then((data) => data.json()),
-        ]);
+        const [vipReponse, stakeHistory, f1, commission, stake] =
+          await Promise.all([
+            await getVipStatus(exist.id),
+            await getStakeHistory(exist.id),
+            await fetch("/api/user/f1", {
+              method: "POST",
+              body: JSON.stringify({
+                id: exist.id,
+              }),
+            }).then((data) => data.json()),
+            await fetch("/api/user/commission", {
+              method: "POST",
+              body: JSON.stringify({
+                id: exist.id,
+              }),
+            }).then((data) => data.json()),
+            await fetch("/api/user/stake", {
+              method: "POST",
+              body: JSON.stringify({
+                id: exist.id,
+              }),
+            }).then((data) => data.json()),
+          ]);
 
         setAccount({
           ...exist,
@@ -546,17 +542,10 @@ export function UserWalletProvider({ children }: { children: ReactNode }) {
         });
         if (!balanceHex || balanceHex === "0x") {
           // (fix) xóa điều kiện này giữ lại để lấy số dư coin
-          if (tokenAddress === ids_distribution_wallet.token_address_temp) {
-            setBalance((prev) => ({
-              ...prev,
-              usdt: "0.00",
-            }));
-          } else {
-            setBalance((prev) => ({
-              ...prev,
-              ids: "0.00",
-            }));
-          }
+          setBalance((prev) => ({
+            ...prev,
+            usdt: "0.00",
+          }));
           return "0.00";
         }
         // Lấy số thập phân của token
@@ -573,21 +562,12 @@ export function UserWalletProvider({ children }: { children: ReactNode }) {
         });
         const decimals = parseInt(decimalsHex, 16);
         // (fix) xóa điều kiện này giữ lại để lấy số dư coin
-        if (tokenAddress === ids_distribution_wallet.token_address_temp) {
-          setBalance((prev) => ({
-            ...prev,
-            ids: (Number(BigInt(balanceHex)) / 10 ** decimals)
-              .toFixed(2)
-              .toString(),
-          }));
-        } else {
-          setBalance((prev) => ({
-            ...prev,
-            usdt: (Number(BigInt(balanceHex)) / 10 ** decimals)
-              .toFixed(2)
-              .toString(),
-          }));
-        }
+        setBalance((prev) => ({
+          ...prev,
+          usdt: (Number(BigInt(balanceHex)) / 10 ** decimals)
+            .toFixed(2)
+            .toString(),
+        }));
         return (Number(BigInt(balanceHex)) / 10 ** decimals)
           .toFixed(2)
           .toString();
@@ -645,7 +625,7 @@ export function UserWalletProvider({ children }: { children: ReactNode }) {
         loading,
         setAccount,
         addNewMember,
-        setLoading
+        setLoading,
       }}
     >
       {children}

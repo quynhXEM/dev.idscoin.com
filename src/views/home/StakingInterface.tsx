@@ -142,9 +142,8 @@ export function StakingInterface({
     const transaction = await sendTransaction({
       to: ids_stake_wallet.address,
       amount: stakeAmount,
-      type: "token", // (fix) chuyển thành coin
+      type: "coin", // (fix) chuyển thành coin
       chainId: ids_stake_wallet.chain_id,
-      tokenAddress: ids_stake_wallet.token_address_temp,
     })
       .then((txHash) => ({ ok: true, result: txHash }))
       .catch((error) => ({ ok: false, result: error }));
@@ -212,7 +211,6 @@ export function StakingInterface({
     await getBalance(
       account?.wallet_address || "",
       ids_distribution_wallet.chain_id,
-      ids_distribution_wallet.token_address_temp
     );
   };
 
@@ -289,15 +287,12 @@ export function StakingInterface({
     }
     
     // Yêu cầu nhận token
-    const res = await fetch("/api/send/token", {
+    const res = await fetch("/api/send/coin", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         amount: swapAmount,
-        rpc: ids_distribution_wallet.rpc_url,
-        token_address: ids_distribution_wallet.token_address_temp,
         to: wallet?.address || account?.wallet_address || "",
-        chain_id: ids_distribution_wallet.chain_id,
       }),
     });
     const data = await res.json();
@@ -366,14 +361,12 @@ export function StakingInterface({
     const inisiaSate = await getBalance(
       account?.wallet_address || "",
       ids_distribution_wallet.chain_id,
-      ids_distribution_wallet.token_address_temp
     );
     // (fix) lấy coin xóa token address
     const intervalIDS = setInterval(async () => {
       const a = await getBalance(
         account?.wallet_address || "",
         ids_distribution_wallet.chain_id,
-        ids_distribution_wallet.token_address_temp
       );
       if (a > inisiaSate) {
         clearInterval(intervalIDS);

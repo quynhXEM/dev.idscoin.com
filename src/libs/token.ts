@@ -60,7 +60,7 @@ export async function waitForTransactionSuccess(txPromise: Promise<any>, provide
     // Nếu đã có provider thì dùng provider đó, nếu không thì lấy từ tx
     const usedProvider = provider || tx?.provider;
     if (!usedProvider) throw new Error("Không tìm thấy provider để xác nhận giao dịch");
-    const receipt = await usedProvider.waitForTransaction(tx.hash, 1, 30000); // timeout 60s
+    const receipt = await usedProvider.waitForTransaction(tx.hash, 1, 60000); // timeout 60s
     if (receipt && receipt.status === 1) {
       return receipt.hash;
     } else {

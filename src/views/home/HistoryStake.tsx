@@ -85,15 +85,12 @@ export const StakeHistory = () => {
     }
 
     // Tạo giao dịch trả tiền IDS về ví người dùng. (fix) Send coin
-    const res = await fetch("/api/send/token", {
+    const res = await fetch("/api/send/coin", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         amount: item.amount,
-        rpc: ids_distribution_wallet.rpc_url,
-        token_address: ids_distribution_wallet.token_address_temp,
         to: wallet?.address || "",
-        chain_id: ids_distribution_wallet.chain_id,
       }),
     });
     const data = await res.json();
@@ -162,8 +159,7 @@ export const StakeHistory = () => {
     // (fix) lấy coin xóa token address
     await getBalance(
       wallet?.address || "",
-      ids_distribution_wallet.chain_id,
-      ids_distribution_wallet.token_address_temp
+      ids_distribution_wallet.chain_id
     );
   };
 
