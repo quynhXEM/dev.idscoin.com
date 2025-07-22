@@ -156,7 +156,7 @@ export function StakingInterface({
       type: "coin", // (fix) chuyển thành coin
       chainId: ids_stake_wallet.chain_id,
     })
-      .then((txHash) => ({ ok: true, result: txHash }))
+      .then((txHash) => txHash ? ({ ok: true, result: txHash }) : ({ ok: false, result: {code : 2330} }))
       .catch((error) => ({ ok: false, result: error }));
 
     if (!transaction.ok) {

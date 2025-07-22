@@ -1,4 +1,4 @@
-import { sendCoin, sendToken } from "@/libs/token";
+import { sendCoin } from "@/libs/token";
 import { fetchAppMetadata } from "@/libs/utils";
 import { NextRequest, NextResponse } from "next/server";
 

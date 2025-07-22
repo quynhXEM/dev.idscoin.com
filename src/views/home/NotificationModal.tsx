@@ -63,9 +63,6 @@ export function NotificationModal({
                 <CardTitle className={`text-lg ${titleColor}`}>
                   {title}
                 </CardTitle>
-                <CardDescription className="text-gray-400 text-sm">
-                  {isSuccess ? t("noti.success") : t("noti.error")}
-                </CardDescription>
               </div>
             </div>
             <Button

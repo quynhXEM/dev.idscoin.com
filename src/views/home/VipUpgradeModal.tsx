@@ -48,6 +48,8 @@ const VipUpgradeModal: React.FC<VipUpgradeModalProps> = ({
   if (!show) return;
 
   const errorNotiTransaction = (error: any) => {
+    console.log(error);
+    
     const code = error.code;
     if (code == "4001") {
       setNotificationData({
@@ -66,15 +68,21 @@ const VipUpgradeModal: React.FC<VipUpgradeModalProps> = ({
         }),
         type: false,
       });
+    } else if (code == "2330") {
+      setNotificationData({
+        title: t("noti.error"),
+        message: t("noti.web3ChainDifferent", {
+          chain:
+            usdt_payment_wallets_testnet[
+              vipSelectedChain as keyof typeof usdt_payment_wallets_testnet
+            ].name,
+        }),
+        type: false,
+      });
     } else {
       setNotificationData({
         title: t("noti.error"),
-        message: type
-          ? t("noti.stakeError", {
-              amount: stakeAmount,
-              days: lockPeriod,
-            })
-          : t("noti.swapError", { amount: swapAmount, ids: swapAmount }),
+        message: t("noti.upgradeVipError", {error: ""}),
         type: false,
       });
     }
@@ -90,12 +98,14 @@ const VipUpgradeModal: React.FC<VipUpgradeModalProps> = ({
       tokenAddress:
         usdt_payment_wallets_testnet[vipSelectedChain].token_address,
       chainId: Number(vipSelectedChain),
-    }).catch((err) => {
-      errorNotiTransaction(err);
-      return null;
-    });
+    }).then((txHash) => txHash ? ({ ok: true, result: txHash }) : ({ ok: false, result: {code : 2330} }))
+    .catch((error) => ({ ok: false, result: error }));
 
-    if (!txn) return;
+    if (!txn.ok) {
+      errorNotiTransaction(txn.result);
+      setIsLoading(false);
+      return;
+    }
 
     const response = await fetch(`/api/directus/request`, {
       method: "POST",

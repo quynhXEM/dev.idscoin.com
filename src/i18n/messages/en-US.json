@@ -262,7 +262,7 @@
       "stakeNotCompleted" : "This stake package has been processed. Please try again later.",
       "clamommicsionFailed" : "Failed to claim commission. Please try again later.",
       "clamommicsionSuccess" : "You have successfully claimed {amount} USDT commission.",
-      "web3ChainDifferent": "{chain} is having issues. Please use a different chain to make transactions."
+      "web3ChainDifferent": "{chain} is disconnected. Please select a different chain to make transactions."
     }
   }
 }
