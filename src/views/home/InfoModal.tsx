@@ -71,7 +71,7 @@ const InfoModal: React.FC<InfoModalProps> = ({ t, show, onClose }) => {
                 {t("products.aScanExplorerDescription")}
               </p>
               <a
-                href="https://a-scan.nobody.network"
+                href={`${process.env.NEXT_PUBLIC_SCAN_URL}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center text-blue-400 hover:text-blue-300 font-semibold"
@@ -97,7 +97,7 @@ const InfoModal: React.FC<InfoModalProps> = ({ t, show, onClose }) => {
                 {t("products.chatNetworkDescription")}
               </p>
               <a
-                href="https://chat.nobody.network"
+                href={`${process.env.NEXT_PUBLIC_CHAT_URL}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center text-purple-400 hover:text-purple-300 font-semibold"
@@ -124,7 +124,7 @@ const InfoModal: React.FC<InfoModalProps> = ({ t, show, onClose }) => {
               </p>
               <div className="flex gap-3">
                 <a
-                  href="https://play.google.com/store/apps/details?id=com.walletair"
+                  href={`${process.env.NEXT_PUBLIC_ANDROID_URL}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center text-cyan-400 hover:text-cyan-300 font-semibold text-sm"
@@ -132,7 +132,7 @@ const InfoModal: React.FC<InfoModalProps> = ({ t, show, onClose }) => {
                   {t("products.android")}
                 </a>
                 <a
-                  href="https://apps.apple.com/app/walletair/id123456789"
+                  href={`${process.env.NEXT_PUBLIC_IOS_URL}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center text-cyan-400 hover:text-cyan-300 font-semibold text-sm"
