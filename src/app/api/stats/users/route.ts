@@ -11,7 +11,7 @@ export const GET = async (request: Request) => {
   };
 
   return await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/items/txn?filter[status][_in]=completed,canceled&filter[app_id]=${process.env.NEXT_PUBLIC_APP_ID}&filter[type]=stake_in&aggregate[count]=*`,
+    `${process.env.NEXT_PUBLIC_API_URL}/items/txn?filter[status][_in]=completed,canceled&filter[app_id]=${process.env.NEXT_PUBLIC_APP_ID}&aggregate[count]=*`,
     requestOptions
   )
     .then((response) => response.json())
