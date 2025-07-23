@@ -4,11 +4,11 @@
   "page_not_found": "Không tìm thấy trang",
   "home": {
     "tooltips": {
-      "tvl": "Tổng giá trị USD của tất cả IDS coin đang được khóa trong hệ thống. TVL cao thể hiện độ tin cậy của platform.",
-      "apy": "Lợi suất trung bình hàng năm khi bạn stake IDS coin. Ví dụ: stake 100 IDS sẽ nhận thêm 13.5 IDS sau 1 năm.",
-      "users": "Tổng số người dùng đã tham gia vào platform. Số lượng lớn cho thấy cộng đồng tin tưởng và sử dụng.",
-      "locked": "Tổng số IDS coin đang được stake/khóa bởi tất cả người dùng. Càng nhiều coin bị khóa càng thể hiện niềm tin dài hạn.",
-      "stakeProgress": "Tỷ lệ phần trăm IDS coin đã được stake so với tổng số dư. Tính bằng: (IDS đã stake / Tổng số dư) × 100%"
+      "tvl": "Total Value Locked (TVL) là tổng giá trị tài USD của tất cả IDS coin đang được khóa trong hệ thống.",
+      "apy": "Average Annual Percentage Yield (Average APY) là giá trị trung bình tổng hợp từ mức lãi suất hàng năm của tất cả các giao dịch stake IDS coin.",
+      "users": "Tổng số người dùng đã tham gia vào platform gồm cả tài khoản miễn phí lẫn tài khoản VIP.",
+      "locked": "Tổng số IDS coin đã đang được stake bởi tất cả người dùng.",
+      "stakeProgress": "Tỷ lệ phần trăm IDS coin mà bạn đã stake so với tổng số dư."
     },
     "header": {
       "ids": "IDS",
@@ -16,7 +16,7 @@
       "intelligentDecentralizedSolution": "Intelligent Decentralized Solution",
       "nobodyChain": "Hệ sinh thái Nobody Chain - Bảo mật thông tin, Tự do Internet",
       "nobodyChainEcosystem": "Nobody Chain Ecosystem",
-      "teamDescription": "Chúng tôi là đội ngũ lập trình viên tài năng đến từ khắp nơi trên thế giới, tập trung phát triển các sản phẩm công nghệ blockchain tiên tiến nhằm bảo vệ quyền riêng tư và mang lại tự do cho môi trường Internet."
+      "teamDescription": "Chúng tôi là đội ngũ lập trình viên tài năng đến từ khắp nơi trên thế giới, tập trung phát triển các sản phẩm công nghệ tiên tiến nhằm bảo vệ quyền riêng tư và mang lại tự do cho môi trường Internet."
     },
     "announcement": {
       "discovery": "🌟 Khám phá IDS - Intelligent Decentralized Solution | Nobody Chain Ecosystem 🌟"
@@ -204,13 +204,13 @@
     },
     "products": {
       "aScanExplorer": "Blockchain Explorer",
-      "aScanExplorerDescription": "Trình khám phá blockchain hoàn chỉnh với đầy đủ thông tin về IDS và Nobody Chain.",
+      "aScanExplorerDescription": "Trình khám phá blockchain phiên bản alpha với đầy đủ thông tin về IDS và Nobody Chain.",
       "exploreNow": "Khám phá ngay",
       "chatNetwork": "Decentralized Communication",
-      "chatNetworkDescription": "Hệ thống giao tiếp phi tập trung bảo mật cao, sản phẩm chủ lực đang hoạt động ổn định.",
+      "chatNetworkDescription": "Chat, gọi thoại, video call... được bảo mã hóa đầu cuối cùng công nghệ lưu trữ phi tập trung.",
       "experienceNow": "Trải nghiệm ngay",
       "cryptoWallet": "Crypto Wallet",
-      "cryptoWalletDescription": "Ví tiền mã hóa an toàn, đã có mặt trên App Store và Google Play Store.",
+      "cryptoWalletDescription": "Ví tiền mã hóa an toàn, đã có mặt trên App Store và Play Store.",
       "android": "📱 Android",
       "ios": "🍎 iOS",
       "investmentPlatform": "Investment Platform",

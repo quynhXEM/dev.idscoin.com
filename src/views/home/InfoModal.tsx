@@ -87,7 +87,7 @@ const InfoModal: React.FC<InfoModalProps> = ({ t, show, onClose }) => {
                   <span className="text-2xl">💬</span>
                 </div>
                 <div>
-                  <h3 className="text-xl font-bold text-white">Chat Network</h3>
+                  <h3 className="text-xl font-bold text-white">Nobody Connect</h3>
                   <p className="text-purple-400 text-sm">
                     {t("products.chatNetwork")}
                   </p>

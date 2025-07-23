@@ -3,11 +3,11 @@
   "page_not_found": "Page Not Found",
   "home": {
     "tooltips": {
-      "tvl": "Total USD value of all IDS coins locked in the system. High TVL shows platform trust.",
-      "apy": "Average annual yield when you stake IDS coins. E.g., stake 100 IDS to receive 13.5 IDS after 1 year.",
-      "users": "Total number of users who have joined the platform. A large number shows community trust and usage.",
-      "locked": "Total IDS coins being staked/locked by all users. More locked coins show long-term trust.",
-      "stakeProgress": "Percentage of IDS coins staked compared to total balance. Calculated as: (Staked IDS / Total balance) × 100%"
+      "tvl": "Total Value Locked (TVL) is the total USD value of all IDS coins currently locked in the system.",
+      "apy": "Average Annual Percentage Yield (Average APY) is the aggregated average of annual interest rates from all IDS coin staking activities.",
+      "users": "The total number of users who have joined the platform, including both free and VIP accounts.",
+      "locked": "The total number of IDS coins currently being staked by all users.",
+      "stakeProgress": "Percentage of IDS coins staked compared to total balance."
     },
     "header": {
       "ids": "IDS",
@@ -15,7 +15,7 @@
       "intelligentDecentralizedSolution": "Intelligent Decentralized Solution",
       "nobodyChain": "Nobody Chain Ecosystem - Privacy Protection, Internet Freedom",
       "nobodyChainEcosystem": "Nobody Chain Ecosystem",
-      "teamDescription": "We are a talented team of developers from around the world, focused on building advanced blockchain products to protect privacy and bring freedom to the Internet."
+      "teamDescription": "We are a team of talented developers from around the world, focused on building advanced technology products to protect privacy and bring freedom to the Internet environment."
     },
     "announcement": {
       "discovery": "🌟 Discover IDS - Intelligent Decentralized Solution | Nobody Chain Ecosystem 🌟"
@@ -195,7 +195,7 @@
       "DaysApy": "{day} days - {apy}% APY",
       "DaysLeft": "{day} days left",
       "noHistory": "No Stake history",
-      "collectIDS" : "Collect {amount} IDS"
+      "collectIDS": "Collect {amount} IDS"
     },
     "footer": {
       "nobodyNetwork": "Nobody Network",
@@ -203,13 +203,13 @@
     },
     "products": {
       "aScanExplorer": "Blockchain Explorer",
-      "aScanExplorerDescription": "A complete blockchain explorer with full information about IDS and Nobody Chain.",
+      "aScanExplorerDescription": "Alpha version of the blockchain explorer with complete information on IDS and Nobody Chain.",
       "exploreNow": "Explore now",
       "chatNetwork": "Decentralized Communication",
-      "chatNetworkDescription": "Highly secure decentralized communication system, main product in stable operation.",
+      "chatNetworkDescription": "Chat, voice call, and video call... are end-to-end encrypted using decentralized storage technology.",
       "experienceNow": "Experience now",
       "cryptoWallet": "Crypto Wallet",
-      "cryptoWalletDescription": "Secure crypto wallet, available on App Store and Google Play Store.",
+      "cryptoWalletDescription": "A secure crypto wallet, now available on the App Store and Play Store.",
       "android": "📱 Android",
       "ios": "🍎 iOS",
       "investmentPlatform": "Investment Platform",
@@ -248,24 +248,24 @@
       "claimRewardsSuccess": "You have successfully claimed {amount} IDS.",
       "web3Error": "Web3 error",
       "web3ErrorSub": "Web3 environment not found. Please install web3 on your browser.",
-      "web3ChainNotFound" : "Your wallet is not added to chain {chain}. Please add it to use our services.",
-      "web3BalanceError" : "Error when getting wallet balance. Please try again later.",
+      "web3ChainNotFound": "Your wallet is not added to chain {chain}. Please add it to use our services.",
+      "web3BalanceError": "Error when getting wallet balance. Please try again later.",
       "addTransactionError": "Error adding transaction data! Transaction hash: {txHash}",
       "validate": "You need {action} at least {min} IDS and cannot exceed {max} IDS balance",
       "cancelStakeTransacrtionError": "Error when canceling stake transaction. Please try again later.",
-      "returnStakeIDSError" : "Error when returning IDS to wallet. Please try again later.",
-      "withdrawIDSsuccess" : "{amount} IDS has been transferred to your wallet: {hash}",
-      "withdrawIDSError" : "You have failed to withdraw {amount} IDS. Please try again later.",
-      "withdrawUSDTsuccess" : "{amount} USDT has been transferred to your wallet: {hash}",
-      "withdrawUSDTError" : "You have failed to withdraw {amount} USDT. Please try again later.",
-      "poolIDSError" : "Error when withdrawing IDS from pool. Please try again later.",
-      "stakeNotCompleted" : "This stake package has been processed. Please try again later.",
-      "clamommicsionFailed" : "Failed to claim commission. Please try again later. Error: {error}",
-      "clamommicsionSuccess" : "You have successfully claimed {amount} USDT commission.",
+      "returnStakeIDSError": "Error when returning IDS to wallet. Please try again later.",
+      "withdrawIDSsuccess": "{amount} IDS has been transferred to your wallet: {hash}",
+      "withdrawIDSError": "You have failed to withdraw {amount} IDS. Please try again later.",
+      "withdrawUSDTsuccess": "{amount} USDT has been transferred to your wallet: {hash}",
+      "withdrawUSDTError": "You have failed to withdraw {amount} USDT. Please try again later.",
+      "poolIDSError": "Error when withdrawing IDS from pool. Please try again later.",
+      "stakeNotCompleted": "This stake package has been processed. Please try again later.",
+      "clamommicsionFailed": "Failed to claim commission. Please try again later. Error: {error}",
+      "clamommicsionSuccess": "You have successfully claimed {amount} USDT commission.",
       "web3ChainDifferent": "{chain} is disconnected. Please select a different chain to make transactions.",
       "clickHere": "Click here",
-      "walletErrorReport" : "to send an email to zero@nobody.network with the subject",
-      "getSupport" : "to get the fastest support."
+      "walletErrorReport": "to send an email to zero@nobody.network with the subject",
+      "getSupport": "to get the fastest support."
     }
   }
 }
