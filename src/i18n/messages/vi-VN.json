@@ -25,7 +25,7 @@
       "totalTvl": "Tổng TVL",
       "averageApy": "APY Trung bình",
       "users": "Người dùng",
-      "locked": "IDS đã khóa"
+      "locked": "IDS đang khóa"
     },
     "staking": {
       "stake": "Stake IDS Coin",
