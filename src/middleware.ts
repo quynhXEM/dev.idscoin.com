@@ -10,12 +10,11 @@ const COUNTRY_LOCALE_MAP: Record<string, string> = {
 };
 
 function getLocaleFromCountry(countryCode: string | null): "vi-VN" | "en-US" {
-  // if (!countryCode) return routing.defaultLocale;
-  // return (
-  //   (COUNTRY_LOCALE_MAP[countryCode] as "vi-VN" | "en-US") ||
-  //   routing.defaultLocale
-  // );
-  return "en-US"
+  if (!countryCode) return routing.defaultLocale;
+  return (
+    (COUNTRY_LOCALE_MAP[countryCode] as "vi-VN" | "en-US") ||
+    routing.defaultLocale
+  );
 }
 
 export default async function middleware(req: NextRequest) {
