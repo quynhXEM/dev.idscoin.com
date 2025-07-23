@@ -5,17 +5,17 @@ const nextConfig: NextConfig = {
   redirects: async () => [
     {
       source: "/",
-      destination: "/vi-VN/home",
+      destination: "/home",
       permanent: true,
       locale: false,
     },
     // Tự động redirect khi không có locale và không phải là file liên quan đến PWA
-    {
-      source: "/:path((?!vi-VN|en-US|api(?:/.*)?|manifest\\.json|manifest\\.ts|manifest\\.webmanifest|sw\\.js|icon-192x192\\.png|icon-512x512\\.png|favicon\\.ico|vercel\\.svg|next\\.svg|window\\.svg|file\\.svg|globe\\.svg).*)",
-      destination: "/vi-VN/:path",
-      permanent: true,
-      locale: false,
-    },
+    // {
+    //   source: "/:path((?!vi-VN|en-US|api(?:/.*)?|manifest\\.json|manifest\\.ts|manifest\\.webmanifest|sw\\.js|icon-192x192\\.png|icon-512x512\\.png|favicon\\.ico|vercel\\.svg|next\\.svg|window\\.svg|file\\.svg|globe\\.svg).*)",
+    //   destination: "/en-US/:path",
+    //   permanent: true,
+    //   locale: false,
+    // },
     {
       source: "/:locale(vi-VN|en-US)",
       destination: "/:locale/home",
