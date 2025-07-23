@@ -96,14 +96,24 @@ const InfoModal: React.FC<InfoModalProps> = ({ t, show, onClose }) => {
               <p className="text-gray-300 mb-4">
                 {t("products.chatNetworkDescription")}
               </p>
-              <a
-                href={`${process.env.NEXT_PUBLIC_CHAT_URL}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center text-purple-400 hover:text-purple-300 font-semibold"
-              >
-                {t("products.experienceNow")} →
-              </a>
+              <div className="flex gap-3">
+                <a
+                  href={`${process.env.NEXT_PUBLIC_CHAT_ANR_URL}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center text-cyan-400 hover:text-cyan-300 font-semibold text-sm"
+                >
+                  {t("products.android")}
+                </a>
+                <a
+                  href={`${process.env.NEXT_PUBLIC_CHAT_URL}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center text-cyan-400 hover:text-cyan-300 font-semibold text-sm"
+                >
+                  🌐 Website
+                </a>
+              </div>
             </div>
 
             {/* Wallet */}
