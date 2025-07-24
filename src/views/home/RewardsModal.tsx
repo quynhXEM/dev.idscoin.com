@@ -317,7 +317,7 @@ const RewardsModal: React.FC<RewardsModalProps> = ({
                       <div className="font-bold text-cyan-400">
                         +
                         {roundToFirstSignificantDecimal(
-                          Number(item.amount) /
+                          Number(item.amount) *
                             Number(item.stake_apy) /
                             100 /
                             365

@@ -177,7 +177,7 @@ export const StakeHistory = () => {
     <div className="space-y-3">
       {account?.stake_history?.map((item, key) => {
         const date =
-          new Date().getDate() <
+          new Date().getDate() >
           new Date(item?.date_created).getDate() + item?.stake_lock_days;
         if (date)
           return (
