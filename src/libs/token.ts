@@ -1,4 +1,5 @@
 import { ethers } from "ethers";
+import { roundDownDecimal } from "./utils";
 
 // Hàm chuyển coin (ETH, BNB, MATIC, ...)
 export async function sendCoin({
@@ -87,7 +88,7 @@ export const getBalance = async (
     if (!tokenAddress) {
       // Lấy số dư coin
       const balanceBigInt = await provider.getBalance(address);
-      return (Number(balanceBigInt) / 1e18).toFixed(2).toString();
+      return roundDownDecimal(Number(balanceBigInt) / 1e18).toString();
     } else {
       // Lấy số dư token ERC20
       const erc20Abi = [
@@ -99,7 +100,7 @@ export const getBalance = async (
         token.balanceOf(address),
         token.decimals(),
       ]);
-      return (Number(balance) / Math.pow(10, Number(decimals))).toFixed(2).toString();
+      return roundDownDecimal(Number(balance) / Math.pow(10, Number(decimals))).toString();
     }
   } catch (error) {
     if (process.env.NODE_ENV === "development") {

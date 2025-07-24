@@ -11,7 +11,7 @@ import { useUserWallet } from "@/commons/UserWalletContext";
 import { Tooltip } from "react-tooltip";
 import { StakeHistory } from "./HistoryStake";
 import { Skeleton } from "@/components/ui/skeleton";
-import { formatNumber } from "@/libs/utils";
+import { formatNumber, roundDownDecimal } from "@/libs/utils";
 
 interface PortfolioOverviewProps {
   t: (key: string) => string;
@@ -123,13 +123,13 @@ export function PortfolioOverview({
                     </Tooltip>
                   </div>
                   <span className="text-gray-300">
-                    {(
+                    {roundDownDecimal(
                       (Number((account as any)?.stake?.stake_in) /
                         Number(
                           Number(balance.ids) + Number((account as any)?.stake?.stake_in)
                         )) *
                       100
-                    ).toFixed(2)}%
+                    )}%
                   </span>
                 </div>
                 <Progress

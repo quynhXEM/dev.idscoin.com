@@ -6,7 +6,7 @@
       "tvl": "Total Value Locked (TVL) is the total USD value of all IDS coins currently locked in the system.",
       "apy": "Average Annual Percentage Yield (Average APY) is the aggregated average of annual interest rates from all IDS coin staking activities.",
       "users": "The total number of users who have joined the platform, including both free and VIP accounts.",
-      "locked": "The total number of IDS coins currently being staked by all users.",
+      "locked": "The total number of IDS coins that have been staked by all users.",
       "stakeProgress": "Percentage of IDS coins staked compared to total balance."
     },
     "header": {
@@ -24,7 +24,7 @@
       "totalTvl": "Total TVL",
       "averageApy": "Average APY",
       "users": "Users",
-      "locked": "IDS Locking"
+      "locked": "IDS Locked"
     },
     "staking": {
       "stake": "Stake IDS Coin",

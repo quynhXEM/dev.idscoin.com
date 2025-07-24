@@ -7,7 +7,7 @@
       "tvl": "Total Value Locked (TVL) là tổng giá trị USD của tất cả IDS coin đang được khóa trong hệ thống.",
       "apy": "Average Annual Percentage Yield (Average APY) là giá trị trung bình tổng hợp từ mức lãi suất hàng năm của tất cả các giao dịch stake IDS coin.",
       "users": "Tổng số người dùng đã tham gia vào platform gồm cả tài khoản miễn phí lẫn tài khoản VIP.",
-      "locked": "Tổng số IDS coin đang được stake bởi tất cả người dùng.",
+      "locked": "Tổng số IDS coin đã được stake bởi tất cả người dùng.",
       "stakeProgress": "Tỷ lệ phần trăm IDS coin mà bạn đã stake so với tổng số dư."
     },
     "header": {
@@ -25,7 +25,7 @@
       "totalTvl": "Tổng TVL",
       "averageApy": "APY Trung bình",
       "users": "Người dùng",
-      "locked": "IDS đang khóa"
+      "locked": "IDS đã khóa"
     },
     "staking": {
       "stake": "Stake IDS Coin",

@@ -7,7 +7,7 @@ import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import Link from "next/link";
-import { formatNumber } from "@/libs/utils";
+import { formatNumber, roundDownDecimal } from "@/libs/utils";
 
 export const StakeHistory = () => {
   const t = useTranslations("home");
@@ -190,7 +190,7 @@ export const StakeHistory = () => {
                 <div className="text-sm text-gray-400">
                   {t("history.DaysApy", {
                     day: item.stake_lock_days,
-                    apy: Number(item.stake_apy).toFixed(0),
+                    apy: roundDownDecimal(item.stake_apy),
                   })}
                 </div>
               </div>
@@ -222,7 +222,7 @@ export const StakeHistory = () => {
                 <div className="text-sm text-gray-400">
                   {t("history.DaysApy", {
                     day: item.stake_lock_days,
-                    apy: Number(item.stake_apy).toFixed(0),
+                    apy: roundDownDecimal(item.stake_apy),
                   })}
                 </div>
               </div>

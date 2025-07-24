@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Gift, HandCoins, Loader2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { useNotification } from "@/commons/NotificationContext";
-import { timeFormat, formatNumber } from "@/libs/utils";
+import { timeFormat, formatNumber, roundDownDecimal } from "@/libs/utils";
 import { Separator } from "@/components/ui/separator";
 import { useAppMetadata } from "@/commons/AppMetadataContext";
 import { useUserWallet } from "@/commons/UserWalletContext";
@@ -309,7 +309,7 @@ const CommissionDetailsModal: React.FC<CommissionDetailsModalProps> = ({
                     </div>
                     <div className="text-right">
                       <div className="font-bold text-emerald-400">
-                        +${item.amount}
+                        +${formatNumber(item.amount)}
                       </div>
                     </div>
                   </div>
@@ -328,7 +328,7 @@ const CommissionDetailsModal: React.FC<CommissionDetailsModalProps> = ({
                 {t("referral.totalCommicsion")}:
               </span>
               <span className="font-semibold text-white">
-                {formatNumber(account?.commission?.all)} USDT
+                {formatNumber(roundDownDecimal(account?.commission?.all))} USDT
               </span>
             </div>
             <div className="flex justify-between">
@@ -336,7 +336,7 @@ const CommissionDetailsModal: React.FC<CommissionDetailsModalProps> = ({
                 {t("referral.withdrawCommicsion")}:
               </span>
               <span className="font-semibold text-blue-400">
-                {formatNumber(account?.commission?.withdraw)} USDT
+                {formatNumber(roundDownDecimal(account?.commission?.withdraw))} USDT
               </span>
             </div>
             <div className="flex justify-between">
@@ -344,9 +344,9 @@ const CommissionDetailsModal: React.FC<CommissionDetailsModalProps> = ({
                 {t("referral.activeCommission")}:
               </span>
               <span className="font-semibold text-white">
-                {formatNumber(
+                {formatNumber(roundDownDecimal(
                   Number(account?.commission?.all) +
-                    Number(account?.commission?.withdraw)
+                    Number(account?.commission?.withdraw))
                 )}{" "}
                 USDT
               </span>
@@ -396,8 +396,10 @@ const CommissionDetailsModal: React.FC<CommissionDetailsModalProps> = ({
               )}
               {t("referral.clamCommicsion", {
                 amount:
-                  Number(account?.commission?.all) +
-                    Number(account?.commission?.withdraw) || 0,
+                  roundDownDecimal(
+                    Number(account?.commission?.all) +
+                      Number(account?.commission?.withdraw)
+                  ) || 0,
               })}
             </Button>
             <Button

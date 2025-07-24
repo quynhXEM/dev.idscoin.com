@@ -50,7 +50,7 @@ export function roundToFirstSignificantDecimal(value: number | string) {
   const digits = Math.floor(Math.log10(abs));
   const decimals = digits >= 0 ? 1 : Math.abs(digits) + 1;
 
-  return Number(Number(value).toFixed(decimals));
+  return roundDownDecimal(Number(value), decimals);
 }
 
 /**
@@ -63,7 +63,12 @@ export function formatNumber(value: number | string, options?: { decimal?: boole
   const num = Number(value);
   if (isNaN(num)) return String(value);
   if (options?.decimal === false) {
-    return num.toLocaleString("en-US", { maximumFractionDigits: 0 });
+    return roundDownDecimal(num).toLocaleString("en-US", { maximumFractionDigits: 0 });
   }
-  return num.toLocaleString("en-US", { maximumFractionDigits: 2 });
+  return roundDownDecimal(num).toLocaleString("en-US", { maximumFractionDigits: 2 });
+}
+
+export function roundDownDecimal(number: number, decimalPlaces: number = 2) {
+  const factor = Math.pow(10, decimalPlaces);
+  return Math.floor(number * factor) / factor;
 }

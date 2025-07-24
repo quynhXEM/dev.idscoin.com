@@ -22,7 +22,7 @@ import {
 import { Zap, Lock, DollarSign, Wallet, Loader2 } from "lucide-react";
 import { useUserWallet } from "@/commons/UserWalletContext";
 import { useAppMetadata } from "@/commons/AppMetadataContext";
-import { formatNumber, roundToFirstSignificantDecimal } from "@/libs/utils";
+import { formatNumber, roundDownDecimal, roundToFirstSignificantDecimal } from "@/libs/utils";
 
 interface StakingInterfaceProps {
   t: (key: string) => string;
@@ -501,11 +501,11 @@ export function StakingInterface({
                   </span>
                   <span className="font-bold text-gray-900">
                     {stakeAmount && isConnected
-                      ? (
+                      ? roundDownDecimal(
                           (Number.parseFloat(stakeAmount) *
                             Number(stakingOptions[lockPeriod])) /
                           36500
-                        ).toFixed(2)
+                        )
                       : "0.0000"}{" "}
                     IDS
                   </span>

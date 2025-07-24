@@ -13,6 +13,7 @@ import React, {
 import { useNotification } from "@/commons/NotificationContext";
 import { useTranslations } from "next-intl";
 import { useAppMetadata } from "./AppMetadataContext";
+import { roundDownDecimal } from "@/libs/utils";
 export type SendTxParams = {
   chainId?: number;
   to: string;
@@ -521,9 +522,9 @@ export function UserWalletProvider({ children }: { children: ReactNode }) {
         }
         setBalance((prev) => ({
           ...prev,
-          ids: (Number(BigInt(balanceHex)) / 1e18).toFixed(2).toString(),
+          ids: roundDownDecimal(Number(BigInt(balanceHex)) / 1e18).toString(),
         }));
-        return (Number(BigInt(balanceHex)) / 1e18).toFixed(2).toString();
+        return roundDownDecimal(Number(BigInt(balanceHex)) / 1e18).toString();
       } else {
         // Lấy số dư token ERC20
         const methodId = "0x70a08231"; // balanceOf(address)
@@ -564,12 +565,10 @@ export function UserWalletProvider({ children }: { children: ReactNode }) {
         // (fix) xóa điều kiện này giữ lại để lấy số dư coin
         setBalance((prev) => ({
           ...prev,
-          usdt: (Number(BigInt(balanceHex)) / 10 ** decimals)
-            .toFixed(2)
+          usdt: roundDownDecimal(Number(BigInt(balanceHex)) / 10 ** decimals)
             .toString(),
         }));
-        return (Number(BigInt(balanceHex)) / 10 ** decimals)
-          .toFixed(2)
+        return roundDownDecimal(Number(BigInt(balanceHex)) / 10 ** decimals)
           .toString();
       }
     } catch (error) {
