@@ -133,7 +133,8 @@
       "detailsCommicsionDescription": "Thống kê chi tiết về hoa hồng USDT từ việc F1 nâng cấp VIP",
       "totalCommicsion": "Tổng hoa hồng",
       "withdrawCommicsion": "Đã rút",
-      "activeCommission": "Khả dụng"
+      "activeCommission": "Khả dụng",
+      "noCommissionHistory": "Không có lịch sử hoa hồng."
     },
     "vip": {
       "upgrade": "Nâng cấp VIP",

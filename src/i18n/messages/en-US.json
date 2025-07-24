@@ -132,7 +132,8 @@
       "detailsCommicsionDescription": "Detailed statistics of USDT commission from F1 upgrading to VIP",
       "totalCommicsion": "Total commission",
       "withdrawCommicsion": "Withdrawn",
-      "activeCommission": "Available"
+      "activeCommission": "Available",
+      "noCommissionHistory": "No commission history."
     },
     "vip": {
       "upgrade": "Upgrade VIP",

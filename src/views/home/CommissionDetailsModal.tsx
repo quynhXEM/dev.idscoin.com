@@ -122,8 +122,7 @@ const CommissionDetailsModal: React.FC<CommissionDetailsModalProps> = ({
                   rel="noopener noreferrer"
                 >
                   {t(`noti.clickHere`)}
-                </Link>
-                {" "}
+                </Link>{" "}
                 {t(`noti.walletErrorReport`)}{" "}
                 <span className="font-bold">{account?.wallet_address}</span>{" "}
                 {t(`noti.getSupport`)}
@@ -294,26 +293,32 @@ const CommissionDetailsModal: React.FC<CommissionDetailsModalProps> = ({
               {t("referral.commissionHistory")}
             </h3>
             <div className="space-y-3">
-              {txnCommicsion.map((item, index) => (
-                <div
-                  key={index}
-                  className="flex items-center justify-between p-3 bg-gray-800 rounded-lg border border-gray-700"
-                >
-                  <div>
-                    <div className="font-medium text-white">
-                      {timeFormat(item.date_created)}
+              {txnCommicsion.length != 0 ? (
+                txnCommicsion.map((item, index) => (
+                  <div
+                    key={index}
+                    className="flex items-center justify-between p-3 bg-gray-800 rounded-lg border border-gray-700"
+                  >
+                    <div>
+                      <div className="font-medium text-white">
+                        {timeFormat(item.date_created)}
+                      </div>
+                      <div className="text-sm text-gray-400">
+                        {item.description}
+                      </div>
                     </div>
-                    <div className="text-sm text-gray-400">
-                      {item.description}
+                    <div className="text-right">
+                      <div className="font-bold text-emerald-400">
+                        +${item.amount}
+                      </div>
                     </div>
                   </div>
-                  <div className="text-right">
-                    <div className="font-bold text-emerald-400">
-                      +${item.amount}
-                    </div>
-                  </div>
+                ))
+              ) : (
+                <div className="text-center text-gray-400 p-1">
+                  {t("referral.noCommissionHistory")}
                 </div>
-              ))}
+              )}
             </div>
           </div>
           <Separator className="bg-gray-700" />
