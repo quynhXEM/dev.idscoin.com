@@ -87,7 +87,7 @@ const InfoModal: React.FC<InfoModalProps> = ({ t, show, onClose }) => {
                   <span className="text-2xl">💬</span>
                 </div>
                 <div>
-                  <h3 className="text-xl font-bold text-white">Nobody Connect</h3>
+                  <h3 className="text-xl font-bold text-white">SOC Connect</h3>
                   <p className="text-purple-400 text-sm">
                     {t("products.chatNetwork")}
                   </p>
@@ -104,6 +104,14 @@ const InfoModal: React.FC<InfoModalProps> = ({ t, show, onClose }) => {
                   className="inline-flex items-center text-cyan-400 hover:text-cyan-300 font-semibold text-sm"
                 >
                   {t("products.android")}
+                </a>
+                <a
+                  href={`${process.env.NEXT_PUBLIC_CHAT_IOS_URL}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center text-cyan-400 hover:text-cyan-300 font-semibold text-sm"
+                >
+                  {t("products.ios")}
                 </a>
                 <a
                   href={`${process.env.NEXT_PUBLIC_CHAT_URL}`}
