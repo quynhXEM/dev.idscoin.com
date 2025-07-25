@@ -32,7 +32,7 @@ export const POST = async (request: Request) => {
       ),
       // stake_dont_claw_24h
       await fetchData(
-        `${process.env.NEXT_PUBLIC_API_URL}/items/txn?filter[status][_in]=completed&filter[amount][_gte]=0&filter[date_created][_gte]=${new Date(new Date().setHours(0,0)).toISOString()}&filter[member_id]=${id}&filter[app_id]=${process.env.NEXT_PUBLIC_APP_ID}&filter[type]=stake_reward&aggregate[sum]=amount`
+        `${process.env.NEXT_PUBLIC_API_URL}/items/txn?filter[status][_in]=completed&filter[amount][_gte]=0&filter[date_created][_gte]=${new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString()}&filter[member_id]=${id}&filter[app_id]=${process.env.NEXT_PUBLIC_APP_ID}&filter[type]=stake_reward&aggregate[sum]=amount`
       ),
       // stake_dont_claw_week
       await fetchData(

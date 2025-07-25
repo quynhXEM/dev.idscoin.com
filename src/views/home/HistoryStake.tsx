@@ -216,7 +216,7 @@ export const StakeHistory = () => {
               className="flex items-center justify-between p-3 bg-gray-800 rounded-lg border border-gray-700"
             >
               <div>
-                <div className="font-medium text-white">{item.amount} IDS</div>
+                <div className="font-medium text-white">{formatNumber(item.amount)} IDS</div>
                 <div className="text-sm text-gray-400">
                   {t("history.DaysApy", {
                     day: item.stake_lock_days,
