@@ -298,6 +298,7 @@ export function UserWalletProvider({ children }: { children: ReactNode }) {
             status: "completed",
           },
           limit: 1000,
+          fields: ["id", "date_created", "amount", "type", "member_id", "stake_apy", "stake_lock_days", "description", "children.id"],
         },
       }),
     })
@@ -306,6 +307,9 @@ export function UserWalletProvider({ children }: { children: ReactNode }) {
       .catch((err) => {
         return null;
       });
+
+      console.log(response);
+      
 
     return response;
   };

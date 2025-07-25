@@ -175,11 +175,9 @@ export const StakeHistory = () => {
 
   return (
     <div className="space-y-3">
-      {account?.stake_history?.map((item, key) => {
-        const date =
-          new Date().getDate() >
-          new Date(item?.date_created).getDate() + item?.stake_lock_days;
-        if (date)
+      {account?.stake_history?.map((item: any, key: any) => {
+        const date = (item?.stake_lock_days - item.children.length) > 0 ? item?.stake_lock_days - item.children.length : 0;
+        if (date == 0)
           return (
             <div
               key={key}
@@ -231,7 +229,7 @@ export const StakeHistory = () => {
                 className="border-blue-600 text-blue-400"
               >
                 <Clock className="w-3 h-3 mr-1" />
-                {t("history.DaysLeft", { day: item.stake_lock_days - date })}
+                {t("history.DaysLeft", { day: date })}
               </Badge>
             </div>
           );
