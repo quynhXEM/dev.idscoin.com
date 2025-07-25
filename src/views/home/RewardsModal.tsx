@@ -216,7 +216,7 @@ const RewardsModal: React.FC<RewardsModalProps> = ({
                     {t("rewards.today")}
                   </div>
                   <div className="text-sm text-gray-400">
-                    Stake {formatNumber(account?.stake?.stake_in)} IDS
+                    {t("rewards.reward24h")}
                   </div>
                 </div>
                 <div className="text-right">

@@ -297,6 +297,7 @@ export function UserWalletProvider({ children }: { children: ReactNode }) {
             type: "stake_in",
             status: "completed",
           },
+          sort: "date_created",
           limit: 1000,
           fields: ["id", "date_created", "amount", "type", "member_id", "stake_apy", "stake_lock_days", "description", "children.id"],
         },
