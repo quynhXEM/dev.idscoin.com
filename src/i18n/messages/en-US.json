@@ -267,7 +267,8 @@
       "web3ChainDifferent": "{chain} is disconnected. Please select a different chain to make transactions.",
       "clickHere": "Click here",
       "walletErrorReport": "to send an email to zero@nobody.network with the subject",
-      "getSupport": "to get the fastest support."
+      "getSupport": "to get the fastest support.",
+      "withdrawConfirm": "Your withdrawal has been confirmed. The assets will be transferred to your wallet within 24 hours."
     }
   }
 }

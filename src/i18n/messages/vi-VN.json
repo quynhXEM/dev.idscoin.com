@@ -268,7 +268,8 @@
       "web3ChainDifferent": "{chain} đang bị mất kết nối. Vui lòng chọn chain khác để giao dịch.",
       "clickHere": "Bấm vào đây",
       "walletErrorReport" : "để gửi email đến zero@nobody.network với tiêu đề là",
-      "getSupport" : "để được hỗ trợ nhanh nhất."
+      "getSupport" : "để được hỗ trợ nhanh nhất.",
+      "withdrawConfirm": "Lệnh rút của bạn đã được ghi nhận. Tài sản sẽ được chuyển về ví của bạn trong vòng 24h."
     }
   }
 }

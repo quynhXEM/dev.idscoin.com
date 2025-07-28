@@ -21,8 +21,6 @@ import {
   SelectContent,
   SelectItem,
 } from "@/components/ui/select";
-import { Label } from "@/components/ui/label";
-import Link from "next/link";
 
 interface CommissionDetailsModalProps {
   t: (key: string) => string;
@@ -50,6 +48,7 @@ const CommissionDetailsModal: React.FC<CommissionDetailsModalProps> = ({
   const [showChainModal, setShowChainModal] = useState(false);
   const [selectedChain, setSelectedChain] = useState<string>("");
   const [txnCommicsion, setTxnCommicsion] = useState<any[]>([]);
+  
   const handleCommicsion = async () => {
     if (txnCommicsion.length === 0) return;
     setLoading(true);
@@ -85,86 +84,7 @@ const CommissionDetailsModal: React.FC<CommissionDetailsModalProps> = ({
         setLoading(false);
         return;
       }
-      const txn = await fetch("/api/send/usdt", {
-        method: "POST",
-        body: JSON.stringify({
-          amount: amount,
-          rpc: usdt_payment_wallets_testnet[selectedChain].rpc_url,
-          token_address:
-            usdt_payment_wallets_testnet[selectedChain].token_address,
-          to: account?.wallet_address,
-          chain_id: Number(selectedChain),
-        }),
-      }).then((data) => data.json());
-      console.log(txn);
 
-      if (!txn.success) {
-        if (process.env.NODE_ENV == "development") {
-          console.log(txn);
-        }
-        if (txn.error == "web3ChainDifferent") {
-          notify({
-            title: t("noti.error"),
-            message: t(`noti.${txn.error}`, {
-              chain: usdt_payment_wallets_testnet[selectedChain].name,
-            }),
-            type: false,
-          });
-        } else {
-          notify({
-            title: t("noti.error"),
-            children: (
-              <span>
-                <Link
-                  className="underline"
-                  href={`mailto:zero@nobody.network?subject=[${account?.wallet_address}]`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  {t(`noti.clickHere`)}
-                </Link>{" "}
-                {t(`noti.walletErrorReport`)}{" "}
-                <span className="font-bold">{account?.wallet_address}</span>{" "}
-                {t(`noti.getSupport`)}
-              </span>
-            ),
-            type: false,
-          });
-        }
-
-        setLoading(false);
-        await fetch("/api/directus/request", {
-          method: "POST",
-          body: JSON.stringify({
-            type: "deleteItem",
-            collection: "txn",
-            id: clamCommission.result.id,
-          }),
-        });
-        return;
-      }
-      const clamCommission_update = await fetch("/api/directus/request", {
-        method: "POST",
-        body: JSON.stringify({
-          type: "updateItem",
-          collection: "txn",
-          id: clamCommission.result.id,
-          items: {
-            affect_balance: false,
-            external_ref: `${usdt_payment_wallets_testnet[selectedChain].explorer_url}/tx/${txn.txHash}`,
-          },
-        }),
-      }).then((data) => data.json());
-
-      if (!clamCommission_update.ok) {
-        notify({
-          title: t("noti.error"),
-          message: t("noti.withdrawUSDTError", { amount: amount }),
-          type: false,
-        });
-        setLoading(false);
-        return;
-      }
       setAccount((prev) => ({
         ...prev,
         commission: {
@@ -174,21 +94,7 @@ const CommissionDetailsModal: React.FC<CommissionDetailsModalProps> = ({
       }));
       notify({
         title: t("noti.success"),
-        children: (
-          <Link
-            href={`${usdt_payment_wallets_testnet[selectedChain].explorer_url}/tx/${txn.txHash}`}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            {t("noti.withdrawUSDTsuccess", {
-              amount: amount,
-              hash: "",
-            })}
-            <span className="text-blue-400 underline">
-              {txn.txHash.slice(0, 13)}
-            </span>
-          </Link>
-        ),
+        message: t("noti.withdrawConfirm"),
         type: true,
       });
       setLoading(false);
@@ -328,7 +234,7 @@ const CommissionDetailsModal: React.FC<CommissionDetailsModalProps> = ({
                 {t("referral.totalCommicsion")}:
               </span>
               <span className="font-semibold text-white">
-                {formatNumber(roundDownDecimal(account?.commission?.all))} USDT
+                {formatNumber(account?.commission?.all)} USDT
               </span>
             </div>
             <div className="flex justify-between">
@@ -336,7 +242,7 @@ const CommissionDetailsModal: React.FC<CommissionDetailsModalProps> = ({
                 {t("referral.withdrawCommicsion")}:
               </span>
               <span className="font-semibold text-blue-400">
-                {formatNumber(roundDownDecimal(account?.commission?.withdraw))} USDT
+                {-formatNumber(Number(account?.commission?.withdraw) * -1)} USDT
               </span>
             </div>
             <div className="flex justify-between">
