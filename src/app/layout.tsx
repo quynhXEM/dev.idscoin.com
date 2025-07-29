@@ -18,7 +18,7 @@ export default async function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <head>
         <link rel="icon" href={faviconUrl} />
-        <title>{metadata.name}</title>
+        <title>{metadata?.name}</title>
       </head>
       <body className={`${chakraPetch.variable} antialiased`}>
         {children}

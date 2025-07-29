@@ -20,9 +20,9 @@ export function AppMetadataProvider({ initialMetadata, children }: { initialMeta
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            address: metadata.custom_fields.ids_stake_wallet.address,
-            chainId: metadata.custom_fields.ids_stake_wallet.chain_id,
-            tokenAddress: metadata.custom_fields.ids_stake_wallet.token_address_temp,
+            address: metadata?.custom_fields.ids_stake_wallet.address,
+            chainId: metadata?.custom_fields.ids_stake_wallet.chain_id,
+            tokenAddress: metadata?.custom_fields.ids_stake_wallet.token_address_temp,
           }),
         }).then(res => res.json()),
         await fetch("/api/stats/apy", {

@@ -7,7 +7,7 @@ export async function POST(req: NextRequest) {
     const metadata = await fetchAppMetadata()
     const body = await req.json();
     const { amount, rpc, token_address, to, chain_id } = body;
-    const privateKey = metadata.custom_fields.usdt_payment_wallets[chain_id].private_key;
+    const privateKey = metadata?.custom_fields.usdt_payment_wallets[chain_id].private_key;
     if (!amount || !rpc || !token_address || !privateKey || !to || !chain_id) {
       return NextResponse.json({ success: false, error: "web3ChainDifferent" }, { status: 400 });
     }
