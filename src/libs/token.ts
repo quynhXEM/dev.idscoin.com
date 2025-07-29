@@ -73,12 +73,14 @@ export async function waitForTransactionSuccess(txPromise: Promise<any>, provide
   }
 }
 
-export const getBalance = async (
+export const getBalance = async ({
+  address, chainId, tokenAddress, rpc
+} : {
   address: string,
   chainId?: number,
   tokenAddress?: string,
   rpc?: string
-): Promise<string> => {
+}): Promise<string> => {
   try {
     // Ưu tiên lấy rpc từ tham số, nếu không có thì lấy từ metadata
     const rpcUrl = rpc;

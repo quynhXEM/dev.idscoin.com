@@ -12,7 +12,7 @@ export async function POST(req: NextRequest) {
     }
     // Ưu tiên rpc truyền vào, nếu không có thì lấy từ metadata
     const rpcUrl = rpc || metadata?.custom_fields?.ids_stake_wallet?.rpc_url;
-    const balance = await getBalance(address, chainId, tokenAddress, rpcUrl);
+    const balance = await getBalance({address, chainId, tokenAddress, rpc: rpcUrl});
     return NextResponse.json({ balance });
   } catch (error: any) {
     return NextResponse.json({ error: error.message || "Lỗi không xác định" }, { status: 500 });
