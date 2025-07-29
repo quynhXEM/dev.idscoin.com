@@ -67,17 +67,17 @@ export function StakingInterface({
     loading
   } = useUserWallet();
 
-  useEffect(() => {
-    if (!isConnected || !wallet || !selectedChain) return;
-    getBalance(
-      wallet.address,
-      Number(selectedChain),
-      usdt_payment_wallets[
-        selectedChain as keyof typeof usdt_payment_wallets
-      ].token_address
-    );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedChain, wallet]);
+  // useEffect(() => {
+  //   if (!isConnected || !wallet || !selectedChain) return;
+  //   getBalance(
+  //     wallet.address,
+  //     Number(selectedChain),
+  //     usdt_payment_wallets[
+  //       selectedChain as keyof typeof usdt_payment_wallets
+  //     ].token_address
+  //   );
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [selectedChain, wallet]);
 
   const errorNotiTransaction = ({
     error,

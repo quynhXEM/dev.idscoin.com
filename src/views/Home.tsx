@@ -65,17 +65,17 @@ export default function IDSStakingPlatform() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  useEffect(() => {
-    if (!isConnected || !wallet || !vipSelectedChain) return;
-    getBalance(
-      wallet.address,
-      Number(vipSelectedChain),
-      usdt_payment_wallets[
-        vipSelectedChain as keyof typeof usdt_payment_wallets
-      ].token_address
-    );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [vipSelectedChain]);
+  // useEffect(() => {
+  //   if (!isConnected || !wallet || !vipSelectedChain) return;
+  //   getBalance(
+  //     wallet.address,
+  //     Number(vipSelectedChain),
+  //     usdt_payment_wallets[
+  //       vipSelectedChain as keyof typeof usdt_payment_wallets
+  //     ].token_address
+  //   );
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [vipSelectedChain]);
 
   const tooltips = {
     tvl: t("tooltips.tvl"),
