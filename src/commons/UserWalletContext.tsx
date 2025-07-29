@@ -109,10 +109,6 @@ export function UserWalletProvider({ children }: { children: ReactNode }) {
     getWalletInfo();
   }, [wallet]);
 
-  useEffect(() => {
-    console.log("loading", loading);
-  }, [loading]);
-
   const disconnect = () => setWallet(null);
 
   // Lỗi thêm 2 ví cùng lúc ( khôgn có ví, co người giới thiệu)
@@ -308,10 +304,37 @@ export function UserWalletProvider({ children }: { children: ReactNode }) {
         return null;
       });
 
-      console.log(response);
-      
+    console.log(response);
+
 
     return response;
+  };
+
+  // Hàm thêm mạng 123999 vào ví
+  const addNetwork123999 = async (provider: any) => {
+    const chainId = 123999;
+    const hexChainId = "0x" + chainId.toString(16);
+    try {
+      await provider.request({
+        method: "wallet_addEthereumChain",
+        params: [
+          {
+            chainId: hexChainId, // 123999
+            chainName: "Nobody Chain",
+            nativeCurrency: {
+              name: "IDS",
+              symbol: "IDS",
+              decimals: 18,
+            },
+            rpcUrls: ["https://a-rpc.nobody.network"],
+            blockExplorerUrls: ["https://a-scan.nobody.network"],
+          },
+        ],
+      });
+      return true;
+    } catch (err) {
+      return true;
+    }
   };
 
   const connectWallet = async () => {
@@ -326,6 +349,67 @@ export function UserWalletProvider({ children }: { children: ReactNode }) {
     setLoading(true);
     try {
       const provider = (window as any).ethereum;
+      // Ép buộc mạng chainId 123999
+      const targetChainId = 123999;
+      const targetChainIdHex = "0x" + targetChainId.toString(16);
+      let currentChainId = await provider.request({ method: "eth_chainId" });
+      if (currentChainId !== targetChainIdHex) {
+        try {
+          await provider.request({
+            method: "wallet_switchEthereumChain",
+            params: [{ chainId: targetChainIdHex }],
+          });
+        } catch (switchError: any) {
+          if (switchError?.code === 4902) {
+            // Nếu chưa có mạng, tự động thêm mạng 123999
+            const added = await addNetwork123999(provider);
+            if (added) {
+              // Sau khi thêm, thử chuyển lại
+              try {
+                await provider.request({
+                  method: "wallet_switchEthereumChain",
+                  params: [{ chainId: targetChainIdHex }],
+                });
+              } catch (err) {
+                notify({
+                  title: t("noti.web3Error"),
+                  message: "Không thể chuyển sang mạng 123999 sau khi thêm!",
+                  type: false,
+                });
+                setLoading(false);
+                return;
+              }
+            } else {
+              notify({
+                title: t("noti.web3Error"),
+                message: "Không thể thêm mạng 123999 vào ví!",
+                type: false,
+              });
+              setLoading(false);
+              return;
+            }
+          } else {
+            notify({
+              title: t("noti.web3Error"),
+              message: "Vui lòng thêm mạng 123999 vào ví của bạn!", // Có thể custom lại message
+              type: false,
+            });
+            setLoading(false);
+            return;
+          }
+        }
+        // Sau khi chuyển mạng, lấy lại chainId
+        currentChainId = await provider.request({ method: "eth_chainId" });
+        if (currentChainId !== targetChainIdHex) {
+          notify({
+            title: t("noti.web3Error"),
+            message: "Không thể chuyển sang mạng 123999!",
+            type: false,
+          });
+          setLoading(false);
+          return;
+        }
+      }
       const accounts = await provider.request({
         method: "eth_requestAccounts",
       });
@@ -390,7 +474,7 @@ export function UserWalletProvider({ children }: { children: ReactNode }) {
             if (
               switchError.code === 4902 &&
               usdt_payment_wallets[
-                chainId as keyof typeof usdt_payment_wallets
+              chainId as keyof typeof usdt_payment_wallets
               ]
             ) {
               // Nếu chưa có mạng, thêm mạng vào MetaMask
@@ -398,7 +482,7 @@ export function UserWalletProvider({ children }: { children: ReactNode }) {
                 method: "wallet_addEthereumChain",
                 params: [
                   usdt_payment_wallets[
-                    chainId as keyof typeof usdt_payment_wallets
+                  chainId as keyof typeof usdt_payment_wallets
                   ],
                 ],
               });
