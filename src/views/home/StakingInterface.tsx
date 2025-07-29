@@ -46,7 +46,7 @@ export function StakingInterface({
   const [isloadding, setIsloadding] = useState(false);
   const [stakeAmount, setStakeAmount] = useState("");
   const [lockPeriod, setLockPeriod] = useState("360");
-  const [selectedChain, setSelectedChain] = useState("1");
+  const [selectedChain, setSelectedChain] = useState("56");
   const [swapAmount, setSwapAmount] = useState("");
   const {
     custom_fields: {

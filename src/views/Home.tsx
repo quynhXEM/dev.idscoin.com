@@ -28,7 +28,7 @@ export default function IDSStakingPlatform() {
   const [showCommissionModal, setShowCommissionModal] = useState(false);
   const [showRewardsModal, setShowRewardsModal] = useState(false);
   const [showInfoModal, setShowInfoModal] = useState(false);
-  const [vipSelectedChain, setVipSelectedChain] = useState("1");
+  const [vipSelectedChain, setVipSelectedChain] = useState("56");
   const { connectWallet, getBalance, isConnected, wallet, disconnect, setLoading } =
     useUserWallet();
 
