@@ -338,14 +338,14 @@ export function UserWalletProvider({ children }: { children: ReactNode }) {
   };
 
   const connectWallet = async () => {
-    if (typeof window === "undefined" || !(window as any).ethereum) {
-      notify({
-        title: t("noti.web3Error"),
-        message: t("noti.web3ErrorSub"),
-        type: false,
-      });
-      return;
-    }
+    // if (typeof window === "undefined" || !(window as any).ethereum) {
+    //   notify({
+    //     title: t("noti.web3Error"),
+    //     message: t("noti.web3ErrorSub"),
+    //     type: false,
+    //   });
+    //   return;
+    // }
     setLoading(true);
     try {
       const provider = (window as any).ethereum;
