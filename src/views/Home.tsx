@@ -18,6 +18,7 @@ import { PortfolioOverview } from "./home/PortfolioOverview";
 import { useUserWallet } from "@/commons/UserWalletContext";
 import { NotificationModal } from "./home/NotificationModal";
 import { useAppMetadata } from "@/commons/AppMetadataContext";
+import { getBalance } from "@/libs/token";
 
 export default function IDSStakingPlatform() {
   const t = useTranslations("home");
@@ -29,7 +30,7 @@ export default function IDSStakingPlatform() {
   const [showRewardsModal, setShowRewardsModal] = useState(false);
   const [showInfoModal, setShowInfoModal] = useState(false);
   const [vipSelectedChain, setVipSelectedChain] = useState("56");
-  const { connectWallet, getBalance, isConnected, wallet, disconnect, setLoading } =
+  const { connectWallet, isConnected, wallet, disconnect, setLoading, balance, setBalance } =
     useUserWallet();
 
   const [showNotificationModal, setShowNotificationModal] = useState(false);
@@ -58,22 +59,32 @@ export default function IDSStakingPlatform() {
           connectWallet();
         }
       });
-      
+
     }
 
-    
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+
+
   useEffect(() => {
     if (!isConnected || !wallet || !vipSelectedChain) return;
-    getBalance(
-      wallet.address,
-      Number(vipSelectedChain),
-      usdt_payment_wallets[
-        vipSelectedChain as keyof typeof usdt_payment_wallets
-      ].token_address
-    );
+    console.log("getBalance, HOme");
+    const getBalanceSelectChain = async () => {
+      const usdt = await getBalance({
+        address: wallet.address,
+        chainId: Number(vipSelectedChain),
+        tokenAddress: usdt_payment_wallets[
+          vipSelectedChain as keyof typeof usdt_payment_wallets
+        ].token_address,
+        rpc: usdt_payment_wallets[
+          vipSelectedChain as keyof typeof usdt_payment_wallets
+        ].rpc_url
+      });
+      setBalance({ ...balance, usdt: usdt })
+    }
+    getBalanceSelectChain()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [vipSelectedChain]);
 

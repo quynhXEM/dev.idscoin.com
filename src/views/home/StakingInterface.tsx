@@ -23,6 +23,7 @@ import { Zap, Lock, DollarSign, Wallet, Loader2 } from "lucide-react";
 import { useUserWallet } from "@/commons/UserWalletContext";
 import { useAppMetadata } from "@/commons/AppMetadataContext";
 import { formatNumber, roundDownDecimal, roundToFirstSignificantDecimal } from "@/libs/utils";
+import { getBalance } from "@/libs/token";
 
 interface StakingInterfaceProps {
   t: (key: string) => string;
@@ -61,21 +62,30 @@ export function StakingInterface({
     sendTransaction,
     wallet,
     balance,
-    getBalance,
+    setBalance,
     account,
     setAccount,
     loading
   } = useUserWallet();
 
+  const getBalanceSelectChain = async () => {
+    const usdt = await getBalance({
+      address: wallet?.address || "",
+      chainId: Number(selectedChain),
+      tokenAddress: usdt_payment_wallets[
+        selectedChain as keyof typeof usdt_payment_wallets
+      ].token_address,
+      rpc: usdt_payment_wallets[
+        selectedChain as keyof typeof usdt_payment_wallets
+      ].rpc_url
+    });
+    setBalance({ ...balance, usdt: usdt })
+  }
+
   useEffect(() => {
     if (!isConnected || !wallet || !selectedChain) return;
-    getBalance(
-      wallet.address,
-      Number(selectedChain),
-      usdt_payment_wallets[
-        selectedChain as keyof typeof usdt_payment_wallets
-      ].token_address
-    );
+
+    getBalanceSelectChain();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedChain, wallet]);
 
@@ -120,9 +130,9 @@ export function StakingInterface({
         title: t("noti.error"),
         message: type
           ? t("noti.stakeError", {
-              amount: stakeAmount,
-              days: lockPeriod,
-            })
+            amount: stakeAmount,
+            days: lockPeriod,
+          })
           : t("noti.swapError", { amount: swapAmount, ids: swapAmount }),
         type: false,
       });
@@ -156,7 +166,7 @@ export function StakingInterface({
       type: "coin", // (fix) chuyển thành coin
       chainId: ids_stake_wallet.chain_id,
     })
-      .then((txHash) => txHash ? ({ ok: true, result: txHash }) : ({ ok: false, result: {code : 2330} }))
+      .then((txHash) => txHash ? ({ ok: true, result: txHash }) : ({ ok: false, result: { code: 2330 } }))
       .catch((error) => ({ ok: false, result: error }));
 
     if (!transaction.ok) {
@@ -219,10 +229,12 @@ export function StakingInterface({
       },
     }))
     // (fix) lấy coin xóa token address
-    await getBalance(
-      account?.wallet_address || "",
-      ids_distribution_wallet.chain_id,
-    );
+    const newBalance = await getBalance({
+      address: account?.wallet_address || "",
+      chainId: ids_distribution_wallet.chain_id,
+      rpc: ids_distribution_wallet.rpc_url
+    });
+    setBalance({ ...balance, ids: newBalance })
   };
 
   const handleSwap = async () => {
@@ -258,9 +270,9 @@ export function StakingInterface({
         usdt_payment_wallets[
           selectedChain as keyof typeof usdt_payment_wallets
         ].token_address,
-    }).then(result => result ? ({ ok: true, result }) : ({ ok: false, result: {code : 2330} }))
-    .catch(err => ({ ok: false, result: err }))
-    
+    }).then(result => result ? ({ ok: true, result }) : ({ ok: false, result: { code: 2330 } }))
+      .catch(err => ({ ok: false, result: err }))
+
     if (!txHash.ok) {
       errorNotiTransaction({ error: txHash.result, type: false });
       setIsloadding(false);
@@ -285,7 +297,7 @@ export function StakingInterface({
         },
       }),
     }).then((data) => data.json());
-    
+
     if (!SendTXN.ok) {
       setNotificationData({
         title: t("noti.error"),
@@ -298,7 +310,7 @@ export function StakingInterface({
       setIsloadding(false);
       return;
     }
-    
+
     // Yêu cầu nhận token
     const res = await fetch("/api/send/coin", {
       method: "POST",
@@ -310,7 +322,7 @@ export function StakingInterface({
     });
     const data = await res.json();
     const txHashReceive = data.success ? data.txHash : null;
-    
+
     if (!txHashReceive) {
       setNotificationData({
         title: t("noti.error"),
@@ -364,24 +376,30 @@ export function StakingInterface({
     });
     setShowNotificationModal(true);
     setIsloadding(false);
-    await getBalance(
-      wallet?.address || account?.wallet_address || "",
-      Number(selectedChain),
-      usdt_payment_wallets[
+
+    const usdt = await getBalance({
+      address: wallet?.address || account?.wallet_address || "",
+      chainId: Number(selectedChain),
+      tokenAddress: usdt_payment_wallets[
         selectedChain as keyof typeof usdt_payment_wallets
       ].token_address
-    );
-    const inisiaSate = await getBalance(
-      account?.wallet_address || "",
-      ids_distribution_wallet.chain_id,
-    );
+    });
+    setBalance({...balance, usdt: usdt});
+
+    const inisiaSate = await getBalance({
+      address: account?.wallet_address || "",
+      chainId: ids_distribution_wallet.chain_id,
+      rpc: ids_distribution_wallet.rpc_url
+    });
     // (fix) lấy coin xóa token address
     const intervalIDS = setInterval(async () => {
-      const a = await getBalance(
-        account?.wallet_address || "",
-        ids_distribution_wallet.chain_id,
-      );
+      const a = await getBalance({
+        address: account?.wallet_address || "",
+        chainId: ids_distribution_wallet.chain_id,
+        rpc: ids_distribution_wallet.rpc_url
+      });
       if (a > inisiaSate) {
+        setBalance({...balance, ids: a})
         clearInterval(intervalIDS);
       }
     }, 1000);
@@ -474,11 +492,10 @@ export function StakingInterface({
                       disabled={isloadding || loading}
                       variant={lockPeriod === days ? "default" : "outline"}
                       onClick={() => setLockPeriod(days)}
-                      className={`h-12 cursor-pointer ${
-                        lockPeriod === days
-                          ? "bg-gray-900 hover:bg-gray-800 text-white font-bold border-gray-900"
-                          : "border-gray-800 text-gray-900 hover:bg-gray-900 hover:text-white hover:border-gray-900 bg-white/80 font-semibold"
-                      }`}
+                      className={`h-12 cursor-pointer ${lockPeriod === days
+                        ? "bg-gray-900 hover:bg-gray-800 text-white font-bold border-gray-900"
+                        : "border-gray-800 text-gray-900 hover:bg-gray-900 hover:text-white hover:border-gray-900 bg-white/80 font-semibold"
+                        }`}
                     >
                       <div className="text-center">
                         <div className="font-semibold">
@@ -501,10 +518,10 @@ export function StakingInterface({
                   <span className="font-bold text-gray-900">
                     {stakeAmount && isConnected
                       ? roundDownDecimal(
-                          (Number.parseFloat(stakeAmount) *
-                            Number(stakingOptions[lockPeriod])) /
-                          36500
-                        )
+                        (Number.parseFloat(stakeAmount) *
+                          Number(stakingOptions[lockPeriod])) /
+                        36500
+                      )
                       : "0.0000"}{" "}
                     IDS
                   </span>
@@ -665,9 +682,8 @@ export function StakingInterface({
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <div
-                      className={`w-2 h-2 rounded-full ${
-                        isConnected ? "bg-green-500" : "bg-red-500"
-                      }`}
+                      className={`w-2 h-2 rounded-full ${isConnected ? "bg-green-500" : "bg-red-500"
+                        }`}
                     ></div>
                     <span className="text-sm text-gray-900 font-medium">
                       {isConnected

@@ -5,9 +5,9 @@ import { Badge } from "@/components/ui/badge";
 import { Clock, Gift, HandCoins, Loader2, Shield } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
-import { Skeleton } from "@/components/ui/skeleton";
 import Link from "next/link";
 import { formatNumber, roundDownDecimal } from "@/libs/utils";
+import { getBalance } from "@/libs/token";
 
 export const StakeHistory = () => {
   const t = useTranslations("home");
@@ -17,8 +17,7 @@ export const StakeHistory = () => {
   const [loadingAction, setLoadingAction] = useState<boolean>(false);
   const [itemLoading, setItemLoading] = useState<any>(null);
   const { notify } = useNotification();
-  const { wallet, getBalance, loading, setAccount, account } =
-    useUserWallet();
+  const { wallet, balance, setBalance, loading, setAccount, account } = useUserWallet();
 
   const handleColectIDS = async (item: any) => {
     if (loadingAction) return;
@@ -156,11 +155,12 @@ export const StakeHistory = () => {
     }
 
     setLoadingAction(false);
-    // (fix) lấy coin xóa token address
-    await getBalance(
-      wallet?.address || "",
-      ids_distribution_wallet.chain_id
-    );
+    const newBalance = await getBalance({
+      address: wallet?.address || "",
+      chainId: ids_distribution_wallet.chain_id,
+      rpc: ids_distribution_wallet.rpc_url
+    });
+    setBalance({...balance, ids: newBalance})
   };
 
   if (!loading && account?.stake_history?.length == 0) {
