@@ -100,14 +100,14 @@ export function UserWalletProvider({ children }: { children: ReactNode }) {
   const { notify } = useNotification();
   const isCreatingMemberRef = useRef(false);
 
-  useEffect(() => {
-    if (!wallet) return;
-    const getWalletInfo = async () => {
-      // Lấy số dư coin => (fix) xóa địa chỉ token
-      await getBalance(wallet.address, ids_distribution_wallet.chain_id);
-    };
-    getWalletInfo();
-  }, [wallet]);
+  // useEffect(() => {
+  //   if (!wallet) return;
+  //   const getWalletInfo = async () => {
+  //     // Lấy số dư coin => (fix) xóa địa chỉ token
+  //     await getBalance(wallet.address, ids_distribution_wallet.chain_id);
+  //   };
+  //   getWalletInfo();
+  // }, [wallet]);
 
   const disconnect = () => setWallet(null);
 
