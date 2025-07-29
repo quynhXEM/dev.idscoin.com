@@ -14,7 +14,6 @@ import { useNotification } from "@/commons/NotificationContext";
 import { useTranslations } from "next-intl";
 import { useAppMetadata } from "./AppMetadataContext";
 import { getBalance } from "@/libs/token";
-import { roundDownDecimal } from "@/libs/utils";
 export type SendTxParams = {
   chainId?: number;
   to: string;
@@ -37,7 +36,7 @@ export type WalletContextType = {
   connectWallet: () => void;
   sendTransaction: (params: SendTxParams) => Promise<any>;
   balance: { ids: string; usdt: string };
-  setBalance: (balance: { ids: any; usdt: any }) => void;
+  setBalance: (balance: { [key: string]: any }) => void;
   account: {
     id: string;
     status: string;
@@ -73,7 +72,7 @@ export function UserWalletProvider({ children }: { children: ReactNode }) {
     },
   } = useAppMetadata();
   const t = useTranslations("home");
-  const [balance, setBalance] = useState<{ ids: string; usdt: string }>({
+  const [balance, setBalanceState] = useState<{ ids: string; usdt: string }>({
     ids: "0",
     usdt: "0",
   });
@@ -97,20 +96,24 @@ export function UserWalletProvider({ children }: { children: ReactNode }) {
   const { notify } = useNotification();
   const isCreatingMemberRef = useRef(false);
 
+  const setBalance = (value: any) => {
+    setBalanceState(prev => ({...prev, ...value}));
+  }
+
   useEffect(() => {
     if (!wallet) return;
     
     const getWalletInfo = async () => {
-      const balance = await getBalance({address: wallet.address, chainId: ids_distribution_wallet.chain_id, rpc: ids_distribution_wallet.rpc_url});
-      setBalance(prev => ({
-        ...prev,
-        ids: balance,
-      }));
-
-      // getBalanceTest(wallet.address, ids_distribution_wallet.chain_id, ids_distribution_wallet.rpc_url);
+      const balanceids = await getBalance({address: wallet.address, chainId: ids_distribution_wallet.chain_id, rpc: ids_distribution_wallet.rpc_url});
+      console.log( balanceids);
+      setBalance({...balance, ids: balanceids});
     };
     getWalletInfo();
   }, [wallet]);
+
+  useEffect(() => {
+    console.log(balance);
+  }, [balance]);
 
   const disconnect = () => setWallet(null);
 
@@ -307,9 +310,6 @@ export function UserWalletProvider({ children }: { children: ReactNode }) {
         return null;
       });
 
-    console.log(response);
-
-
     return response;
   };
 
@@ -429,106 +429,6 @@ export function UserWalletProvider({ children }: { children: ReactNode }) {
       setLoading(false);
     }
   };
-  
-
-  // Hàm lấy số dư coin hoặc token
-  // const getBalanceTest = async (
-  //   address: string,
-  //   chainId?: number,
-  //   tokenAddress?: string
-  // ): Promise<string> => {
-  //   if (typeof window === "undefined" || !(window as any).ethereum) {
-  //     throw new Error("Không tìm thấy provider");
-  //   }
-  //   try {
-  //     const provider = (window as any).ethereum;
-
-  //     // Chuyển chain nếu cần
-  //     if (chainId) {
-  //       const currentChain = await provider.request({ method: "eth_chainId" });
-  //       if (parseInt(currentChain, 16) !== chainId) {
-  //         await provider.request({
-  //           method: "wallet_switchEthereumChain",
-  //           params: [
-  //             {
-  //               chainId:
-  //                 usdt_payment_wallets[
-  //                   chainId as keyof typeof usdt_payment_wallets
-  //                 ]?.chainId || "0x" + chainId.toString(16),
-  //             },
-  //           ],
-  //         });
-  //       }
-  //     }
-
-  //     if (!tokenAddress) {
-  //       // Lấy số dư coin
-  //       const balanceHex = await provider.request({
-  //         method: "eth_getBalance",
-  //         params: [address, "latest"],
-  //       });
-  //       if (!balanceHex || balanceHex === "0x") {
-          
-  //         return "0.00";
-  //       }
-       
-  //       return roundDownDecimal(Number(BigInt(balanceHex)) / 1e18).toString();
-  //     } else {
-  //       // Lấy số dư token ERC20
-  //       const methodId = "0x70a08231"; // balanceOf(address)
-  //       const addressPadded = address.replace("0x", "").padStart(64, "0");
-  //       const data = methodId + addressPadded;
-
-  //       const balanceHex = await provider.request({
-  //         method: "eth_call",
-  //         params: [
-  //           {
-  //             to: tokenAddress,
-  //             data,
-  //           },
-  //           "latest",
-  //         ],
-  //       });
-  //       if (!balanceHex || balanceHex === "0x") {
-  //         // (fix) xóa điều kiện này giữ lại để lấy số dư coin
-         
-  //         return "0.00";
-  //       }
-  //       // Lấy số thập phân của token
-  //       const decimalsData = "0x313ce567"; // decimals()
-  //       const decimalsHex = await provider.request({
-  //         method: "eth_call",
-  //         params: [
-  //           {
-  //             to: tokenAddress,
-  //             data: decimalsData,
-  //           },
-  //           "latest",
-  //         ],
-  //       });
-  //       const decimals = parseInt(decimalsHex, 16);
-  //       // (fix) xóa điều kiện này giữ lại để lấy số dư coin
-       
-  //       return roundDownDecimal(Number(BigInt(balanceHex)) / 10 ** decimals)
-  //         .toString();
-  //     }
-  //   } catch (error) {
-  //     if (error?.code == "4902") {
-  //       // notify({
-  //       //   title: t("noti.web3Error"),
-  //       //   message: t("noti.web3ChainNotFound", {chain: usdt_payment_wallets[chainId as keyof typeof usdt_payment_wallets]?.name}),
-  //       //   type: false,
-  //       // });
-  //     } else {
-  //       notify({
-  //         title: t("noti.web3Error"),
-  //         message: t("noti.web3BalanceError"),
-  //         type: false,
-  //       });
-  //     }
-  //     return "0";
-  //   }
-  // };
 
   // Thêm hàm chờ xác nhận giao dịch
   async function waitForTransactionReceipt(

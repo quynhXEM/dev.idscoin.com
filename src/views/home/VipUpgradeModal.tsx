@@ -48,8 +48,6 @@ const VipUpgradeModal: React.FC<VipUpgradeModalProps> = ({
   if (!show) return;
 
   const errorNotiTransaction = (error: any) => {
-    console.log(error);
-    
     const code = error.code;
     if (code == "4001") {
       setNotificationData({

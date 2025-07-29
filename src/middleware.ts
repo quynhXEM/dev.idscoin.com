@@ -28,6 +28,24 @@ export default async function middleware(req: NextRequest) {
     | "en-US"
     | undefined;
 
+  // Nếu pathLocale không hợp lệ (không phải vi-VN hoặc en-US), redirect sang /[locale]/...
+  if (pathLocale !== "vi-VN" && pathLocale !== "en-US") {
+    let locale = cookieLocale;
+    if (!locale) {
+      let ip = req.headers.get("x-forwarded-for") || "";
+      if (ip.includes(",")) ip = ip.split(",")[0];
+      let countryCode: string | null = null;
+      try {
+        countryCode = await getCountryCodeFromIp(ip);
+      } catch {}
+      locale = getLocaleFromCountry(countryCode);
+    }
+    const url = req.nextUrl.clone();
+    url.pathname = `/${locale}${req.nextUrl.pathname}`;
+    // Giữ nguyên query string nếu có
+    return NextResponse.redirect(url);
+  }
+
   if (!cookieLocale) {
     // Nếu không có, lấy từ IP
     let ip = req.headers.get("x-forwarded-for") || "";

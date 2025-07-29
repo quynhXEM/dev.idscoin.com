@@ -61,8 +61,6 @@ export default function IDSStakingPlatform() {
       });
 
     }
-
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -70,7 +68,6 @@ export default function IDSStakingPlatform() {
 
   useEffect(() => {
     if (!isConnected || !wallet || !vipSelectedChain) return;
-    console.log("getBalance, HOme");
     const getBalanceSelectChain = async () => {
       const usdt = await getBalance({
         address: wallet.address,
@@ -86,7 +83,7 @@ export default function IDSStakingPlatform() {
     }
     getBalanceSelectChain()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [vipSelectedChain]);
+  }, [vipSelectedChain, wallet]);
 
   const tooltips = {
     tvl: t("tooltips.tvl"),

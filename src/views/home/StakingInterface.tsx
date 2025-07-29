@@ -384,7 +384,7 @@ export function StakingInterface({
         selectedChain as keyof typeof usdt_payment_wallets
       ].token_address
     });
-    setBalance({...balance, usdt: usdt});
+    setBalance({ ...balance, usdt: usdt });
 
     const inisiaSate = await getBalance({
       address: account?.wallet_address || "",
@@ -399,7 +399,7 @@ export function StakingInterface({
         rpc: ids_distribution_wallet.rpc_url
       });
       if (a > inisiaSate) {
-        setBalance({...balance, ids: a})
+        setBalance({ ...balance, ids: a })
         clearInterval(intervalIDS);
       }
     }, 1000);
