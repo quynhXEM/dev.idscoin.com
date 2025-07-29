@@ -22,13 +22,13 @@ import { useAppMetadata } from "@/commons/AppMetadataContext";
 export default function IDSStakingPlatform() {
   const t = useTranslations("home");
   const {
-    custom_fields: { usdt_payment_wallets, usdt_payment_wallets_testnet },
+    custom_fields: { usdt_payment_wallets },
   } = useAppMetadata();
   const [showVipModal, setShowVipModal] = useState(false);
   const [showCommissionModal, setShowCommissionModal] = useState(false);
   const [showRewardsModal, setShowRewardsModal] = useState(false);
   const [showInfoModal, setShowInfoModal] = useState(false);
-  const [vipSelectedChain, setVipSelectedChain] = useState("97");
+  const [vipSelectedChain, setVipSelectedChain] = useState("1");
   const { connectWallet, getBalance, isConnected, wallet, disconnect, setLoading } =
     useUserWallet();
 
@@ -70,8 +70,8 @@ export default function IDSStakingPlatform() {
     getBalance(
       wallet.address,
       Number(vipSelectedChain),
-      usdt_payment_wallets_testnet[
-        vipSelectedChain as keyof typeof usdt_payment_wallets_testnet
+      usdt_payment_wallets[
+        vipSelectedChain as keyof typeof usdt_payment_wallets
       ].token_address
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps

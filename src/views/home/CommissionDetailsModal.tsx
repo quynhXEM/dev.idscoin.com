@@ -41,8 +41,8 @@ const CommissionDetailsModal: React.FC<CommissionDetailsModalProps> = ({
   const { notify } = useNotification();
   const { account, setAccount } = useUserWallet();
   const {
-    custom_fields: { usdt_payment_wallets_testnet } = {
-      usdt_payment_wallets_testnet: {},
+    custom_fields: { usdt_payment_wallets } = {
+      usdt_payment_wallets: {},
     },
   } = useAppMetadata();
   const [showChainModal, setShowChainModal] = useState(false);
@@ -67,10 +67,10 @@ const CommissionDetailsModal: React.FC<CommissionDetailsModalProps> = ({
             app_id: "db2a722c-59e2-445c-b89e-7b692307119a",
             member_id: account?.id,
             amount: -amount,
-            currency: `USDT ${usdt_payment_wallets_testnet[selectedChain].name}`,
+            currency: `USDT ${usdt_payment_wallets[selectedChain].name}`,
             type: "withdraw",
             affect_balance: true,
-            description: `Withdraw ${amount} USDT ${usdt_payment_wallets_testnet[selectedChain].name} commission`,
+            description: `Withdraw ${amount} USDT ${usdt_payment_wallets[selectedChain].name} commission`,
           },
         }),
       }).then((data) => data.json());
@@ -341,8 +341,8 @@ const CommissionDetailsModal: React.FC<CommissionDetailsModalProps> = ({
                     <SelectValue placeholder={t("vip.selectChain")} />
                   </SelectTrigger>
                   <SelectContent className="bg-gray-800 border-gray-700 text-white">
-                    {usdt_payment_wallets_testnet &&
-                      Object.entries(usdt_payment_wallets_testnet).map(
+                    {usdt_payment_wallets &&
+                      Object.entries(usdt_payment_wallets).map(
                         ([key, value]) => {
                           const v = value as { name: string };
                           return (

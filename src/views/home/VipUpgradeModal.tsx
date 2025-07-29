@@ -41,7 +41,7 @@ const VipUpgradeModal: React.FC<VipUpgradeModalProps> = ({
 }) => {
   const { sendTransaction, account, getVipStatus, setAccount } = useUserWallet();
   const {
-    custom_fields: { usdt_payment_wallets, usdt_payment_wallets_testnet },
+    custom_fields: { usdt_payment_wallets },
     icon,
   } = useAppMetadata();
   const [isloading, setIsLoading] = useState<boolean>(false);
@@ -62,8 +62,8 @@ const VipUpgradeModal: React.FC<VipUpgradeModalProps> = ({
         title: t("noti.error"),
         message: t("noti.web3ChainNotFound", {
           chain:
-            usdt_payment_wallets_testnet[
-              vipSelectedChain as keyof typeof usdt_payment_wallets_testnet
+            usdt_payment_wallets[
+              vipSelectedChain as keyof typeof usdt_payment_wallets
             ].name,
         }),
         type: false,
@@ -73,8 +73,8 @@ const VipUpgradeModal: React.FC<VipUpgradeModalProps> = ({
         title: t("noti.error"),
         message: t("noti.web3ChainDifferent", {
           chain:
-            usdt_payment_wallets_testnet[
-              vipSelectedChain as keyof typeof usdt_payment_wallets_testnet
+            usdt_payment_wallets[
+              vipSelectedChain as keyof typeof usdt_payment_wallets
             ].name,
         }),
         type: false,
@@ -92,11 +92,11 @@ const VipUpgradeModal: React.FC<VipUpgradeModalProps> = ({
   const handleUpgradeVip = async () => {
     setIsLoading(true);
     const txn = await sendTransaction({
-      to: usdt_payment_wallets_testnet[vipSelectedChain].address,
+      to: usdt_payment_wallets[vipSelectedChain].address,
       amount: "100",
       type: "token",
       tokenAddress:
-        usdt_payment_wallets_testnet[vipSelectedChain].token_address,
+        usdt_payment_wallets[vipSelectedChain].token_address,
       chainId: Number(vipSelectedChain),
     }).then((txHash) => txHash ? ({ ok: true, result: txHash }) : ({ ok: false, result: {code : 2330} }))
     .catch((error) => ({ ok: false, result: error }));
@@ -117,11 +117,11 @@ const VipUpgradeModal: React.FC<VipUpgradeModalProps> = ({
           app_id: process.env.NEXT_PUBLIC_APP_ID,
           member_id: account?.id,
           amount: "100",
-          currency: `USDT ${usdt_payment_wallets_testnet[vipSelectedChain].name}`,
+          currency: `USDT ${usdt_payment_wallets[vipSelectedChain].name}`,
           type: "vip_upgrade",
           affect_balance: false,
           description: "Upgrade VIP Account via Web3",
-          external_ref: `${usdt_payment_wallets_testnet[vipSelectedChain].explorer_url}/tx/${txn}`,
+          external_ref: `${usdt_payment_wallets[vipSelectedChain].explorer_url}/tx/${txn}`,
         },
       }),
     })
@@ -151,7 +151,7 @@ const VipUpgradeModal: React.FC<VipUpgradeModalProps> = ({
             app_id: process.env.NEXT_PUBLIC_APP_ID,
             member_id: account?.referrer_id,
             amount: !isVip ? "5" : "50",
-            currency: `USDT ${usdt_payment_wallets_testnet[vipSelectedChain].name}`,
+            currency: `USDT ${usdt_payment_wallets[vipSelectedChain].name}`,
             type: "referral_bonus",
             affect_balance: true,
             description: `${account.username} Upgraded to VIP`,
@@ -220,7 +220,7 @@ const VipUpgradeModal: React.FC<VipUpgradeModalProps> = ({
                 <SelectValue placeholder={t("vip.selectChain")} />
               </SelectTrigger>
               <SelectContent className="bg-gray-800 border-gray-700 text-white">
-                {Object.entries(usdt_payment_wallets_testnet).map(
+                {Object.entries(usdt_payment_wallets).map(
                   ([key, value]) => {
                     return (
                       <SelectItem

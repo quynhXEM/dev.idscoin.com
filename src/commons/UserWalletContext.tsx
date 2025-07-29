@@ -72,7 +72,6 @@ export function UserWalletProvider({ children }: { children: ReactNode }) {
   const {
     custom_fields: {
       usdt_payment_wallets,
-      usdt_payment_wallets_testnet,
       ids_distribution_wallet,
     },
   } = useAppMetadata();
@@ -381,8 +380,8 @@ export function UserWalletProvider({ children }: { children: ReactNode }) {
               params: [
                 {
                   chainId:
-                    usdt_payment_wallets_testnet[
-                      chainId as keyof typeof usdt_payment_wallets_testnet
+                    usdt_payment_wallets[
+                      chainId as keyof typeof usdt_payment_wallets
                     ]?.chainId || "0x" + chainId.toString(16),
                 },
               ],
@@ -390,16 +389,16 @@ export function UserWalletProvider({ children }: { children: ReactNode }) {
           } catch (switchError: any) {
             if (
               switchError.code === 4902 &&
-              usdt_payment_wallets_testnet[
-                chainId as keyof typeof usdt_payment_wallets_testnet
+              usdt_payment_wallets[
+                chainId as keyof typeof usdt_payment_wallets
               ]
             ) {
               // Nếu chưa có mạng, thêm mạng vào MetaMask
               await provider.request({
                 method: "wallet_addEthereumChain",
                 params: [
-                  usdt_payment_wallets_testnet[
-                    chainId as keyof typeof usdt_payment_wallets_testnet
+                  usdt_payment_wallets[
+                    chainId as keyof typeof usdt_payment_wallets
                   ],
                 ],
               });
@@ -409,8 +408,8 @@ export function UserWalletProvider({ children }: { children: ReactNode }) {
                 params: [
                   {
                     chainId:
-                      usdt_payment_wallets_testnet[
-                        chainId as keyof typeof usdt_payment_wallets_testnet
+                      usdt_payment_wallets[
+                        chainId as keyof typeof usdt_payment_wallets
                       ]?.chainId,
                   },
                 ],
@@ -503,8 +502,8 @@ export function UserWalletProvider({ children }: { children: ReactNode }) {
             params: [
               {
                 chainId:
-                  usdt_payment_wallets_testnet[
-                    chainId as keyof typeof usdt_payment_wallets_testnet
+                  usdt_payment_wallets[
+                    chainId as keyof typeof usdt_payment_wallets
                   ]?.chainId || "0x" + chainId.toString(16),
               },
             ],
@@ -580,7 +579,7 @@ export function UserWalletProvider({ children }: { children: ReactNode }) {
       if (error?.code == "4902") {
         // notify({
         //   title: t("noti.web3Error"),
-        //   message: t("noti.web3ChainNotFound", {chain: usdt_payment_wallets_testnet[chainId as keyof typeof usdt_payment_wallets_testnet]?.name}),
+        //   message: t("noti.web3ChainNotFound", {chain: usdt_payment_wallets[chainId as keyof typeof usdt_payment_wallets]?.name}),
         //   type: false,
         // });
       } else {
