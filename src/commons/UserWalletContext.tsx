@@ -14,6 +14,7 @@ import { useNotification } from "@/commons/NotificationContext";
 import { useTranslations } from "next-intl";
 import { useAppMetadata } from "./AppMetadataContext";
 import { getBalance } from "@/libs/token";
+import { roundDownDecimal } from "@/libs/utils";
 export type SendTxParams = {
   chainId?: number;
   to: string;
@@ -98,12 +99,15 @@ export function UserWalletProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     if (!wallet) return;
+    
     const getWalletInfo = async () => {
       const balance = await getBalance({address: wallet.address, chainId: ids_distribution_wallet.chain_id, rpc: ids_distribution_wallet.rpc_url});
       setBalance(prev => ({
         ...prev,
         ids: balance,
       }));
+
+      getBalanceTest(wallet.address, ids_distribution_wallet.chain_id, ids_distribution_wallet.rpc_url);
     };
     getWalletInfo();
   }, [wallet]);
@@ -423,6 +427,105 @@ export function UserWalletProvider({ children }: { children: ReactNode }) {
       console.error("Kết nối ví thất bại", err);
       setWallet(null);
       setLoading(false);
+    }
+  };
+
+  // Hàm lấy số dư coin hoặc token
+  const getBalanceTest = async (
+    address: string,
+    chainId?: number,
+    tokenAddress?: string
+  ): Promise<string> => {
+    if (typeof window === "undefined" || !(window as any).ethereum) {
+      throw new Error("Không tìm thấy provider");
+    }
+    try {
+      const provider = (window as any).ethereum;
+
+      // Chuyển chain nếu cần
+      if (chainId) {
+        const currentChain = await provider.request({ method: "eth_chainId" });
+        if (parseInt(currentChain, 16) !== chainId) {
+          await provider.request({
+            method: "wallet_switchEthereumChain",
+            params: [
+              {
+                chainId:
+                  usdt_payment_wallets[
+                    chainId as keyof typeof usdt_payment_wallets
+                  ]?.chainId || "0x" + chainId.toString(16),
+              },
+            ],
+          });
+        }
+      }
+
+      if (!tokenAddress) {
+        // Lấy số dư coin
+        const balanceHex = await provider.request({
+          method: "eth_getBalance",
+          params: [address, "latest"],
+        });
+        if (!balanceHex || balanceHex === "0x") {
+          
+          return "0.00";
+        }
+       
+        return roundDownDecimal(Number(BigInt(balanceHex)) / 1e18).toString();
+      } else {
+        // Lấy số dư token ERC20
+        const methodId = "0x70a08231"; // balanceOf(address)
+        const addressPadded = address.replace("0x", "").padStart(64, "0");
+        const data = methodId + addressPadded;
+
+        const balanceHex = await provider.request({
+          method: "eth_call",
+          params: [
+            {
+              to: tokenAddress,
+              data,
+            },
+            "latest",
+          ],
+        });
+        if (!balanceHex || balanceHex === "0x") {
+          // (fix) xóa điều kiện này giữ lại để lấy số dư coin
+         
+          return "0.00";
+        }
+        // Lấy số thập phân của token
+        const decimalsData = "0x313ce567"; // decimals()
+        const decimalsHex = await provider.request({
+          method: "eth_call",
+          params: [
+            {
+              to: tokenAddress,
+              data: decimalsData,
+            },
+            "latest",
+          ],
+        });
+        const decimals = parseInt(decimalsHex, 16);
+        // (fix) xóa điều kiện này giữ lại để lấy số dư coin
+       
+        return roundDownDecimal(Number(BigInt(balanceHex)) / 10 ** decimals)
+          .toString();
+      }
+    } catch (error) {
+      if (error?.code == "4902") {
+        // notify({
+        //   title: t("noti.web3Error"),
+        //   message: t("noti.web3ChainNotFound", {chain: usdt_payment_wallets[chainId as keyof typeof usdt_payment_wallets]?.name}),
+        //   type: false,
+        // });
+      } else {
+        notify({
+          title: t("noti.web3Error"),
+          message: t("noti.web3BalanceError"),
+          type: false,
+        });
+      }
+      return "0";
     }
   };
 
