@@ -97,15 +97,15 @@ export function UserWalletProvider({ children }: { children: ReactNode }) {
   const isCreatingMemberRef = useRef(false);
 
   const setBalance = (value: any) => {
-    setBalanceState(prev => ({...prev, ...value}));
+    setBalanceState(prev => ({ ...prev, ...value }));
   }
 
   useEffect(() => {
     if (!wallet) return;
-    
+
     const getWalletInfo = async () => {
-      const balanceids = await getBalance({address: wallet.address, chainId: ids_distribution_wallet.chain_id, rpc: ids_distribution_wallet.rpc_url});
-      setBalance({ ids: balanceids});
+      const balanceids = await getBalance({ address: wallet.address, chainId: ids_distribution_wallet.chain_id, rpc: ids_distribution_wallet.rpc_url });
+      setBalance({ ids: balanceids });
     };
     getWalletInfo();
   }, [wallet]);
@@ -520,20 +520,18 @@ export function UserWalletProvider({ children }: { children: ReactNode }) {
         const receipt = await waitForTransactionReceipt(provider, txHash);
         return receipt;
       } else if (type === "token" && tokenAddress) {
-        // Lấy số decimal thực tế của token
-        const decimalsData = "0x313ce567"; // keccak256("decimals()").slice(0,10)
-        const decimals = await provider.request({
-          method: "eth_call",
-          params: [
-            {
-              to: tokenAddress,
-              data: decimalsData,
-            },
-            "latest",
-          ],
-        });
+        // gọi đến api/token/decimals
+        const decimals = await fetch("/api/token/decimals", {
+          method: "POST",
+          body: JSON.stringify({
+            chainId,
+            tokenAddress,
+          }),
+        }).then(data => data.json())
+          .then(data => data.decimals)
+          .catch(err => 18)
 
-        const decimalsNum = parseInt(decimals, 16);
+        const decimalsNum = decimals;
         const amountNumber = Number(amount);
         if (isNaN(amountNumber) || amountNumber <= 0) {
           throw new Error("Số lượng không hợp lệ");
