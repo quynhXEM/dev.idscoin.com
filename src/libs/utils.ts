@@ -50,7 +50,7 @@ export function roundToFirstSignificantDecimal(value: number | string) {
   const digits = Math.floor(Math.log10(abs));
   const decimals = digits >= 0 ? 1 : Math.abs(digits) + 1;
 
-  return roundDownDecimal(Number(value), decimals);
+  return roundDownDecimal(Number(value), decimals) || 0;
 }
 
 /**
