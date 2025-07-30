@@ -5,6 +5,9 @@ export const POST = async (request: Request) => {
   const myHeaders = new Headers();
   myHeaders.append("Authorization", `Bearer ${process.env.APP_TOKEN}`);
 
+  console.log(process.env.NEXT_PUBLIC_APP_ID, process.env.APP_TOKEN);
+  
+
   const requestOptions: RequestInit = {
     method: "GET",
     headers: myHeaders,
@@ -56,6 +59,8 @@ export const POST = async (request: Request) => {
       ),
     ]);
 
+    console.log(stake_dont_claw, stake_dont_claw_24h, stake_dont_claw_week, stake_dont_claw_month, stake_in, stake_out, stake_reward);
+    
   if (stake_in.ok) {
     return NextResponse.json({
       ok: true,

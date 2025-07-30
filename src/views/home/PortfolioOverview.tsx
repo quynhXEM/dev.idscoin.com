@@ -11,7 +11,7 @@ import { useUserWallet } from "@/commons/UserWalletContext";
 import { Tooltip } from "react-tooltip";
 import { StakeHistory } from "./HistoryStake";
 import { Skeleton } from "@/components/ui/skeleton";
-import { formatNumber, roundDownDecimal } from "@/libs/utils";
+import { formatNumber, roundDownDecimal, roundToFirstSignificantDecimal } from "@/libs/utils";
 
 interface PortfolioOverviewProps {
   t: (key: string) => string;
@@ -167,7 +167,7 @@ export function PortfolioOverview({
             <div className="space-y-4">
               <div className="text-center p-4 bg-gray-800 rounded-lg border border-gray-700">
                 <div className="text-2xl font-bold text-blue-400">
-                  {formatNumber((account as any)?.stake?.stake_dont_claw)} IDS
+                  {roundToFirstSignificantDecimal((account as any)?.stake?.stake_dont_claw)} IDS
                 </div>
                 <div className="text-sm text-gray-400">
                   {t("rewards.pending")}
@@ -178,7 +178,7 @@ export function PortfolioOverview({
                 <div className="flex justify-between text-sm">
                   <span className="text-gray-300">{t("rewards.today")}:</span>
                   <span className="text-blue-400">
-                    +{formatNumber((account as any)?.stake?.stake_dont_claw_24h)} IDS
+                    +{roundToFirstSignificantDecimal((account as any)?.stake?.stake_dont_claw_24h)} IDS
                   </span>
                 </div>
                 <div className="flex justify-between text-sm">
@@ -186,7 +186,7 @@ export function PortfolioOverview({
                     {t("rewards.last7Days")}:
                   </span>
                   <span className="text-blue-400">
-                    +{formatNumber((account as any)?.stake?.stake_dont_claw_week)} IDS
+                    +{roundToFirstSignificantDecimal((account as any)?.stake?.stake_dont_claw_week)} IDS
                   </span>
                 </div>
                 <div className="flex justify-between text-sm">
@@ -194,7 +194,7 @@ export function PortfolioOverview({
                     {t("rewards.last30Days")}:
                   </span>
                   <span className="text-blue-400">
-                    +{formatNumber((account as any)?.stake?.stake_dont_claw_month)} IDS
+                    +{roundToFirstSignificantDecimal((account as any)?.stake?.stake_dont_claw_month)} IDS
                   </span>
                 </div>
               </div>

@@ -187,7 +187,7 @@ const RewardsModal: React.FC<RewardsModalProps> = ({
             <div className="grid grid-cols-2 gap-4">
               <div className="text-center">
                 <div className="text-2xl font-bold text-cyan-400">
-                  {formatNumber(account?.stake?.stake_dont_claw)} {t("staking.ids")}
+                  {roundToFirstSignificantDecimal(account?.stake?.stake_dont_claw)} {t("staking.ids")}
                 </div>
                 <div className="text-sm text-gray-400">
                   {t("rewards.pending")}
@@ -221,10 +221,10 @@ const RewardsModal: React.FC<RewardsModalProps> = ({
                 </div>
                 <div className="text-right">
                   <div className="font-bold text-cyan-400">
-                    +{formatNumber(account?.stake?.stake_dont_claw_24h)} {t("staking.ids")}
+                    +{roundToFirstSignificantDecimal(account?.stake?.stake_dont_claw_24h)} {t("staking.ids")}
                   </div>
                   <div className="text-xs text-gray-500">
-                    ~${formatNumber(account?.stake?.stake_dont_claw_24h)}
+                    ~${roundToFirstSignificantDecimal(account?.stake?.stake_dont_claw_24h)}
                   </div>
                 </div>
               </div>
@@ -240,10 +240,10 @@ const RewardsModal: React.FC<RewardsModalProps> = ({
                 </div>
                 <div className="text-right">
                   <div className="font-bold text-cyan-400">
-                    +{formatNumber(account?.stake?.stake_dont_claw_week)} {t("staking.ids")}
+                    +{roundToFirstSignificantDecimal(account?.stake?.stake_dont_claw_week)} {t("staking.ids")}
                   </div>
                   <div className="text-xs text-gray-500">
-                    ~${formatNumber(account?.stake?.stake_dont_claw_week)}
+                    ~${roundToFirstSignificantDecimal(account?.stake?.stake_dont_claw_week)}
                   </div>
                 </div>
               </div>
@@ -259,10 +259,10 @@ const RewardsModal: React.FC<RewardsModalProps> = ({
                 </div>
                 <div className="text-right">
                   <div className="font-bold text-cyan-400">
-                    +{formatNumber(account?.stake?.stake_dont_claw_month)}{t("staking.ids")}
+                    +{roundToFirstSignificantDecimal(account?.stake?.stake_dont_claw_month)}{t("staking.ids")}
                   </div>
                   <div className="text-xs text-gray-500">
-                    ~${formatNumber(account?.stake?.stake_dont_claw_month)}
+                    ~${roundToFirstSignificantDecimal(account?.stake?.stake_dont_claw_month)}
                   </div>
                 </div>
               </div>
@@ -278,10 +278,10 @@ const RewardsModal: React.FC<RewardsModalProps> = ({
                 </div>
                 <div className="text-right">
                   <div className="font-bold text-cyan-400">
-                    +{formatNumber(account?.stake?.stake_dont_claw)} {t("staking.ids")}
+                    +{roundToFirstSignificantDecimal(account?.stake?.stake_dont_claw)} {t("staking.ids")}
                   </div>
                   <div className="text-xs text-gray-500">
-                    ~${formatNumber(account?.stake?.stake_dont_claw)}
+                    ~${roundToFirstSignificantDecimal(account?.stake?.stake_dont_claw)}
                   </div>
                 </div>
               </div>

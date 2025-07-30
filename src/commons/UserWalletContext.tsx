@@ -165,7 +165,6 @@ export function UserWalletProvider({ children }: { children: ReactNode }) {
               }),
             }).then((data) => data.json()),
           ]);
-
         setAccount({
           ...exist,
           f1: f1?.result || 0,
