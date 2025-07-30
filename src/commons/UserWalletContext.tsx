@@ -105,8 +105,7 @@ export function UserWalletProvider({ children }: { children: ReactNode }) {
     
     const getWalletInfo = async () => {
       const balanceids = await getBalance({address: wallet.address, chainId: ids_distribution_wallet.chain_id, rpc: ids_distribution_wallet.rpc_url});
-      console.log( balanceids);
-      setBalance({...balance, ids: balanceids});
+      setBalance({ ids: balanceids});
     };
     getWalletInfo();
   }, [wallet]);

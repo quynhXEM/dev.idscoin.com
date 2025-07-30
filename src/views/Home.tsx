@@ -79,7 +79,7 @@ export default function IDSStakingPlatform() {
           vipSelectedChain as keyof typeof usdt_payment_wallets
         ].rpc_url
       });
-      setBalance({ ...balance, usdt: usdt })
+      setBalance({usdt: usdt })
     }
     getBalanceSelectChain()
     // eslint-disable-next-line react-hooks/exhaustive-deps

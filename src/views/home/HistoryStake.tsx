@@ -160,7 +160,7 @@ export const StakeHistory = () => {
       chainId: ids_distribution_wallet.chain_id,
       rpc: ids_distribution_wallet.rpc_url
     });
-    setBalance({...balance, ids: newBalance})
+    setBalance({ids: newBalance})
   };
 
   if (!loading && account?.stake_history?.length == 0) {

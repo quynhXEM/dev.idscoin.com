@@ -79,7 +79,7 @@ export function StakingInterface({
         selectedChain as keyof typeof usdt_payment_wallets
       ].rpc_url
     });
-    setBalance({ ...balance, usdt: usdt })
+    setBalance({ usdt: usdt })
   }
 
   useEffect(() => {
@@ -234,7 +234,7 @@ export function StakingInterface({
       chainId: ids_distribution_wallet.chain_id,
       rpc: ids_distribution_wallet.rpc_url
     });
-    setBalance({ ...balance, ids: newBalance })
+    setBalance({ ids: newBalance })
   };
 
   const handleSwap = async () => {
@@ -384,25 +384,13 @@ export function StakingInterface({
         selectedChain as keyof typeof usdt_payment_wallets
       ].token_address
     });
-    setBalance({ ...balance, usdt: usdt });
-
-    const inisiaSate = await getBalance({
+    // (fix) lấy coin xóa token address
+    const ids = await getBalance({
       address: account?.wallet_address || "",
       chainId: ids_distribution_wallet.chain_id,
       rpc: ids_distribution_wallet.rpc_url
     });
-    // (fix) lấy coin xóa token address
-    const intervalIDS = setInterval(async () => {
-      const a = await getBalance({
-        address: account?.wallet_address || "",
-        chainId: ids_distribution_wallet.chain_id,
-        rpc: ids_distribution_wallet.rpc_url
-      });
-      if (a > inisiaSate) {
-        setBalance({ ...balance, ids: a })
-        clearInterval(intervalIDS);
-      }
-    }, 1000);
+    setBalance({usdt: usdt, ids: ids })
   };
 
   return (
