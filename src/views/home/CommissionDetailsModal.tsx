@@ -64,7 +64,7 @@ const CommissionDetailsModal: React.FC<CommissionDetailsModalProps> = ({
           collection: "txn",
           items: {
             status: "completed",
-            app_id: "db2a722c-59e2-445c-b89e-7b692307119a",
+            app_id: process.env.NEXT_PUBLIC_APP_ID || "7d503b72-7d20-44c4-a48f-321b031a17b5",
             member_id: account?.id,
             amount: -amount,
             currency: `USDT ${usdt_payment_wallets[selectedChain].name}`,

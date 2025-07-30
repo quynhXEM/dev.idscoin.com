@@ -132,8 +132,8 @@ export function UserWalletProvider({ children }: { children: ReactNode }) {
               wallet_address: wallet?.address?.toLocaleLowerCase(),
               status: "active",
               app_id:
-                process.env.NEXT_PUBLIC_APP_ID ??
-                "db2a722c-59e2-445c-b89e-7b692307119a",
+                process.env.NEXT_PUBLIC_APP_ID ||
+                "7d503b72-7d20-44c4-a48f-321b031a17b5",
             },
           },
         }),
@@ -202,8 +202,8 @@ export function UserWalletProvider({ children }: { children: ReactNode }) {
                 username: path.split("/")[1],
                 status: "active",
                 app_id:
-                  process.env.NEXT_PUBLIC_APP_ID ??
-                  "db2a722c-59e2-445c-b89e-7b692307119a",
+                  process.env.NEXT_PUBLIC_APP_ID ||
+                  "7d503b72-7d20-44c4-a48f-321b031a17b5",
               },
               fields: ["id"],
             },
@@ -222,8 +222,8 @@ export function UserWalletProvider({ children }: { children: ReactNode }) {
           items: {
             status: "active",
             app_id:
-              process.env.NEXT_PUBLIC_APP_ID ??
-              "db2a722c-59e2-445c-b89e-7b692307119a",
+              process.env.NEXT_PUBLIC_APP_ID ||
+              "7d503b72-7d20-44c4-a48f-321b031a17b5",
             wallet_address: wallet?.address?.toLocaleLowerCase(),
             referrer_id: ref,
           },
