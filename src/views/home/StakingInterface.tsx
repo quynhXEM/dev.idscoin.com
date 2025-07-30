@@ -142,7 +142,7 @@ export function StakingInterface({
   const handleStake = async () => {
     if (
       !stakeAmount ||
-      Number(stakeAmount) < 100 ||
+      Number(stakeAmount) < 1 ||
       Number(stakeAmount) > Number(balance.ids)
     ) {
       setNotificationData({
@@ -240,7 +240,7 @@ export function StakingInterface({
   const handleSwap = async () => {
     if (
       !swapAmount ||
-      Number(swapAmount) < 10 ||
+      Number(swapAmount) < 1 ||
       Number(swapAmount) > Number(balance.usdt)
     ) {
       setNotificationData({
