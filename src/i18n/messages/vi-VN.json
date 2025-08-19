@@ -134,7 +134,8 @@
       "totalCommicsion": "Tổng hoa hồng",
       "withdrawCommicsion": "Đã rút",
       "activeCommission": "Khả dụng",
-      "noCommissionHistory": "Không có lịch sử hoa hồng."
+      "noCommissionHistory": "Không có lịch sử hoa hồng.",
+      "verifyEmail": "Xác thực email để nhận {amount} IDS Coin"
     },
     "vip": {
       "upgrade": "Nâng cấp VIP",
@@ -271,5 +272,16 @@
       "getSupport" : "để được hỗ trợ nhanh nhất.",
       "withdrawConfirm": "Lệnh rút của bạn đã được ghi nhận. Tài sản sẽ được chuyển về ví của bạn trong vòng 24h."
     }
+  },
+  "verify": {
+    "verifying": "Đang xác thực, vui lòng chờ...",
+    "verify_done": "Quá trình xác thực đã kết thúc",
+    "error_title": "Lỗi xác thực",
+    "error_invalid_token": "Token không hợp lệ. Gửi lại yêu cầu để xác thực lại!",
+    "error_update": "Lỗi khi xác thực email. Vui lòng thử lại!",
+    "success_title": "Xác thực thành công",
+    "success_message": "Bạn đã xác thực thành công email của bạn. 1 IDS Coin sẽ được chuyển vào ví của bạn. Bạn có thể đóng cửa sổ này lại.",
+    "info_title": "Trạng thái xác thực",
+    "info_already_verified": "Email đã được xác thực trước đó. Bạn có thể đóng cửa sổ này lại."
   }
 }

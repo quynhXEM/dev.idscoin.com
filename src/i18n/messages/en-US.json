@@ -133,7 +133,8 @@
       "totalCommicsion": "Total commission",
       "withdrawCommicsion": "Withdrawn",
       "activeCommission": "Available",
-      "noCommissionHistory": "No commission history."
+      "noCommissionHistory": "No commission history.",
+      "verifyEmail": "Verify email to get {amount} IDS Coin"
     },
     "vip": {
       "upgrade": "Upgrade VIP",
@@ -270,5 +271,16 @@
       "getSupport": "to get the fastest support.",
       "withdrawConfirm": "Your withdrawal has been confirmed. The assets will be transferred to your wallet within 24 hours."
     }
+  },
+  "verify": {
+    "verifying": "Verifying, please wait...",
+    "verify_done": "Verification process completed",
+    "error_title": "Verification Error",
+    "error_invalid_token": "Invalid token. Please request verification again!",
+    "error_update": "Error verifying email. Please try again!",
+    "success_title": "Verification Successful",
+    "success_message": "Your email has been successfully verified. 1 IDS Coin will be sent to your wallet. You can close this window now.",
+    "info_title": "Verification Status",
+    "info_already_verified": "Email has already been verified. You can close this window."
   }
 }

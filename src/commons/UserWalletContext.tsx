@@ -56,6 +56,7 @@ export type WalletContextType = {
   setAccount: (account: any) => void;
   addNewMember: (wallet: WalletInfo) => Promise<void>;
   setLoading: (loading: boolean) => void;
+  refreshVerifyEmail: () => Promise<void>;
 };
 
 const UserWalletContext = createContext<WalletContextType | undefined>(
@@ -255,6 +256,33 @@ export function UserWalletProvider({ children }: { children: ReactNode }) {
       setLoading(false);
     }
   };
+
+  const refreshVerifyEmail = async () => {
+    const response = await fetch("/api/directus/request", {
+      method: "POST",
+      body: JSON.stringify({
+        type: "readItems",
+        collection: "member",
+        params: {
+          filter: {
+            wallet_address: wallet?.address?.toLocaleLowerCase(),
+            status: "active",
+            app_id:
+              process.env.NEXT_PUBLIC_APP_ID ||
+              "7d503b72-7d20-44c4-a48f-321b031a17b5",
+          },
+          fields: ["email_verified"],
+        },
+      }),
+    }).then(data => data.json())
+      .then(data => data.result[0])
+      .catch(err => null);
+
+    setAccount(prev => prev ? {
+      ...prev,
+      email_verified: response?.email_verified == true,
+    } : null);
+  }
 
   const getVipStatus = async (user_id: string) => {
     const response = await fetch("/api/directus/request", {
@@ -601,6 +629,7 @@ export function UserWalletProvider({ children }: { children: ReactNode }) {
         setAccount,
         addNewMember,
         setLoading,
+        refreshVerifyEmail
       }}
     >
       {children}

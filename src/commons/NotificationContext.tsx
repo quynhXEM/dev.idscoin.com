@@ -6,7 +6,7 @@ import { useTranslations } from "next-intl";
 interface NotificationData {
   title: string;
   message?: string;
-  type: boolean; // true = success, false = error
+  type: boolean | "warning" | "info"; // true = success, false = error
   children?: ReactNode;
 }
 

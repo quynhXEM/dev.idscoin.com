@@ -26,6 +26,7 @@ import {
 import { useUserWallet } from "@/commons/UserWalletContext";
 import { Skeleton } from "@/components/ui/skeleton";
 import { formatNumber } from "@/libs/utils";
+import { VerifyEmail } from "./components/VefifyEmail";
 
 interface ReferralSectionProps {
   t: (key: string, params?: Record<string, string>) => string;
@@ -104,7 +105,7 @@ export function ReferralSection({
         <CardContent className="space-y-4">
           <div className="text-center p-8 bg-gray-800 rounded-lg border-2 border-dashed border-gray-700 ">
             <Wallet className="w-16 h-16 mx-auto text-gray-500 mb-4" />
-            <h3 className="text-lg font-semibold text-white mb-2">  
+            <h3 className="text-lg font-semibold text-white mb-2">
               {t("referral.connectWallet")}
             </h3>
             <p className="text-gray-400 text-sm mb-4">
@@ -287,8 +288,10 @@ export function ReferralSection({
           <CardDescription className="text-gray-400">
             {t("referral.earn5")}
           </CardDescription>
+
         </CardHeader>
         <CardContent className="space-y-4">
+          <VerifyEmail />
           <div className="p-4 bg-gray-800 rounded-lg border border-blue-700/50">
             <div className="flex items-center justify-between">
               <div>
@@ -329,11 +332,10 @@ export function ReferralSection({
               <Button
                 size="sm"
                 onClick={copyReferralLink}
-                className={`cursor-pointer ${
-                  copied
+                className={`cursor-pointer ${copied
                     ? "bg-emerald-600 hover:bg-emerald-700"
                     : "bg-blue-600 hover:bg-blue-700"
-                }`}
+                  }`}
               >
                 {copied ? (
                   <>
@@ -416,7 +418,9 @@ export function ReferralSection({
           <CardDescription className="text-gray-400">
             {t("referral.earn50")}
           </CardDescription>
+          <VerifyEmail />
         </CardHeader>
+
         <CardContent className="space-y-4">
           <div className="p-4 bg-gray-800 rounded-lg border-2 border-dashed border-blue-600/50">
             <div className="text-center mb-3">
@@ -438,11 +442,10 @@ export function ReferralSection({
               <Button
                 size="sm"
                 onClick={copyReferralLink}
-                className={`cursor-pointer ${
-                  copied
+                className={`cursor-pointer ${copied
                     ? "bg-emerald-600 hover:bg-emerald-700"
                     : "bg-blue-600 hover:bg-blue-700"
-                }`}
+                  }`}
               >
                 {copied ? (
                   <>
