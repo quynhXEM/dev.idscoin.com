@@ -25,14 +25,13 @@ export const VerifyEmail = () => {
                 if (now - sentTime < 60 * 1000) {
                     notify({
                         title: t("referral.verifyEmail", { amount: 1 }),
-                        message: "Bạn đã gửi yêu cầu xác thực email trước đó, vui lòng chờ 1 phút để gửi lại",
+                        message: t("verifyEmail.wait_1_minute"),
                         type: "warning"
                     })
                     return false;
                 }
             }
         }
-
         return true
     }
 
@@ -86,14 +85,14 @@ export const VerifyEmail = () => {
                 setIsSend(true);
                 notify({
                     title: t("referral.verifyEmail", { amount: 1 }),
-                    message: "Yêu cầu xác thực đã được gửi vào email mà bạn đang kí tài khoản này. Kiểm tra hộp thư và xác thực để nhận 1 IDS Coin",
+                    message: t("verifyEmail.sent_success"),
                     type: "info"
                 })
             }
         } catch (error) {
             notify({
                 title: t("referral.verifyEmail", { amount: 1 }),
-                message: "Gửi Email thất bại vui lòng thử lại!",
+                message: t("verifyEmail.send_fail"),
                 type: false
             })
         } finally {
@@ -118,7 +117,7 @@ export const VerifyEmail = () => {
             <div onClick={handleVerify} className="w-full p-1 px-5 rounded-sm bg-gradient-to-r from-blue-600 via-purple-600 to-blue-600 border-blue-500 cursor-pointer hover:shadow-lg hover:shadow-blue-500/30 hover:scale-101 transition-all duration-100">
                 <div className="overflow-hidden whitespace-nowrap flex justify-center ">
                     <div className="animate-marquee inline-block text-white font-semibold text-sm text-center pt-1">
-                        ✉️ {t("referral.verifyEmail", { amount: 1 })}. {isSend && "Nếu chưa nhận được hãy bấm vào đây để gửi lại lần nữa!"}
+                        ✉️ {t("referral.verifyEmail", { amount: 1 })}. {isSend && t("verifyEmail.resend_hint")}
                     </div>
                 </div>
             </div>
@@ -127,7 +126,7 @@ export const VerifyEmail = () => {
                 await refreshVerifyEmail();
                 setLoading(false);
             }} className="bg-gray-300 text-nowrap text-center text-black hover:bg-white text-sm cursor-pointer">
-                {loading ? <Loader2 className="animate-spin" /> : "Kiểm tra"}
+                {loading ? <Loader2 className="animate-spin" /> : t("verifyEmail.check_btn")}
                 </Button>}
         </div>
     );

@@ -136,6 +136,13 @@
       "noCommissionHistory": "No commission history.",
       "verifyEmail": "Verify email to get {amount} IDS Coin"
     },
+    "verifyEmail": {
+      "wait_1_minute": "You have already requested email verification, please wait 1 minute to resend.",
+      "sent_success": "Verification request has been sent to your registered email. Please check your inbox and verify to receive 1 IDS Coin.",
+      "send_fail": "Failed to send email, please try again!",
+      "resend_hint": "If you haven't received it, click here to resend!",
+      "check_btn": "Check"
+    },
     "vip": {
       "upgrade": "Upgrade VIP",
       "upgrade50": "Earn 50% commission instead of 5%",

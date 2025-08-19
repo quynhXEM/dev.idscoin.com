@@ -137,6 +137,13 @@
       "noCommissionHistory": "Không có lịch sử hoa hồng.",
       "verifyEmail": "Xác thực email để nhận {amount} IDS Coin"
     },
+    "verifyEmail": {
+        "wait_1_minute": "Bạn đã gửi yêu cầu xác thực email trước đó, vui lòng chờ 1 phút để gửi lại",
+        "sent_success": "Yêu cầu xác thực đã được gửi vào email mà bạn đang kí tài khoản này. Kiểm tra hộp thư và xác thực để nhận 1 IDS Coin",
+        "send_fail": "Gửi Email thất bại vui lòng thử lại!",
+        "resend_hint": "Nếu chưa nhận được hãy bấm vào đây để gửi lại lần nữa!",
+        "check_btn": "Kiểm tra"
+      },
     "vip": {
       "upgrade": "Nâng cấp VIP",
       "upgrade50": "Nhận 50% hoa hồng thay vì 5%",
