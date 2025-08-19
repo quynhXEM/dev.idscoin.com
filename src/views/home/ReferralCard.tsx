@@ -24,9 +24,9 @@ import {
   Loader2,
 } from "lucide-react";
 import { useUserWallet } from "@/commons/UserWalletContext";
-import { Skeleton } from "@/components/ui/skeleton";
 import { formatNumber } from "@/libs/utils";
 import { VerifyEmail } from "./components/VefifyEmail";
+import { KYCRewardCard } from "./components/KYCRewardCard";
 
 interface ReferralSectionProps {
   t: (key: string, params?: Record<string, string>) => string;
@@ -47,6 +47,7 @@ export function ReferralSection({
   const [registrationEmail, setRegistrationEmail] = useState(account?.email || "");
   const [registrationUsername, setRegistrationUsername] = useState(account?.username || "");
   const [isloading, setIsLoading] = useState<boolean>(false);
+  const [isKYC, setIsKYC] = useState<boolean>(true);
   const [copied, setCopied] = useState(false);
 
   const copyReferralLink = async () => {
@@ -292,6 +293,7 @@ export function ReferralSection({
         </CardHeader>
         <CardContent className="space-y-4">
           <VerifyEmail />
+          <KYCRewardCard />
           <div className="p-4 bg-gray-800 rounded-lg border border-blue-700/50">
             <div className="flex items-center justify-between">
               <div>
@@ -333,8 +335,8 @@ export function ReferralSection({
                 size="sm"
                 onClick={copyReferralLink}
                 className={`cursor-pointer ${copied
-                    ? "bg-emerald-600 hover:bg-emerald-700"
-                    : "bg-blue-600 hover:bg-blue-700"
+                  ? "bg-emerald-600 hover:bg-emerald-700"
+                  : "bg-blue-600 hover:bg-blue-700"
                   }`}
               >
                 {copied ? (
@@ -418,10 +420,11 @@ export function ReferralSection({
           <CardDescription className="text-gray-400">
             {t("referral.earn50")}
           </CardDescription>
-          <VerifyEmail />
         </CardHeader>
 
         <CardContent className="space-y-4">
+          <VerifyEmail />
+          <KYCRewardCard />
           <div className="p-4 bg-gray-800 rounded-lg border-2 border-dashed border-blue-600/50">
             <div className="text-center mb-3">
               <UserPlus className="w-8 h-8 mx-auto text-blue-400 mb-2" />
@@ -443,8 +446,8 @@ export function ReferralSection({
                 size="sm"
                 onClick={copyReferralLink}
                 className={`cursor-pointer ${copied
-                    ? "bg-emerald-600 hover:bg-emerald-700"
-                    : "bg-blue-600 hover:bg-blue-700"
+                  ? "bg-emerald-600 hover:bg-emerald-700"
+                  : "bg-blue-600 hover:bg-blue-700"
                   }`}
               >
                 {copied ? (

@@ -278,6 +278,50 @@
       "walletErrorReport" : "để gửi email đến zero@nobody.network với tiêu đề là",
       "getSupport" : "để được hỗ trợ nhanh nhất.",
       "withdrawConfirm": "Lệnh rút của bạn đã được ghi nhận. Tài sản sẽ được chuyển về ví của bạn trong vòng 24h."
+    },
+    "kyc_form" : {
+      "title": "Xác thực danh tính (KYC)",
+      "description": "Hoàn thành xác thực để sử dụng đầy đủ tính năng platform",
+      "document_info": "Thông tin giấy tờ",
+      "document_type": "Loại giấy tờ *",
+      "document_type_placeholder": "Chọn loại giấy tờ",
+      "document_number": "Số giấy tờ *",
+      "document_number_placeholder": "Nhập số giấy tờ",
+      "expiry_date": "Ngày hết hạn *",
+      "expiry_date_placeholder": "YYYY-MM-DD",
+      "image_verification": "Hình ảnh xác thực",
+      "front_image": "Ảnh mặt trước *",
+      "front_image_description": "Chụp rõ nét mặt trước giấy tờ",
+      "back_image": "Ảnh mặt sau *",
+      "back_image_description": "Chụp rõ nét mặt sau giấy tờ",
+      "selfie_image": "Ảnh selfie *",
+      "selfie_image_description": "Chụp ảnh cầm giấy tờ cạnh mặt",
+      "photo_guidelines": "Hướng dẫn chụp ảnh",
+      "guideline_clear": "• Ảnh phải rõ nét, không bị mờ hoặc chói sáng",
+      "guideline_corners": "• Hiển thị đầy đủ 4 góc của giấy tờ",
+      "guideline_selfie": "• Ảnh selfie phải thấy rõ mặt và giấy tờ",
+      "guideline_format": "• Định dạng: JPG, PNG (tối đa 10MB mỗi ảnh)",
+      "guideline_match": "• Thông tin trên ảnh phải khớp với thông tin đã nhập",
+      "cancel": "Hủy bỏ",
+      "submit": "Gửi xác thực",
+      "processing": "Đang xử lý...",
+      "success_title": "Thành công",
+      "success_message": "Yêu cầu xác thực đã được gửi thành công",
+      "error_title": "Lỗi",
+      "error_message": "Yêu cầu xác thực thất bại",
+      "nid_document": "Chứng minh nhân dân (CMND)"
+    },
+    "kyc_card": {
+      "reward_description_verified": "Chia sẻ link giới thiệu để bạn bè tham gia. Chỉ cần họ KYC và bạn sẽ nhận thưởng 1 USDT cho mỗi người mới KYC thành công.",
+      "reward_description_unverified": "Thưởng cho mỗi người dùng tham gia KYC thành công",
+      "claim_reward": "Nhận {amount} USDT",
+      "kyc_required": "Cần hoàn thành KYC",
+      "kyc_required_description": "Hoàn thành xác thực danh tính để tham gia chương trình nhận thưởng",
+      "start_kyc": "Bắt đầu KYC ngay",
+      "pending_status": "Yêu cầu đang chờ xử lý",
+      "pending_description": "Yêu cầu KYC của bạn đã được gửi thành công, vui lòng chờ xác nhận!",
+      "rejected_status": "Yêu cầu của bạn đã bị từ chối",
+      "resubmit_request": "Gửi lại yêu cầu"
     }
   },
   "verify": {
@@ -290,5 +334,11 @@
     "success_message": "Bạn đã xác thực thành công email của bạn. 1 IDS Coin sẽ được chuyển vào ví của bạn. Bạn có thể đóng cửa sổ này lại.",
     "info_title": "Trạng thái xác thực",
     "info_already_verified": "Email đã được xác thực trước đó. Bạn có thể đóng cửa sổ này lại."
+  },
+  "drag_drop": {
+    "drop_here": "Thả ảnh vào đây",
+    "drag_drop_here": "Kéo thả ảnh vào đây",
+    "or_click_to_select": "hoặc click để chọn file",
+    "supported_formats": "Hỗ trợ: JPG, PNG (tối đa 10MB)"
   }
 }

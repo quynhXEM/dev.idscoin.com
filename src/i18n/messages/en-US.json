@@ -277,6 +277,50 @@
       "walletErrorReport": "to send an email to zero@nobody.network with the subject",
       "getSupport": "to get the fastest support.",
       "withdrawConfirm": "Your withdrawal has been confirmed. The assets will be transferred to your wallet within 24 hours."
+    },
+    "kyc_form" : {
+      "title": "Identity Verification (KYC)",
+      "description": "Complete verification to use full platform features",
+      "document_info": "Document Information",
+      "document_type": "Document Type *",
+      "document_type_placeholder": "Select document type",
+      "document_number": "Document Number *",
+      "document_number_placeholder": "Enter document number",
+      "expiry_date": "Expiry Date *",
+      "expiry_date_placeholder": "YYYY-MM-DD",
+      "image_verification": "Image Verification",
+      "front_image": "Front Image *",
+      "front_image_description": "Take clear photo of document front",
+      "back_image": "Back Image *",
+      "back_image_description": "Take clear photo of document back",
+      "selfie_image": "Selfie Image *",
+      "selfie_image_description": "Take photo holding document next to face",
+      "photo_guidelines": "Photo Guidelines",
+      "guideline_clear": "• Photos must be clear, not blurry or overexposed",
+      "guideline_corners": "• Show all 4 corners of the document",
+      "guideline_selfie": "• Selfie must clearly show face and document",
+      "guideline_format": "• Format: JPG, PNG (max 10MB each)",
+      "guideline_match": "• Information in photos must match entered data",
+      "cancel": "Cancel",
+      "submit": "Submit Verification",
+      "processing": "Processing...",
+      "success_title": "Success",
+      "success_message": "Verification request has been submitted successfully",
+      "error_title": "Error",
+      "error_message": "Verification request failed",
+      "nid_document": "National ID Card (CMND)"
+    },
+    "kyc_card": {
+      "reward_description_verified": "Share referral link for friends to join. Just when they complete KYC and you will receive 1 USDT reward for each successful KYC.",
+      "reward_description_unverified": "Reward for each user who successfully completes KYC",
+      "claim_reward": "Claim {amount} USDT",
+      "kyc_required": "KYC Completion Required",
+      "kyc_required_description": "Complete identity verification to join the rewards program",
+      "start_kyc": "Start KYC Now",
+      "pending_status": "Request is being processed",
+      "pending_description": "Your KYC request has been submitted successfully, please wait for confirmation!",
+      "rejected_status": "Your request has been rejected",
+      "resubmit_request": "Resubmit Request"
     }
   },
   "verify": {
@@ -289,5 +333,11 @@
     "success_message": "Your email has been successfully verified. 1 IDS Coin will be sent to your wallet. You can close this window now.",
     "info_title": "Verification Status",
     "info_already_verified": "Email has already been verified. You can close this window."
+  },
+  "drag_drop": {
+    "drop_here": "Drop image here",
+    "drag_drop_here": "Drag and drop image here",
+    "or_click_to_select": "or click to select file",
+    "supported_formats": "Supported: JPG, PNG (max 10MB)"
   }
 }

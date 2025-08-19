@@ -38,8 +38,10 @@ export type WalletContextType = {
   balance: { ids: string; usdt: string };
   setBalance: (balance: { [key: string]: any }) => void;
   account: {
+    kyc_status_reason: ReactNode;
     id: string;
     status: string;
+    kyc_status: string | false;
     app_id: string;
     email: string;
     password: unknown;
@@ -57,6 +59,7 @@ export type WalletContextType = {
   addNewMember: (wallet: WalletInfo) => Promise<void>;
   setLoading: (loading: boolean) => void;
   refreshVerifyEmail: () => Promise<void>;
+  loadKYCStatus: () => Promise<void>;
 };
 
 const UserWalletContext = createContext<WalletContextType | undefined>(
@@ -80,6 +83,7 @@ export function UserWalletProvider({ children }: { children: ReactNode }) {
   const [account, setAccount] = useState<{
     id: string;
     status: string;
+    kyc_status: string | false;
     app_id: string;
     email: string;
     password: unknown;
@@ -143,7 +147,7 @@ export function UserWalletProvider({ children }: { children: ReactNode }) {
         .then((data) => data.result[0])
         .catch(() => null);
       if (exist) {
-        const [vipReponse, stakeHistory, f1, commission, stake] =
+        const [vipReponse, stakeHistory, f1, commission, stake, kyc_status] =
           await Promise.all([
             await getVipStatus(exist.id),
             await getStakeHistory(exist.id),
@@ -165,10 +169,29 @@ export function UserWalletProvider({ children }: { children: ReactNode }) {
                 id: exist.id,
               }),
             }).then((data) => data.json()),
+            await fetch("/api/directus/request", {
+              method: "POST",
+              body: JSON.stringify({
+                type: "readItems",
+                collection: "member_kyc",
+                params: {
+                  filter: {
+                    member_id: exist.id,
+                  },
+                  fields: ["status", "reject_reason"],
+                  sort: "-date_created"
+                },
+              }),
+            }).then((data) => data.json())
+              .then(data => ({
+                kyc_status: data?.result?.[0]?.status ?? false,
+                kyc_status_reason: data?.result?.[0]?.reject_reason ?? null
+              })),
           ]);
         setAccount({
           ...exist,
           f1: f1?.result || 0,
+          ...kyc_status,
           isVip: vipReponse ? true : false,
           commission: commission?.result || {
             all: 0,
@@ -234,6 +257,7 @@ export function UserWalletProvider({ children }: { children: ReactNode }) {
         ...newusser.result,
         f1: 0,
         isVip: false,
+        kyc_status: false,
         commission: {
           all: 0,
           day: 0,
@@ -272,6 +296,7 @@ export function UserWalletProvider({ children }: { children: ReactNode }) {
               "7d503b72-7d20-44c4-a48f-321b031a17b5",
           },
           fields: ["email_verified"],
+          sort: "-date_created"
         },
       }),
     }).then(data => data.json())
@@ -281,6 +306,34 @@ export function UserWalletProvider({ children }: { children: ReactNode }) {
     setAccount(prev => prev ? {
       ...prev,
       email_verified: response?.email_verified == true,
+    } : null);
+  }
+
+  const loadKYCStatus = async () => {
+    if (!account?.id) return;
+    const response = await fetch("/api/directus/request", {
+      method: "POST",
+      body: JSON.stringify({
+        type: "readItems",
+        collection: "member_kyc",
+        params: {
+          filter: {
+            member_id: account?.id,
+          },
+          fields: ["status", "reject_reason"],
+          sort: "-date_created"
+        },
+      }),
+    }).then((data) => data.json())
+      .then(data => ({
+        kyc_status: data?.result?.[0]?.status ?? false,
+        kyc_status_reason: data?.result?.[0]?.reject_reason ?? null
+      }));
+
+    setAccount(prev => prev ? {
+      ...prev,
+      kyc_status: response?.kyc_status ?? false,
+      kyc_status_reason: response?.kyc_status_reason ?? null
     } : null);
   }
 
@@ -629,7 +682,8 @@ export function UserWalletProvider({ children }: { children: ReactNode }) {
         setAccount,
         addNewMember,
         setLoading,
-        refreshVerifyEmail
+        refreshVerifyEmail,
+        loadKYCStatus
       }}
     >
       {children}
