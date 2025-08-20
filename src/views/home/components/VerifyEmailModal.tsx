@@ -22,22 +22,72 @@ export const VerifyEmailModal = ({
     const [email, setEmail] = useState<string>(account?.email || "");
     const { notify } = useNotification();
     const [loading, setLoading] = useState<boolean>(false);
-    const [countdown, setCountdown] = useState<number>(0);
+    const [refreshLoading, setRefreshLoading] = useState<boolean>(false);
+    const [emailCountdown, setEmailCountdown] = useState<number>(0);
+    const [refreshCountdown, setRefreshCountdown] = useState<number>(0);
     const [showGuidance, setShowGuidance] = useState<boolean>(false);
     const locale = useLocale();
 
-    // Xử lý đếm ngược
+    // Xử lý đếm ngược cho gửi email
     useEffect(() => {
         let timer: NodeJS.Timeout;
-        if (countdown > 0) {
+        if (emailCountdown > 0) {
             timer = setTimeout(() => {
-                setCountdown(countdown - 1);
+                setEmailCountdown(emailCountdown - 1);
             }, 1000);
         }
         return () => {
             if (timer) clearTimeout(timer);
         };
-    }, [countdown]);
+    }, [emailCountdown]);
+
+    // Xử lý đếm ngược cho kiểm tra trạng thái
+    useEffect(() => {
+        let timer: NodeJS.Timeout;
+        if (refreshCountdown > 0) {
+            timer = setTimeout(() => {
+                setRefreshCountdown(refreshCountdown - 1);
+            }, 1000);
+        }
+        return () => {
+            if (timer) clearTimeout(timer);
+        };
+    }, [refreshCountdown]);
+
+    const handleRefreshVerifyEmail = async () => {
+        if (refreshLoading || refreshCountdown > 0) return;
+        
+        setRefreshLoading(true);
+        try {
+            const result = await refreshVerifyEmail();
+            if (result) {
+                // Nếu đã verify thành công, ẩn guidance và reset countdown
+                setShowGuidance(false);
+                setRefreshCountdown(0);
+                notify({
+                    title: t("verifyEmail.verification_success_title"),
+                    message: t("verifyEmail.verification_success_message"),
+                    type: true
+                });
+            } else {
+                // Nếu chưa verify, bắt đầu countdown 10 giây để tránh spam
+                setRefreshCountdown(10);
+                notify({
+                    title: t("verifyEmail.not_verified_yet"),
+                    message: t("verifyEmail.please_check_email"),
+                    type: "warning"
+                });
+            }
+        } catch (error) {
+            notify({
+                title: t("verifyEmail.check_failed"),
+                message: t("verifyEmail.check_failed_message"),
+                type: false
+            });
+        } finally {
+            setRefreshLoading(false);
+        }
+    };
 
     const checktTimeOut = (getPriEmail: any) => {
         if (getPriEmail.result.length > 0) {
@@ -60,7 +110,7 @@ export const VerifyEmailModal = ({
     }
 
     const handleVerify = async () => {
-        if (loading || countdown > 0) return;
+        if (loading || emailCountdown > 0) return;
         setLoading(true);
         try {
             const is_verify = await refreshVerifyEmail()
@@ -79,7 +129,7 @@ export const VerifyEmailModal = ({
                 }).then(data => data.json())
                 if (!updateEmail?.ok) {
                     notify({
-                        title: "Cập nhật email thất bại",
+                        title: t("verifyEmail.update_email_failed"),
                         message: updateEmail?.error?.errors?.[0]?.message,
                         type: false
                     });
@@ -135,8 +185,8 @@ export const VerifyEmailModal = ({
                     message: t("verifyEmail.sent_success"),
                     type: "info"
                 });
-                // Bắt đầu đếm ngược 120 giây
-                setCountdown(120);
+                // Bắt đầu đếm ngược 120 giây cho gửi email
+                setEmailCountdown(120);
                 // Hiển thị thông báo hướng dẫn
                 setShowGuidance(true);
             }
@@ -164,19 +214,19 @@ export const VerifyEmailModal = ({
             <CardHeader>
                 <CardTitle className="flex items-center text-white text-xl">
                     <Inbox className="w-5 h-5 mr-2 text-cyan-400 " />
-                    Xác minh email
+                    {t("verifyEmail.modal_title")}
                 </CardTitle>
                 <CardDescription className="text-gray-400">
-                    Xác minh email để đảm bảo bạn nhận được các thông tin quan trọng.
+                    {t("verifyEmail.modal_description")}
                 </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
                 <div className="flex flex-col justify-center gap-3s text-white">
-                    <p>👉 Xác minh email giúp chúng tôi luôn giữ liên kết với bạn.</p>
-                    <p>👉 Email của bạn sẽ không được tiết lộ với bất kì bên thứ ba.</p>
+                    <p>{t("verifyEmail.privacy_note_1")}</p>
+                    <p>{t("verifyEmail.privacy_note_2")}</p>
                 </div>
                 <div className="flex flex-col gap-2 text-white">
-                    <Label>Email:<Info className="tooltips-email w-3 h-3" />
+                    <Label>{t("verifyEmail.email_label")}<Info className="tooltips-email w-3 h-3" />
                     </Label>
                     <Tooltip
                         anchorSelect=".tooltips-email"
@@ -184,7 +234,7 @@ export const VerifyEmailModal = ({
                         className="text-wrap outline-none"
                         style={{ maxWidth: 270, zIndex: 100 }}
                     >
-                        Giữ nguyên nếu email chính xác hoặc bạn có thể nhập email mới để cập nhật và xác thực.
+                        {t("verifyEmail.email_tooltip")}
                     </Tooltip>
                     <Input
                         value={email}
@@ -206,14 +256,23 @@ export const VerifyEmailModal = ({
                             }} />
                             <p>{t("verifyEmail.follow_instructions")}</p>
                             <p>{t("verifyEmail.check_spam")}</p>
-                            <p>👇️ Xác minh thành công rồi nhấn vào nút bên dưới để cập nhật trạng thái tài khoản</p>
+                            <p>{t("verifyEmail.verification_success_note")}</p>
                         </div>
                         <Button
                             variant="outline"
+                            disabled={refreshLoading || refreshCountdown > 0}
                             className="w-full border-gray-700 text-gray-300 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-700 hover:to-blue-700 hover:text-gray-200 cursor-pointer"
-                            onClick={refreshVerifyEmail}
+                            onClick={handleRefreshVerifyEmail}
                         >
-                            Tôi đã xác minh email
+                            {refreshLoading ? (
+                                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                            ) : null}
+                            {refreshLoading
+                                ? t("verifyEmail.checking")
+                                : refreshCountdown > 0
+                                    ? t("verifyEmail.check_again_after", { seconds: refreshCountdown })
+                                    : t("verifyEmail.verified_button")
+                            }
                         </Button>
                     </div>
                 )}
@@ -221,7 +280,7 @@ export const VerifyEmailModal = ({
                 <div className="flex justify-center gap-3">
                     <Button
                         variant="outline"
-                        disabled={loading || countdown > 0 || !email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)}
+                        disabled={loading || emailCountdown > 0 || !email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)}
                         className="flex-2 border-gray-700 text-gray-300 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-700 hover:to-blue-700 hover:text-gray-200 cursor-pointer"
                         onClick={handleVerify}
                     >
@@ -232,8 +291,8 @@ export const VerifyEmailModal = ({
                         )}
                         {loading
                             ? t("verifyEmail.sending")
-                            : countdown > 0
-                                ? t("verifyEmail.resend_after", { seconds: countdown })
+                            : emailCountdown > 0
+                                ? t("verifyEmail.resend_after", { seconds: emailCountdown })
                                 : t("verifyEmail.send_verification")
                         }
                     </Button>

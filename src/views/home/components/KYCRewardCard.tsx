@@ -1,8 +1,7 @@
 "use client"
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Shield, CheckCircle, XCircle, Gift } from "lucide-react"
 import { useUserWallet } from "@/commons/UserWalletContext"
 import { KYCForm } from "./KYCForm"
 import { useEffect, useState } from "react"
@@ -10,6 +9,11 @@ import { useTranslations } from "next-intl"
 import { Select, SelectContent, SelectItem, SelectValue, SelectTrigger } from "@/components/ui/select"
 import { useAppMetadata } from "@/commons/AppMetadataContext"
 import { useNotification } from "@/commons/NotificationContext"
+import { Badge } from "@/components/ui/badge"
+import { Gift } from "lucide-react"
+import { Label } from "@/components/ui/label"
+import { formatNumber } from "@/libs/utils"
+import { Separator } from "@/components/ui/separator"
 
 
 export function KYCRewardCard() {
@@ -82,6 +86,7 @@ export function KYCRewardCard() {
         message: t("noti.withdrawConfirm"),
         type: true,
       });
+      getKYCReward()
       setLoading(false);
       setShowChainModal(false);
     } catch (error) {
@@ -105,86 +110,61 @@ export function KYCRewardCard() {
   return (
     <>
       <KYCForm isOpen={showKYCForm} onClose={setShowKYCForm} />
-      <Card className="bg-gradient-to-r from-emerald-900/30 to-green-900/30 border-emerald-700/50 shadow-lg shadow-emerald-500/20">
-        <CardContent className="space-y-4">
-          {/* Reward Information */}
-          <div className="text-center p-4 bg-emerald-800/20 rounded-lg border border-emerald-600/30">
-            <div className="flex items-center justify-center gap-2 mb-2">
-              <span className="text-2xl font-bold text-emerald-400">{account?.kyc_status == "verified" ? kycreward?.sum : 1} USDT</span>
+      <div className="p-4 bg-gray-800 rounded-lg border border-blue-700/50">
+        <div className="flex items-center justify-between">
+          <div>
+            <div className="flex items-center gap-2 font-semibold text-blue-300">
+              {tKyc("kyc_verification")}
+              {account?.kyc_status == "verified" && <Badge
+                className="bg-gradient-to-r from-cyan-600 to-green-600"
+              >
+                {tKyc("verified_badge")}
+              </Badge>}
+
+              {account?.kyc_status == "pending" && <Badge
+                className="bg-gradient-to-r from-orange-600 to-yellow-600"
+              >
+                {tKyc("pending_badge")}
+              </Badge>}
+
+              {account?.kyc_status == "rejected" && <Badge
+                className="bg-gradient-to-r from-red-600 to-red-600"
+              >
+                {tKyc("rejected_badge")}
+              </Badge>}
             </div>
-            <p className="text-emerald-200 text-sm font-medium">{account?.kyc_status == "verified" ? tKyc("reward_description_verified") : tKyc("reward_description_unverified")}</p>
+            <div className="text-sm text-blue-400/80">
+              {tKyc("reward_description")}
+            </div>
+            {account?.kyc_status == "rejected" && <div className="text-sm text-red-400 font-semibold">
+              {tKyc("rejection_reason")} {account?.kyc_status_reason}
+            </div>}
           </div>
+          {!account?.kyc_status && <Button
+            size="sm"
+            className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 cursor-pointer"
+            onClick={() => setShowKYCForm(true)}
+          >
+            {tKyc("start_kyc")}
+          </Button>}
 
-          {/* Stats */}
-          {account?.kyc_status == "verified" && (
-            <>
-              <Button
-                variant="outline"
-                disabled={loading || kycreward?.sum <= 0}
-                className="w-full border-gray-700 text-gray-300 hover:bg-blue-900/30 hover:border-blue-600 hover:text-blue-300 bg-transparent cursor-pointer"
-                size="sm"
-                onClick={() => { setShowChainModal(true) }}
-              >
-                <Gift className="w-4 h-4 mr-2" />
-                {tKyc("claim_reward", { amount: kycreward?.sum })}
-              </Button>
-            </>
-          )}
+          {account?.kyc_status == "verified" && <Button
+            size="sm"
+            className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 cursor-pointer"
+            onClick={() => setShowChainModal(true)}
+          >
+            {tKyc("claim_commission")}
+          </Button>}
 
-
-          {!account?.kyc_status && (
-            <div className="space-y-3">
-              <div className="p-3 bg-yellow-900/20 rounded-lg border border-yellow-700/50">
-                <div className="flex items-center gap-2 mb-1">
-                  <Shield className="w-4 h-4 text-yellow-500" />
-                  <span className="text-yellow-300 font-medium text-sm">{tKyc("kyc_required")}</span>
-                </div>
-                <p className="text-yellow-200 text-xs">
-                  {tKyc("kyc_required_description")}
-                </p>
-              </div>
-              <Button
-                onClick={() => setShowKYCForm(true)}
-                className="w-full bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-700 hover:to-green-700 text-white font-semibold"
-              >
-                <Shield className="w-4 h-4 mr-2" />
-                {tKyc("start_kyc")}
-              </Button>
-            </div>
-          )}
-          {account?.kyc_status == "pending" && (
-            <div className="p-3 bg-yellow-900/20 rounded-lg border border-yellow-700/50">
-              <div className="flex items-center gap-2 mb-1">
-                <CheckCircle className="w-4 h-4 text-yellow-500" />
-                <span className="text-yellow-300 font-medium text-sm">{tKyc("pending_status")}</span>
-              </div>
-              <p className="text-yellow-200 text-xs">
-                {tKyc("pending_description")}
-              </p>
-            </div>
-          )}
-          {account?.kyc_status == "rejected" && (<>
-            <div className="p-3 bg-red-900/20 rounded-lg border border-red-700/50">
-              <div className="flex items-center gap-2 mb-1">
-                <XCircle className="w-4 h-4 text-red-500" />
-                <span className="text-red-300 font-medium text-sm">{tKyc("rejected_status")}</span>
-              </div>
-              <p className="text-red-200 text-xs">
-                {account?.kyc_status_reason}
-              </p>
-
-            </div>
-            <Button
-              onClick={() => setShowKYCForm(true)}
-              className="w-full bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-700 hover:to-green-700 text-white font-semibold"
-            >
-              <Shield className="w-4 h-4 mr-2" />
-              {tKyc("resubmit_request")}
-            </Button>
-          </>
-          )}
-        </CardContent>
-      </Card>
+          {account?.kyc_status == "rejected" && <Button
+            size="sm"
+            className="bg-gradient-to-r from-red-600 to-red-600 cursor-pointer"
+            onClick={() => setShowKYCForm(true)}
+          >
+            {tKyc("resubmit_request")}
+          </Button>}
+        </div>
+      </div>
       {showChainModal && (
         <div
           className="fixed inset-0 bg-black/80 flex items-center justify-center z-50"
@@ -195,11 +175,63 @@ export function KYCRewardCard() {
             onClick={(e) => e.stopPropagation()}
           >
             <CardHeader>
-              <CardTitle className="text-white text-xl">
-                {t("vip.selectChain")}
+              <CardTitle className="">
+                <div className="flex items-center text-white text-xl">
+                  <Gift className="w-5 h-5 mr-2 text-cyan-400 " />
+                  {tKyc("commission_modal_title")}
+                </div>
+                <CardDescription className="text-gray-400">{tKyc("commission_modal_description")}</CardDescription>
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-6">
+              <div className="p-4 bg-gray-800 rounded-lg border border-gray-700">
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="text-center">
+                    <div className="text-2xl font-bold text-emerald-400">
+                      {kycreward.count}
+                    </div>
+                    <div className="text-sm text-gray-400">
+                      {tKyc("f1_kyc_success")}
+                    </div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-2xl font-bold text-cyan-400">
+                      {kycreward.bonus}
+                    </div>
+                    <div className="text-sm text-gray-400">
+                      {tKyc("usdt_kyc_commission")}
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <Separator className="bg-gray-700" />
+              <div className="gap-2">
+                <div className="flex justify-between">
+                  <span className="text-gray-400 text-md">
+                    {t("referral.totalCommicsion")}:
+                  </span>
+                  <span className="font-semibold text-white">
+                    {formatNumber(kycreward.bonus)} USDT
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-400 text-md">
+                    {t("referral.withdrawCommicsion")}:
+                  </span>
+                  <span className="font-semibold text-blue-400">
+                    {-formatNumber(Number(kycreward.clawed) * -1)} USDT
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-400 text-md">
+                    {t("referral.activeCommission")}:
+                  </span>
+                  <span className="font-semibold text-white">
+                    {formatNumber(kycreward.sum)}{" "}
+                    USDT
+                  </span>
+                </div>
+              </div>
               <div>
                 <Select value={selectedChain} onValueChange={setSelectedChain}>
                   <SelectTrigger className="w-full mt-2 bg-gray-800 border-gray-700 text-white focus:border-blue-500">
@@ -231,19 +263,20 @@ export function KYCRewardCard() {
               <div className="flex space-x-3">
                 <Button
                   variant="outline"
+                  disabled={loading}
                   className="flex-1 border-gray-700 text-gray-300 hover:bg-gray-800 hover:text-gray-200 bg-transparent cursor-pointer"
                   onClick={() => setShowChainModal(false)}
                 >
                   {t("vip.cancel")}
                 </Button>
                 <Button
-                  disabled={!selectedChain}
+                  disabled={!selectedChain || loading || kycreward.sum == 0}
                   className="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 cursor-pointer"
                   onClick={() => {
                     handleClaimRewards();
                   }}
                 >
-                  {t("noti.continue")}
+                  {tKyc("claim_amount", { amount: kycreward?.sum })}
                 </Button>
               </div>
             </CardContent>

@@ -149,7 +149,24 @@
         "check_email_title": "Kiểm tra email của bạn",
         "email_sent_to": "📧 Chúng tôi đã gửi email xác thực đến {email}",
         "follow_instructions": "👆 Vui lòng kiểm tra hộp thư đến và làm theo hướng dẫn",
-        "check_spam": "📁 Nếu không thấy email, hãy kiểm tra thư mục spam"
+        "check_spam": "📁 Nếu không thấy email, hãy kiểm tra thư mục spam",
+        "modal_title": "Xác minh email",
+        "modal_description": "Xác minh email để đảm bảo bạn nhận được các thông tin quan trọng.",
+        "privacy_note_1": "👉 Xác minh email giúp chúng tôi luôn giữ liên kết với bạn.",
+        "privacy_note_2": "👉 Email của bạn sẽ không được tiết lộ với bất kì bên thứ ba.",
+        "email_label": "Email:",
+        "email_tooltip": "Giữ nguyên nếu email chính xác hoặc bạn có thể nhập email mới để cập nhật và xác thực.",
+        "verification_success_note": "👇️ Xác minh thành công rồi nhấn vào nút bên dưới để cập nhật trạng thái tài khoản",
+        "verified_button": "Tôi đã xác minh email",
+        "update_email_failed": "Cập nhật email thất bại",
+        "checking": "Đang kiểm tra...",
+        "check_again_after": "Kiểm tra lại sau {seconds}s",
+        "verification_success_title": "Xác minh thành công",
+        "verification_success_message": "Email của bạn đã được xác minh thành công!",
+        "not_verified_yet": "Chưa xác minh",
+        "please_check_email": "Vui lòng kiểm tra email và hoàn thành xác minh trước",
+        "check_failed": "Kiểm tra thất bại",
+        "check_failed_message": "Không thể kiểm tra trạng thái xác minh, vui lòng thử lại"
       },
     "vip": {
       "upgrade": "Nâng cấp VIP",
@@ -328,7 +345,19 @@
       "pending_status": "Yêu cầu đang chờ xử lý",
       "pending_description": "Yêu cầu KYC của bạn đã được gửi thành công, vui lòng chờ xác nhận!",
       "rejected_status": "Yêu cầu của bạn đã bị từ chối",
-      "resubmit_request": "Gửi lại yêu cầu"
+      "resubmit_request": "Gửi lại yêu cầu",
+      "kyc_verification": "Xác thực KYC",
+      "verified_badge": "Đã xác thực",
+      "pending_badge": "Đang xác thực",
+      "rejected_badge": "Bị từ chối",
+      "reward_description": "Nhận 1 USDT với mỗi người mới do bạn giới thiệu và xác thực KYC thành công",
+      "rejection_reason": "Lý do từ chối:",
+      "claim_commission": "Nhận hoa hồng",
+      "commission_modal_title": "Hoa hồng giới thiệu KYC",
+      "commission_modal_description": "Chi tiết hoa hồng nhận được khi giới thiệu người mới tham gia đã KYC thành công",
+      "f1_kyc_success": "F1 KYC thành công",
+      "usdt_kyc_commission": "USDT hoa hồng KYC",
+      "claim_amount": "Nhận {amount} USDT"
     }
   },
   "verify": {

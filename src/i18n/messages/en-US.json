@@ -148,7 +148,24 @@
       "check_email_title": "Check your email",
       "email_sent_to": "📧 We have sent a verification email to {email}",
       "follow_instructions": "👆 Please check your inbox and follow the instructions",
-      "check_spam": "📁 If you don't see the email, please check your spam folder"
+      "check_spam": "📁 If you don't see the email, please check your spam folder",
+      "modal_title": "Email Verification",
+      "modal_description": "Verify your email to ensure you receive important information.",
+      "privacy_note_1": "👉 Email verification helps us stay connected with you.",
+      "privacy_note_2": "👉 Your email will not be disclosed to any third parties.",
+      "email_label": "Email:",
+      "email_tooltip": "Keep it unchanged if the email is correct or you can enter a new email to update and verify.",
+      "verification_success_note": "👇️ After successful verification, click the button below to update your account status",
+      "verified_button": "I have verified my email",
+      "update_email_failed": "Failed to update email",
+      "checking": "Checking...",
+      "check_again_after": "Check again after {seconds}s",
+      "verification_success_title": "Verification Successful",
+      "verification_success_message": "Your email has been verified successfully!",
+      "not_verified_yet": "Not verified yet",
+      "please_check_email": "Please check your email and complete verification first",
+      "check_failed": "Check failed",
+      "check_failed_message": "Unable to check verification status, please try again"
     },
     "vip": {
       "upgrade": "Upgrade VIP",
@@ -327,7 +344,19 @@
       "pending_status": "Request is being processed",
       "pending_description": "Your KYC request has been submitted successfully, please wait for confirmation!",
       "rejected_status": "Your request has been rejected",
-      "resubmit_request": "Resubmit Request"
+      "resubmit_request": "Resubmit Request",
+      "kyc_verification": "KYC Verification",
+      "verified_badge": "Verified",
+      "pending_badge": "Pending",
+      "rejected_badge": "Rejected",
+      "reward_description": "Receive 1 USDT for each new person you refer who successfully completes KYC verification",
+      "rejection_reason": "Rejection reason:",
+      "claim_commission": "Claim Commission",
+      "commission_modal_title": "KYC Referral Commission",
+      "commission_modal_description": "Commission details received when referring new users who have successfully completed KYC",
+      "f1_kyc_success": "F1 KYC Successful",
+      "usdt_kyc_commission": "USDT KYC Commission",
+      "claim_amount": "Claim {amount} USDT"
     }
   },
   "verify": {
