@@ -368,7 +368,14 @@
     "success_title": "Verification Successful",
     "success_message": "Your email has been successfully verified. 1 IDS Coin will be sent to your wallet. You can close this window now.",
     "info_title": "Verification Status",
-    "info_already_verified": "Email has already been verified. You can close this window."
+    "info_already_verified": "Email has already been verified. You can close this window.",
+    "step_1": "Email address verification successful",
+    "step_2": "1 IDS sent to your wallet with hash",
+    "sending_coin": "Sending 1 IDS to your wallet, please do not close the browser...",
+    "process_complete": "All processes completed successfully!",
+    "please_wait": "Please do not close the browser while we process your request.",
+    "retry_button": "Try Again",
+    "close_window": "Close Window"
   },
   "drag_drop": {
     "drop_here": "Drop image here",
