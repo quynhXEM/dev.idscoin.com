@@ -135,14 +135,21 @@
       "withdrawCommicsion": "Đã rút",
       "activeCommission": "Khả dụng",
       "noCommissionHistory": "Không có lịch sử hoa hồng.",
-      "verifyEmail": "Xác thực email để nhận {amount} IDS Coin"
+      "verifyEmail": "Xác minh địa chỉ email nhận ngay {amount} IDS"
     },
     "verifyEmail": {
         "wait_1_minute": "Bạn đã gửi yêu cầu xác thực email trước đó, vui lòng chờ 1 phút để gửi lại",
         "sent_success": "Yêu cầu xác thực đã được gửi vào email mà bạn đang kí tài khoản này. Kiểm tra hộp thư và xác thực để nhận 1 IDS Coin",
         "send_fail": "Gửi Email thất bại vui lòng thử lại!",
         "resend_hint": "Nếu chưa nhận được hãy bấm vào đây để gửi lại lần nữa!",
-        "check_btn": "Kiểm tra"
+        "check_btn": "Kiểm tra",
+        "sending": "Đang gửi...",
+        "resend_after": "Gửi lại sau {seconds}s",
+        "send_verification": "Gửi email xác thực",
+        "check_email_title": "Kiểm tra email của bạn",
+        "email_sent_to": "📧 Chúng tôi đã gửi email xác thực đến {email}",
+        "follow_instructions": "👆 Vui lòng kiểm tra hộp thư đến và làm theo hướng dẫn",
+        "check_spam": "📁 Nếu không thấy email, hãy kiểm tra thư mục spam"
       },
     "vip": {
       "upgrade": "Nâng cấp VIP",

@@ -134,14 +134,21 @@
       "withdrawCommicsion": "Withdrawn",
       "activeCommission": "Available",
       "noCommissionHistory": "No commission history.",
-      "verifyEmail": "Verify email to get {amount} IDS Coin"
+      "verifyEmail": "Verify email address and get {amount} IDS"
     },
     "verifyEmail": {
       "wait_1_minute": "You have already requested email verification, please wait 1 minute to resend.",
       "sent_success": "Verification request has been sent to your registered email. Please check your inbox and verify to receive 1 IDS Coin.",
       "send_fail": "Failed to send email, please try again!",
       "resend_hint": "If you haven't received it, click here to resend!",
-      "check_btn": "Check"
+      "check_btn": "Check",
+      "sending": "Sending...",
+      "resend_after": "Resend after {seconds}s",
+      "send_verification": "Send verification email",
+      "check_email_title": "Check your email",
+      "email_sent_to": "📧 We have sent a verification email to {email}",
+      "follow_instructions": "👆 Please check your inbox and follow the instructions",
+      "check_spam": "📁 If you don't see the email, please check your spam folder"
     },
     "vip": {
       "upgrade": "Upgrade VIP",

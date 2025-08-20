@@ -58,7 +58,7 @@ export type WalletContextType = {
   setAccount: (account: any) => void;
   addNewMember: (wallet: WalletInfo) => Promise<void>;
   setLoading: (loading: boolean) => void;
-  refreshVerifyEmail: () => Promise<void>;
+  refreshVerifyEmail: () => Promise<boolean>;
   loadKYCStatus: () => Promise<void>;
 };
 
@@ -307,6 +307,8 @@ export function UserWalletProvider({ children }: { children: ReactNode }) {
       ...prev,
       email_verified: response?.email_verified == true,
     } : null);
+
+    return response?.email_verified == true
   }
 
   const loadKYCStatus = async () => {

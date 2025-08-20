@@ -43,7 +43,7 @@ export function ReferralSection({
   setShowNotificationModal,
   setNotificationData,
 }: ReferralSectionProps) {
-  const { connectWallet, isConnected, wallet, account, loading } = useUserWallet();
+  const { connectWallet, isConnected, wallet, account, loading, setAccount } = useUserWallet();
   const [registrationEmail, setRegistrationEmail] = useState(account?.email || "");
   const [registrationUsername, setRegistrationUsername] = useState(account?.username || "");
   const [isloading, setIsLoading] = useState<boolean>(false);
@@ -78,7 +78,11 @@ export function ReferralSection({
       }),
     }).then((data) => data.json());
     if (update_info.ok) {
-      connectWallet();
+      setAccount((prev: any) => ({
+        ...prev,
+        email: registrationEmail,
+        username: registrationUsername,
+      }));
     } else {
       setNotificationData({
         title: t("noti.error"),
