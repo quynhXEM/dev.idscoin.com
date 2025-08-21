@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { CheckCircle, XCircle, X, WandSparklesIcon, CircleAlert, AlertTriangle } from "lucide-react";
-import { ReactNode } from "react";
+import { ReactNode, useEffect } from "react";
 
 interface NotificationModalProps {
   t: (key: string) => string;
@@ -30,6 +30,17 @@ export function NotificationModal({
   type,
   children
 }: NotificationModalProps) {
+  // Ngăn chặn cuộn và tương tác khi modal mở
+  useEffect(() => {
+    if (isOpen) {
+      const originalOverflow = document.body.style.overflow;
+      document.body.style.overflow = 'hidden';
+      return () => {
+        document.body.style.overflow = originalOverflow;
+      };
+    }
+  }, [isOpen])
+
   if (!isOpen) return null;
   
   const isSuccess = type === true;
@@ -78,7 +89,7 @@ export function NotificationModal({
     : "bg-gradient-to-r from-red-600 to-orange-600 hover:from-red-700 hover:to-orange-700";
 
   return (
-    <div onClick={onClose} className="fixed inset-0 bg-black/80 flex items-center justify-center z-50">
+    <div onClick={onClose} className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 overscroll-contain" onWheel={(e) => e.preventDefault()} onTouchMove={(e) => e.preventDefault()} style={{ touchAction: 'none' }}>
       <Card onClick={(e) => e.stopPropagation()} 
         className={`w-full max-w-md mx-4 bg-gray-900 border-gray-800 ${borderColor} shadow-2xl animate-in fade-in-0 zoom-in-95 duration-300`}
       >

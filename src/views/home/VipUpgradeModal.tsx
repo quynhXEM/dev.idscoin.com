@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Card,
   CardHeader,
@@ -45,6 +45,18 @@ const VipUpgradeModal: React.FC<VipUpgradeModalProps> = ({
     icon,
   } = useAppMetadata();
   const [isloading, setIsLoading] = useState<boolean>(false);
+
+  // Ngăn chặn cuộn và tương tác khi modal mở
+  useEffect(() => {
+    if (show) {
+      const originalOverflow = document.body.style.overflow;
+      document.body.style.overflow = 'hidden';
+      return () => {
+        document.body.style.overflow = originalOverflow;
+      };
+    }
+  }, [show])
+
   if (!show) return;
 
   const errorNotiTransaction = (error: any) => {
@@ -58,29 +70,19 @@ const VipUpgradeModal: React.FC<VipUpgradeModalProps> = ({
     } else if (code == "4902" || code == "-32602") {
       setNotificationData({
         title: t("noti.error"),
-        message: t("noti.web3ChainNotFound", {
-          chain:
-            usdt_payment_wallets[
-              vipSelectedChain as keyof typeof usdt_payment_wallets
-            ].name,
-        }),
+        message: t("noti.web3ChainNotFound"),
         type: false,
       });
     } else if (code == "2330") {
       setNotificationData({
         title: t("noti.error"),
-        message: t("noti.web3ChainDifferent", {
-          chain:
-            usdt_payment_wallets[
-              vipSelectedChain as keyof typeof usdt_payment_wallets
-            ].name,
-        }),
+        message: t("noti.web3ChainDifferent"),
         type: false,
       });
     } else {
       setNotificationData({
         title: t("noti.error"),
-        message: t("noti.upgradeVipError", {error: ""}),
+        message: t("noti.upgradeVipError"),
         type: false,
       });
     }
@@ -129,7 +131,7 @@ const VipUpgradeModal: React.FC<VipUpgradeModalProps> = ({
     if (!response?.id) {
       setNotificationData({
         title: t("noti.error"),
-        message: t("noti.upgradeVipError", { error: response.toString() }),
+        message: t("noti.upgradeVipError"),
         type: false,
       });
       setShowNotificationModal(true);
@@ -174,8 +176,11 @@ const VipUpgradeModal: React.FC<VipUpgradeModalProps> = ({
   };
   return (
     <div
-      className="fixed inset-0 bg-black/80 flex items-center justify-center z-50"
+      className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 overscroll-contain"
       onClick={onClose}
+      onWheel={(e) => e.preventDefault()}
+      onTouchMove={(e) => e.preventDefault()}
+      style={{ touchAction: 'none' }}
     >
       <Card
         className="w-full max-w-md mx-4 bg-gray-900 border-gray-800"
@@ -220,6 +225,7 @@ const VipUpgradeModal: React.FC<VipUpgradeModalProps> = ({
               <SelectContent className="bg-gray-800 border-gray-700 text-white">
                 {Object.entries(usdt_payment_wallets).map(
                   ([key, value]) => {
+                    const v = value as { name: string };
                     return (
                       <SelectItem
                         key={key}
@@ -228,7 +234,7 @@ const VipUpgradeModal: React.FC<VipUpgradeModalProps> = ({
                       >
                         <div className="flex items-center gap-2">
                           <div className="font-semibold text-white">
-                            {value.name}
+                            {v.name}
                           </div>
                         </div>
                       </SelectItem>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Card,
   CardHeader,
@@ -15,11 +15,25 @@ interface InfoModalProps {
 }
 
 const InfoModal: React.FC<InfoModalProps> = ({ t, show, onClose }) => {
+  // Ngăn chặn cuộn và tương tác khi modal mở
+  useEffect(() => {
+    if (show) {
+      const originalOverflow = document.body.style.overflow;
+      document.body.style.overflow = 'hidden';
+      return () => {
+        document.body.style.overflow = originalOverflow;
+      };
+    }
+  }, [show])
+
   if (!show) return null;
   return (
     <div
-      className="fixed inset-0 bg-black/80 flex items-center justify-center z-50"
+      className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 overscroll-contain"
       onClick={() => onClose()}
+      onWheel={(e) => e.preventDefault()}
+      onTouchMove={(e) => e.preventDefault()}
+      style={{ touchAction: 'none' }}
     >
       <Card
         className="w-full max-w-4xl mx-4 bg-gray-900 border-gray-800 max-h-[90vh] overflow-y-auto"

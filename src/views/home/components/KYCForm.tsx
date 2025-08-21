@@ -2,7 +2,7 @@
 
 import type React from "react"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -37,6 +37,17 @@ export function KYCForm({ isOpen, onClose }: KYCFormProps) {
     const { notify } = useNotification()
     const [isSubmitting, setIsSubmitting] = useState(false)
     const t = useTranslations("home.kyc_form")
+
+    // Ngăn chặn cuộn và tương tác khi modal mở
+    useEffect(() => {
+        if (isOpen) {
+            const originalOverflow = document.body.style.overflow;
+            document.body.style.overflow = 'hidden';
+            return () => {
+                document.body.style.overflow = originalOverflow;
+            };
+        }
+    }, [isOpen])
 
     if (!isOpen) return null
 
@@ -117,7 +128,7 @@ export function KYCForm({ isOpen, onClose }: KYCFormProps) {
     }
 
     return (
-        <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4" onClick={() => onClose(false)}>
+        <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4 overscroll-contain" onClick={() => onClose(false)} onWheel={(e) => e.preventDefault()} onTouchMove={(e) => e.preventDefault()} style={{ touchAction: 'none' }}>
             <Card
                 className="w-full max-w-4xl bg-gray-900 border-gray-800 max-h-[90vh] overflow-y-auto"
                 onClick={(e) => e.stopPropagation()}

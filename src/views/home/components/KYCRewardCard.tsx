@@ -92,7 +92,7 @@ export function KYCRewardCard() {
     } catch (error) {
       notify({
         title: t("noti.error"),
-        message: t("noti.clamommicsionFailed", { error: error }),
+        message: t("noti.clamommicsionFailed", { error: String(error) }),
         type: false,
       });
       setLoading(false);
@@ -106,9 +106,20 @@ export function KYCRewardCard() {
     }
   }, [account?.kyc_status])
 
+  // Ngăn chặn cuộn và tương tác khi modal mở
+  useEffect(() => {
+    if (showChainModal) {
+      const originalOverflow = document.body.style.overflow;
+      document.body.style.overflow = 'hidden';
+      return () => {
+        document.body.style.overflow = originalOverflow;
+      };
+    }
+  }, [showChainModal])
+
   if (!account?.email_verified) return;
   return (
-    <>
+    <div>
       <KYCForm isOpen={showKYCForm} onClose={setShowKYCForm} />
       <div className="p-4 bg-gray-800 rounded-lg border border-blue-700/50">
         <div className="flex items-center justify-between">
@@ -167,8 +178,11 @@ export function KYCRewardCard() {
       </div>
       {showChainModal && (
         <div
-          className="fixed inset-0 bg-black/80 flex items-center justify-center z-50"
+          className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 overscroll-contain"
           onClick={() => setShowChainModal(false)}
+          onWheel={(e) => e.preventDefault()}
+          onTouchMove={(e) => e.preventDefault()}
+          style={{ touchAction: 'none' }}
         >
           <Card
             className="w-full max-w-md mx-4 bg-gray-900 border-gray-800"
@@ -283,6 +297,6 @@ export function KYCRewardCard() {
           </Card>
         </div>
       )}
-    </>
+    </div>
   )
 }

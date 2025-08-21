@@ -136,11 +136,36 @@ const CommissionDetailsModal: React.FC<CommissionDetailsModalProps> = ({
     getData();
   }, [account]);
 
+  // Ngăn chặn cuộn và tương tác khi modal mở
+  useEffect(() => {
+    if (show) {
+      const originalOverflow = document.body.style.overflow;
+      document.body.style.overflow = 'hidden';
+      return () => {
+        document.body.style.overflow = originalOverflow;
+      };
+    }
+  }, [show])
+
+  // Ngăn chặn cuộn và tương tác khi chain modal mở
+  useEffect(() => {
+    if (showChainModal) {
+      const originalOverflow = document.body.style.overflow;
+      document.body.style.overflow = 'hidden';
+      return () => {
+        document.body.style.overflow = originalOverflow;
+      };
+    }
+  }, [showChainModal])
+
   if (!show) return;
   return (
     <div
-      className="fixed inset-0 bg-black/80 flex items-center justify-center z-50"
+      className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 overscroll-contain"
       onClick={() => onClose()}
+      onWheel={(e) => e.preventDefault()}
+      onTouchMove={(e) => e.preventDefault()}
+      style={{ touchAction: 'none' }}
     >
       <Card
         className="w-full max-w-lg mx-4 bg-gray-900 border-gray-800 max-h-[90vh] overflow-y-auto"
@@ -322,8 +347,11 @@ const CommissionDetailsModal: React.FC<CommissionDetailsModalProps> = ({
       {/* Modal chọn chain */}
       {showChainModal && (
         <div
-          className="fixed inset-0 bg-black/80 flex items-center justify-center z-50"
+          className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 overscroll-contain"
           onClick={() => setShowChainModal(false)}
+          onWheel={(e) => e.preventDefault()}
+          onTouchMove={(e) => e.preventDefault()}
+          style={{ touchAction: 'none' }}
         >
           <Card
             className="w-full max-w-md mx-4 bg-gray-900 border-gray-800"

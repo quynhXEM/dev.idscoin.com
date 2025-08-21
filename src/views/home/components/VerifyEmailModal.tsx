@@ -23,9 +23,20 @@ export const VerifyEmailModal = ({
     const { notify } = useNotification();
     const [loading, setLoading] = useState<boolean>(false);
     const [emailCountdown, setEmailCountdown] = useState<number>(0);
-    const [refreshCountdown, setRefreshCountdown] = useState<number>(15);
+    const [refreshCountdown, setRefreshCountdown] = useState<number>(0);
     const [showGuidance, setShowGuidance] = useState<boolean>(false);
     const locale = useLocale();
+
+    // Ngăn chặn cuộn và tương tác khi modal mở
+    useEffect(() => {
+        if (show) {
+            const originalOverflow = document.body.style.overflow;
+            document.body.style.overflow = 'hidden';
+            return () => {
+                document.body.style.overflow = originalOverflow;
+            };
+        }
+    }, [show])
 
     // Xử lý đếm ngược cho gửi email
     useEffect(() => {
@@ -162,6 +173,7 @@ export const VerifyEmailModal = ({
             if (emailreq.ok) {
                 // Bắt đầu đếm ngược 60 giây cho gửi email
                 setEmailCountdown(60);
+                setRefreshCountdown(15);
                 // Hiển thị thông báo hướng dẫn
                 setShowGuidance(true);
             }
@@ -179,7 +191,10 @@ export const VerifyEmailModal = ({
     if (!show) return null;
 
     return <div
-        className="fixed inset-0 bg-black/80 flex items-center justify-center z-50"
+        className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 overscroll-contain"
+        onWheel={(e) => e.preventDefault()}
+        onTouchMove={(e) => e.preventDefault()}
+        style={{ touchAction: 'none' }}
         onClick={() => setShow(false)}
     >
         <Card
@@ -197,8 +212,8 @@ export const VerifyEmailModal = ({
             </CardHeader>
             <CardContent className="space-y-6">
                 <div className="flex flex-col justify-center gap-3s text-white">
-                    <p>{t("verifyEmail.privacy_note_1")}</p>
-                    <p>{t("verifyEmail.privacy_note_2")}</p>
+                    <p>- {t("verifyEmail.privacy_note_1")}</p>
+                    <p>- {t("verifyEmail.privacy_note_2")}</p>
                 </div>
                 <div className="flex flex-col gap-2 text-white">
                     <Label>{t("verifyEmail.email_label")}<Info className="tooltips-email w-3 h-3" />
