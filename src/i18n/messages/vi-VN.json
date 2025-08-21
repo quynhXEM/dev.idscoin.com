@@ -371,12 +371,13 @@
     "info_title": "Trạng thái xác thực",
     "info_already_verified": "Email đã được xác thực trước đó. Bạn có thể đóng cửa sổ này lại.",
     "step_1": "Xác minh địa chỉ email thành công",
-    "step_2": "Đã gửi 1 IDS vào ví của bạn với hash",
+    "step_2": "Đã gửi 1 IDS vào ví của bạn",
     "sending_coin": "Đang gửi 1 IDS vào ví của bạn, vui lòng không đóng trình duyệt...",
-    "process_complete": "Tất cả quá trình đã hoàn thành thành công!",
+    "process_complete": "Tất cả quá trình đã hoàn tất!",
     "please_wait": "Vui lòng không đóng trình duyệt trong khi chúng tôi xử lý yêu cầu của bạn.",
     "retry_button": "Thử lại",
-    "close_window": "Đóng cửa sổ"
+    "close_window": "Đóng cửa sổ",
+    "view_detail": "Xem chi tiết"
   },
   "drag_drop": {
     "drop_here": "Thả ảnh vào đây",

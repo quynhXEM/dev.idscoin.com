@@ -27,8 +27,8 @@ interface KYCFormProps {
 export function KYCForm({ isOpen, onClose }: KYCFormProps) {
     const [formData, setFormData] = useState({
         cardType: "NID",
-        cardNumber: "0394202942472",
-        expiryDate: "2025-08-14",
+        cardNumber: "",
+        expiryDate: "",
         frontImage: null as File | null,
         backImage: null as File | null,
         selfieImage: null as File | null,

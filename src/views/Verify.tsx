@@ -106,9 +106,6 @@ export const Verify = () => {
                     // Hoàn thành bước 1
                     updateStepCompleted(1);
                     
-                    // Đợi một chút để người dùng thấy bước 1 hoàn thành
-                    await new Promise(resolve => setTimeout(resolve, 1000));
-                    
                     // Bước 2: Gửi coin
                     setCurrentStep(2);
                     
@@ -123,9 +120,6 @@ export const Verify = () => {
                     // Hoàn thành bước 2 - luôn đánh dấu hoàn thành khi gọi API thành công
                     const txnHash = txn?.hash || txn?.transactionHash || txn?.txHash || 'Transaction completed';
                     updateStepCompleted(2, txnHash);
-                    
-                    // Đợi một chút để người dùng thấy bước 2 hoàn thành
-                    await new Promise(resolve => setTimeout(resolve, 1000));
                     
                     setLoading(false)
                     setCurrentStep(0);
@@ -241,12 +235,12 @@ export const Verify = () => {
                         </div>
                         <div className="flex-1">
                             <p className={`font-medium ${step.completed ? 'text-green-600' : currentStep === step.id ? 'text-primary' : 'text-gray-500'}`}>
-                                {step.id}. {step.message}
+                                {step.message}
                             </p>
                             {step.hash && (
-                                <p className="text-xs text-gray-500 mt-1 break-all">
-                                    {step.hash}
-                                </p>
+                                <a href={`https://a-scan.nobody.network/tx/${step.hash}`} target="_blank" className="text-xs text-gray-500 mt-1 break-all">
+                                    {t("view_detail")}
+                                </a>
                             )}
                         </div>
                     </div>

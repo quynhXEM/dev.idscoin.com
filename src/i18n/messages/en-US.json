@@ -370,12 +370,13 @@
     "info_title": "Verification Status",
     "info_already_verified": "Email has already been verified. You can close this window.",
     "step_1": "Email address verification successful",
-    "step_2": "1 IDS sent to your wallet with hash",
+    "step_2": "1 IDS sent to your wallet",
     "sending_coin": "Sending 1 IDS to your wallet, please do not close the browser...",
-    "process_complete": "All processes completed successfully!",
+    "process_complete": "All processes completed!",
     "please_wait": "Please do not close the browser while we process your request.",
     "retry_button": "Try Again",
-    "close_window": "Close Window"
+    "close_window": "Close Window",
+    "view_detail": "View transaction detail"
   },
   "drag_drop": {
     "drop_here": "Drop image here",
