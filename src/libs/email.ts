@@ -1,135 +1,293 @@
 export const EmailVerifyEmail = (lang: string, username : string, base64 : string, email : string) => {
     const url = process.env.NEXT_PUBLIC_WEB_URL + username + '/verify?token=' + base64;
   if (lang == "vi-VN") {
-    return `<!DOCTYPE html>
-<html lang="vi">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Xác minh địa chỉ email</title>
+    return `<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<style>
+		table,
+		td,
+		th {
+			border-collapse: collapse;
+		}
+
+		div,
+		a,
+		b,
+		h1,
+		h2,
+		h3,
+		h4,
+		h5,
+		h6,
+		p,
+		td,
+		body,
+		span {
+			font-family: 'Open Sans', Arial, Helvetica, sans-serif !important;
+		}
+
+		a {
+			text-decoration: none !important;
+		}
+
+		@media (max-width: 600px) {
+			.mobile-stack {
+				display: block !important;
+				width: 100% !important;
+				padding-left: 0 !important;
+				padding-right: 0 !important;
+				text-align: center !important;
+			}
+
+			.mobile-center {
+				text-align: center !important;
+			}
+
+			td {
+				border-radius: 0 !important;
+			}
+
+			.container-mobile {
+				padding: 0 !important;
+				border-radius: 0 !important;
+			}
+
+			.mobile-button {
+				display: block !important;
+				width: calc(100% - 40px) !important;
+				margin: 10px 20px !important;
+				text-align: center !important;
+				box-sizing: border-box !important;
+			}
+		}
+	</style>
 </head>
-<body style="margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #f4f4f4;">
-    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color: #f4f4f4;">
-        <tr>
-            <td align="center" style="padding: 40px 0;">
-                <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="600" style="background-color: #ffffff; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
-                    <tr>
-                        <td align="center" style="padding: 40px 30px 20px 30px;">
-                            <h1 style="margin: 0; color: #333333; font-size: 28px; font-weight: bold;">
-                                Xác minh địa chỉ email
-                            </h1>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="padding: 0 30px 20px 30px;">
-                            <p style="margin: 0 0 20px 0; color: #666666; font-size: 16px; line-height: 1.6; text-align: center;">
-                                Vui lòng bấm vào nút ngay bên dưới để xác minh bạn là chủ sở hữu của địa chỉ email [${email}]:
-                            </p>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td align="center" style="padding: 20px 30px;">
-                            <a href="${url}" style="display: inline-block; text-decoration: none;">
-                                <img 
-                                    src="https://i.imgur.com/wIkhR7f.png" 
-                                    alt="Click để xác minh email" 
-                                    width="300" 
-                                    height="100" 
-                                    style="border: 3px solid #4CAF50; border-radius: 12px; cursor: pointer;"
-                                />
-                            </a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="padding: 20px 30px;">
-                            <div style="background-color: #fff3cd; border: 1px solid #ffeaa7; border-radius: 4px; padding: 15px;">
-                                <p style="margin: 0; color: #856404; font-size: 13px; line-height: 1.5;">
-                                    <strong>⚠️ Lưu ý:</strong> Liên kết xác minh chỉ có giá trị trong vòng 24 giờ.
-                                </p>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="padding: 30px; text-align: center; border-top: 1px solid #eeeeee;">
-                            <p style="margin: 0 0 10px 0; color: #999999; font-size: 12px;">
-                                Email này được gửi từ hệ thống tự động, vui lòng không reply.
-                            </p>
-                            <p style="margin: 0; color: #999999; font-size: 12px;">
-                                © ${new Date().getFullYear()} <a href="${process.env.NEXT_PUBLIC_WEB_URL}" style="color: #999999; text-decoration: none;">IDS Coin</a>.
-                            </p>
-                        </td>
-                    </tr>
-                </table>
-            </td>
-        </tr>
-    </table>
-</body>
-</html>`;
+<div style="margin: 0; background-color: #f5f5f5;">
+	<!-- Main Container Table -->
+	<table width="100%" cellpadding="0" cellspacing="0" style="margin: 0 auto;">
+		<tr>
+			<td style="background: #3f3f4c; border-radius: 8px; padding: 50px 60px;"
+				class="container-mobile container-mobile-header">
+
+				<!-- Header Section -->
+				<table width="100%" cellpadding="0" cellspacing="0">
+					<tr>
+						<td
+							style="text-align: center; color: #fff; background-color: #121316; border-radius: 14px; margin-bottom: 20px;">
+							<div style="padding: 24px;">
+								<img
+									src="https://cdn.nobody.network/assets/5c74bc70-c141-403f-86db-4825addc93c3/nobody-network-dark.jpg?height=120"
+									alt="Nobody Network Logo" style="max-width: 180px; display: block; margin: 0 auto 20px;">
+								<h1 style="margin: 14px 0 25px 0; font-size: 28px; font-weight: 600; line-height: normal; color: #fff;">
+									Xác minh địa chỉ email của bạn</h1>
+								<p style="font-size: 16px; line-height: 24px; margin: 0 0 15px; color: #fff;">
+									Cảm ơn bạn đã tham gia vào hệ sinh thái Nobody Network. Vui lòng xác minh địa chỉ email của bạn bằng cách nhấn vào nút bên dưới.</p>
+							</div>
+						</td>
+					</tr>
+				</table>
+
+				<!-- Spacing -->
+				<table width="100%" cellpadding="0" cellspacing="0">
+					<tr>
+						<td style="height: 20px;"></td>
+					</tr>
+				</table>
+
+				<!-- Verification Button Section -->
+				<table width="100%" cellpadding="0" cellspacing="0">
+					<tr>
+						<td style="text-align: center; background: #121316; border-radius: 14px; padding: 30px;">
+							<a href="${url}" target="_blank"
+								style="background: linear-gradient(-30deg, #17cdd8, #8b5cf6, #17cdd8); color: #fff!important; font-size: 16px; font-weight: 600; line-height: 20px; border-radius: 50px; padding: 15px 40px; text-decoration: none; display: inline-block; margin: 20px 0;" class="mobile-button">✅ Xác minh email ngay</a>
+							<p style="color: #9f9fa7; font-size: 14px; line-height: 20px; margin: 20px 0 0; text-align: center;">
+								<strong style="color: #fff;">⚠️ Lưu ý:</strong> Link xác minh sẽ hết hạn sau 24 giờ
+							</p>
+						</td>
+					</tr>
+				</table>
+
+				<!-- Footer Text -->
+				<table width="100%" cellpadding="0" cellspacing="0">
+					<tr>
+						<td style="color: #ffffff!important; font-size: 14px; text-align: center; padding: 20px;">
+							Email này được gửi để xác minh địa chỉ email của bạn. Nếu bạn không thực hiện yêu cầu này, vui lòng bỏ qua email này.<br><br>
+							Để được hỗ trợ, vui lòng liên hệ: <a href="mailto:zero@nobody.network" style="color: #17cdd8;">zero@nobody.network</a>
+						</td>
+					</tr>
+				</table>
+
+				<!-- Footer Links -->
+				<table width="100%" cellpadding="0" cellspacing="0">
+					<tr>
+						<td style="border-top: 1px solid #4e4e52; padding: 10px 20px; text-align: center; margin: 0 20px;">
+							<a href="https://www.nobody.network" target="_blank"
+								style="color: #91919a; font-size: 14px; text-decoration: none; margin: 0 10px;">Truy cập
+								nobody.network</a>
+							<span style="color: #91919a; ">|</span>
+							<a href="/unsubscribe" style="color: #91919a; font-size: 14px; text-decoration: none; margin: 0 10px;">Hủy
+								đăng ký</a>
+						</td>
+					</tr>
+				</table>
+
+				<!-- Final Footer Text -->
+				<table width="100%" cellpadding="0" cellspacing="0">
+					<tr>
+						<td style="color: #fff; text-align: center; font-size: 14px;">
+							Email này được gửi bởi Nobody Network.
+						</td>
+					</tr>
+				</table>
+
+			</td>
+		</tr>
+	</table>
+</div>`;
   } else {
-    return `<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Verify Your Email Address</title>
+    return `<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<style>
+		table,
+		td,
+		th {
+			border-collapse: collapse;
+		}
+
+		div,
+		a,
+		b,
+		h1,
+		h2,
+		h3,
+		h4,
+		h5,
+		h6,
+		p,
+		td,
+		body,
+		span {
+			font-family: 'Open Sans', Arial, Helvetica, sans-serif !important;
+		}
+
+		a {
+			text-decoration: none !important;
+		}
+
+		@media (max-width: 600px) {
+			.mobile-stack {
+				display: block !important;
+				width: 100% !important;
+				padding-left: 0 !important;
+				padding-right: 0 !important;
+				text-align: center !important;
+			}
+
+			.mobile-center {
+				text-align: center !important;
+			}
+
+			td {
+				border-radius: 0 !important;
+			}
+
+			.container-mobile {
+				padding: 0 !important;
+				border-radius: 0 !important;
+			}
+
+			.mobile-button {
+				display: block !important;
+				width: calc(100% - 40px) !important;
+				margin: 10px 20px !important;
+				text-align: center !important;
+				box-sizing: border-box !important;
+			}
+		}
+	</style>
 </head>
-<body style="margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #f4f4f4;">
-    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color: #f4f4f4;">
-        <tr>
-            <td align="center" style="padding: 40px 0;">
-                <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="600" style="background-color: #ffffff; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
-                    <tr>
-                        <td align="center" style="padding: 40px 30px 20px 30px;">
-                            <h1 style="margin: 0; color: #333333; font-size: 28px; font-weight: bold;">
-                                Verify Your Email Address
-                            </h1>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="padding: 0 30px 20px 30px;">
-                            <p style="margin: 0 0 20px 0; color: #666666; font-size: 16px; line-height: 1.6; text-align: center;">
-                                Please click the button below to confirm that you are the owner of the email address [${email}]:
-                            </p>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td align="center" style="padding: 20px 30px;">
-                            <a href="${url}" style="display: inline-block; text-decoration: none;">
-                                <img 
-                                    src="https://i.imgur.com/wIkhR7f.png" 
-                                    alt="Click to verify your email" 
-                                    width="300" 
-                                    height="100" 
-                                    style="border: 3px solid #4CAF50; border-radius: 12px; cursor: pointer;"
-                                />
-                            </a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="padding: 20px 30px;">
-                            <div style="background-color: #fff3cd; border: 1px solid #ffeaa7; border-radius: 4px; padding: 15px;">
-                                <p style="margin: 0; color: #856404; font-size: 13px; line-height: 1.5;">
-                                    <strong>⚠️ Note:</strong> The verification link is valid for 24 hours only.
-                                </p>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="padding: 30px; text-align: center; border-top: 1px solid #eeeeee;">
-                            <p style="margin: 0 0 10px 0; color: #999999; font-size: 12px;">
-                                This email was sent automatically, please do not reply.
-                            </p>
-                            <p style="margin: 0; color: #999999; font-size: 12px;">
-                                © ${new Date().getFullYear()} <a href="${process.env.NEXT_PUBLIC_WEB_URL}" style="color:rgb(21, 83, 255); text-decoration: none;">IDS Coin</a>.
-                            </p>
-                        </td>
-                    </tr>
-                </table>
-            </td>
-        </tr>
-    </table>
-</body>
-</html>
+<div style="margin: 0; background-color: #f5f5f5;">
+	<!-- Main Container Table -->
+	<table width="100%" cellpadding="0" cellspacing="0" style="margin: 0 auto;">
+		<tr>
+			<td style="background: #3f3f4c; border-radius: 8px; padding: 50px 60px;"
+				class="container-mobile container-mobile-header">
+
+				<!-- Header Section -->
+				<table width="100%" cellpadding="0" cellspacing="0">
+					<tr>
+						<td
+							style="text-align: center; color: #fff; background-color: #121316; border-radius: 14px; margin-bottom: 20px;">
+							<div style="padding: 24px;">
+								<img
+									src="https://cdn.nobody.network/assets/5c74bc70-c141-403f-86db-4825addc93c3/nobody-network-dark.jpg?height=120"
+									alt="Nobody Network Logo" style="max-width: 180px; display: block; margin: 0 auto 20px;">
+								<h1 style="margin: 14px 0 25px 0; font-size: 28px; font-weight: 600; line-height: normal; color: #fff;">
+									Verify your email address</h1>
+								<p style="font-size: 16px; line-height: 24px; margin: 0 0 15px; color: #fff;">
+									Thank you for joining the Nobody Network ecosystem. Please verify your email address by clicking the button below.</p>
+							</div>
+						</td>
+					</tr>
+				</table>
+
+				<!-- Spacing -->
+				<table width="100%" cellpadding="0" cellspacing="0">
+					<tr>
+						<td style="height: 20px;"></td>
+					</tr>
+				</table>
+
+				<!-- Verification Button Section -->
+				<table width="100%" cellpadding="0" cellspacing="0">
+					<tr>
+						<td style="text-align: center; background: #121316; border-radius: 14px; padding: 30px;">
+							<a href="${url}" target="_blank"
+								style="background: linear-gradient(-30deg, #17cdd8, #8b5cf6, #17cdd8); color: #fff!important; font-size: 16px; font-weight: 600; line-height: 20px; border-radius: 50px; padding: 15px 40px; text-decoration: none; display: inline-block; margin: 20px 0;" class="mobile-button">✅ Verify Email Now</a>
+							<p style="color: #9f9fa7; font-size: 14px; line-height: 20px; margin: 20px 0 0; text-align: center;">
+								<strong style="color: #fff;">⚠️ Note:</strong> The verification link will expire in 24 hours.
+							</p>
+						</td>
+					</tr>
+				</table>
+
+				<!-- Footer Text -->
+				<table width="100%" cellpadding="0" cellspacing="0">
+					<tr>
+						<td style="color: #ffffff!important; font-size: 14px; text-align: center; padding: 20px;">
+							This email was sent to verify your email address. If you did not make this request, please ignore this email.<br><br>
+							For support, please contact: <a href="mailto:zero@nobody.network" style="color: #17cdd8;">zero@nobody.network</a>
+						</td>
+					</tr>
+				</table>
+
+				<!-- Footer Links -->
+				<table width="100%" cellpadding="0" cellspacing="0">
+					<tr>
+						<td style="border-top: 1px solid #4e4e52; padding: 10px 20px; text-align: center; margin: 0 20px;">
+							<a href="https://www.nobody.network" target="_blank"
+								style="color: #91919a; font-size: 14px; text-decoration: none; margin: 0 10px;">Visit nobody.network</a>
+							<span style="color: #91919a; ">|</span>
+							<a href="/unsubscribe" style="color: #91919a; font-size: 14px; text-decoration: none; margin: 0 10px;">Unsubscribe</a>
+						</td>
+					</tr>
+				</table>
+
+				<!-- Final Footer Text -->
+				<table width="100%" cellpadding="0" cellspacing="0">
+					<tr>
+						<td style="color: #fff; text-align: center; font-size: 14px;">
+							This email was sent by Nobody Network.
+						</td>
+					</tr>
+				</table>
+
+			</td>
+		</tr>
+	</table>
+</div>
 `;
   }
 };
