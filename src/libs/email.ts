@@ -32,7 +32,7 @@ export const EmailVerifyEmail = (lang: string, username : string, base64 : strin
                             <a href="${url}" style="display: inline-block; text-decoration: none;">
                                 <img 
                                     src="https://i.imgur.com/wIkhR7f.png" 
-                                    alt="Click để xác thực email" 
+                                    alt="Click để xác minh email" 
                                     width="300" 
                                     height="100" 
                                     style="border: 3px solid #4CAF50; border-radius: 12px; cursor: pointer;"
@@ -44,7 +44,7 @@ export const EmailVerifyEmail = (lang: string, username : string, base64 : strin
                         <td style="padding: 20px 30px;">
                             <div style="background-color: #fff3cd; border: 1px solid #ffeaa7; border-radius: 4px; padding: 15px;">
                                 <p style="margin: 0; color: #856404; font-size: 13px; line-height: 1.5;">
-                                    <strong>⚠️ Lưu ý:</strong> Liên kết xác thực chỉ có giá trị trong vòng 24 giờ.
+                                    <strong>⚠️ Lưu ý:</strong> Liên kết xác minh chỉ có giá trị trong vòng 24 giờ.
                                 </p>
                             </div>
                         </td>

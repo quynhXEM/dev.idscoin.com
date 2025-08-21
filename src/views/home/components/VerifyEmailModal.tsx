@@ -22,9 +22,8 @@ export const VerifyEmailModal = ({
     const [email, setEmail] = useState<string>(account?.email || "");
     const { notify } = useNotification();
     const [loading, setLoading] = useState<boolean>(false);
-    const [refreshLoading, setRefreshLoading] = useState<boolean>(false);
     const [emailCountdown, setEmailCountdown] = useState<number>(0);
-    const [refreshCountdown, setRefreshCountdown] = useState<number>(0);
+    const [refreshCountdown, setRefreshCountdown] = useState<number>(15);
     const [showGuidance, setShowGuidance] = useState<boolean>(false);
     const locale = useLocale();
 
@@ -49,44 +48,25 @@ export const VerifyEmailModal = ({
                 setRefreshCountdown(refreshCountdown - 1);
             }, 1000);
         }
+        if (refreshCountdown == 0) {
+            handleRefreshVerifyEmail()
+        }
         return () => {
             if (timer) clearTimeout(timer);
         };
     }, [refreshCountdown]);
 
     const handleRefreshVerifyEmail = async () => {
-        if (refreshLoading || refreshCountdown > 0) return;
-        
-        setRefreshLoading(true);
-        try {
-            const result = await refreshVerifyEmail();
-            if (result) {
-                // Nếu đã verify thành công, ẩn guidance và reset countdown
-                setShowGuidance(false);
-                setRefreshCountdown(0);
-                notify({
-                    title: t("verifyEmail.verification_success_title"),
-                    message: t("verifyEmail.verification_success_message"),
-                    type: true
-                });
-            } else {
-                // Nếu chưa verify, bắt đầu countdown 10 giây để tránh spam
-                setRefreshCountdown(10);
-                notify({
-                    title: t("verifyEmail.not_verified_yet"),
-                    message: t("verifyEmail.please_check_email"),
-                    type: "warning"
-                });
-            }
-        } catch (error) {
-            notify({
-                title: t("verifyEmail.check_failed"),
-                message: t("verifyEmail.check_failed_message"),
-                type: false
-            });
-        } finally {
-            setRefreshLoading(false);
+        if (refreshCountdown > 0) return;
+
+        const result = await refreshVerifyEmail();
+        if (result) {
+            setShowGuidance(false);
+            setRefreshCountdown(0);
+        } else {
+            setRefreshCountdown(15);
         }
+
     };
 
     const checktTimeOut = (getPriEmail: any) => {
@@ -180,11 +160,6 @@ export const VerifyEmailModal = ({
                 })
             })
             if (emailreq.ok) {
-                notify({
-                    title: t("referral.verifyEmail", { amount: 1 }),
-                    message: t("verifyEmail.sent_success"),
-                    type: "info"
-                });
                 // Bắt đầu đếm ngược 60 giây cho gửi email
                 setEmailCountdown(60);
                 // Hiển thị thông báo hướng dẫn
@@ -246,38 +221,23 @@ export const VerifyEmailModal = ({
                 {/* Thông báo hướng dẫn sau khi gửi email */}
                 {showGuidance && (
                     <div className="p-4 bg-blue-900/20 rounded-lg border border-blue-700/50">
-                        <div className="flex items-center gap-2 mb-2">
-                            <Inbox className="w-4 h-4 text-blue-400" />
-                            <span className="text-blue-300 font-semibold text-sm">{t("verifyEmail.check_email_title")}</span>
-                        </div>
                         <div className="text-sm text-blue-200 space-y-1">
                             <p dangerouslySetInnerHTML={{
                                 __html: t("verifyEmail.email_sent_to", { email: `<strong>${email}</strong>` })
                             }} />
-                            <p>{t("verifyEmail.follow_instructions")}</p>
-                            <p>{t("verifyEmail.check_spam")}</p>
-                            <p>{t("verifyEmail.verification_success_note")}</p>
                         </div>
-                        <Button
-                            variant="outline"
-                            disabled={refreshLoading || refreshCountdown > 0}
-                            className="w-full border-gray-700 text-gray-300 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-700 hover:to-blue-700 hover:text-gray-200 cursor-pointer"
-                            onClick={handleRefreshVerifyEmail}
-                        >
-                            {refreshLoading ? (
-                                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                            ) : null}
-                            {refreshLoading
-                                ? t("verifyEmail.checking")
-                                : refreshCountdown > 0
-                                    ? t("verifyEmail.check_again_after", { seconds: refreshCountdown })
-                                    : t("verifyEmail.verified_button")
-                            }
-                        </Button>
                     </div>
                 )}
 
                 <div className="flex justify-center gap-3">
+                    <Button
+                        variant="outline"
+                        disabled={loading}
+                        className="flex-1 border-gray-700 text-gray-300 hover:bg-gray-800 hover:text-gray-200 bg-transparent cursor-pointer"
+                        onClick={() => setShow(false)}
+                    >
+                        {t("referral.close")}
+                    </Button>
                     <Button
                         variant="outline"
                         disabled={loading || emailCountdown > 0 || !email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)}
@@ -295,14 +255,6 @@ export const VerifyEmailModal = ({
                                 ? t("verifyEmail.resend_after", { seconds: emailCountdown })
                                 : t("verifyEmail.send_verification")
                         }
-                    </Button>
-                    <Button
-                        variant="outline"
-                        disabled={loading}
-                        className="flex-1 border-gray-700 text-gray-300 hover:bg-gray-800 hover:text-gray-200 bg-transparent cursor-pointer"
-                        onClick={() => setShow(false)}
-                    >
-                        {t("referral.close")}
                     </Button>
                 </div>
             </CardContent>
