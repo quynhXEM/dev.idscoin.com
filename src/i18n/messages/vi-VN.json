@@ -369,7 +369,7 @@
     "success_message": "Bạn đã xác minh thành công email của bạn. 1 IDS Coin sẽ được chuyển vào ví của bạn. Bạn có thể đóng cửa sổ này lại.",
     "info_title": "Trạng thái xác minh",
     "info_already_verified": "Email đã được xác minh trước đó. Bạn có thể đóng cửa sổ này lại.",
-    "step_1": "Xác minh địa chỉ email thành công",
+    "step_1": "Xác minh địa chỉ email",
     "step_2": "Đã gửi 1 IDS vào ví của bạn",
     "sending_coin": "Đang gửi 1 IDS vào ví của bạn, vui lòng không đóng trình duyệt...",
     "process_complete": "Tất cả quá trình đã hoàn tất!",

@@ -59,11 +59,6 @@ export const Verify = () => {
             setLoading(false)
             setStatus('error')
             setErrorMessage(t("error_invalid_token"))
-            notify({
-                title: t("error_title"),
-                message: t("error_invalid_token"),
-                type: false
-            })
             return;
         };
 
@@ -124,41 +119,20 @@ export const Verify = () => {
                     setLoading(false)
                     setCurrentStep(0);
                     setStatus('success')
-                    
-                    notify({
-                        title: t("success_title"),
-                        message: t("process_complete"),
-                        type: true
-                    })
                 } else {
                     setLoading(false)
                     setStatus('error')
                     setErrorMessage(t("error_update"))
-                    notify({
-                        title: t("error_title"),
-                        message: t("error_update"),
-                        type: false
-                    })
                 }
 
             } else {
                 setLoading(false)
                 setStatus('already_verified')
-                notify({
-                    title: t("info_title"),
-                    message: t("info_already_verified"),
-                    type: "info"
-                })
             }
         } catch (error) {
             setLoading(false)
             setStatus('error')
             setErrorMessage(t("error_update"))
-            notify({
-                title: t("error_title"),
-                message: t("error_update"),
-                type: false
-            })
         }
     }
     // Render cho trường hợp lỗi
