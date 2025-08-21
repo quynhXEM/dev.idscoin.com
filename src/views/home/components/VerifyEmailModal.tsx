@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { EmailVerifyEmail } from "@/libs/email";
 import { encryptObject } from "@/libs/secret";
-import { Inbox, Info, Loader2, Send, Shield } from "lucide-react";
+import { Inbox, Info, Loader2, Send, Shield, XIcon } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { useState, useEffect } from "react";
 import { Tooltip } from "react-tooltip";
@@ -202,9 +202,12 @@ export const VerifyEmailModal = ({
             onClick={(e) => e.stopPropagation()}
         >
             <CardHeader>
-                <CardTitle className="flex items-center text-white text-xl">
-                    <Inbox className="w-5 h-5 mr-2 text-cyan-400 " />
-                    {t("verifyEmail.modal_title")}
+                <CardTitle className="flex items-center justify-between">
+                    <div className="flex items-center text-white text-xl ">
+                        <Inbox className="w-5 h-5 mr-2 text-cyan-400 " />
+                        {t("verifyEmail.modal_title")}
+                    </div>
+                    <XIcon className="text-white cursor-pointer scale-90 hover:scale-105" onClick={() => setShow(false)}/>
                 </CardTitle>
                 <CardDescription className="text-gray-400">
                     {t("verifyEmail.modal_description")}
@@ -247,16 +250,8 @@ export const VerifyEmailModal = ({
                 <div className="flex justify-center gap-3">
                     <Button
                         variant="outline"
-                        disabled={loading}
-                        className="flex-1 border-gray-700 text-gray-300 hover:bg-gray-800 hover:text-gray-200 bg-transparent cursor-pointer"
-                        onClick={() => setShow(false)}
-                    >
-                        {t("referral.close")}
-                    </Button>
-                    <Button
-                        variant="outline"
                         disabled={loading || emailCountdown > 0 || !email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)}
-                        className="flex-2 border-gray-700 text-gray-300 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-700 hover:to-blue-700 hover:text-gray-200 cursor-pointer"
+                        className="flex-2 w-full border-gray-700 text-gray-300 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-700 hover:to-blue-700 hover:text-gray-200 cursor-pointer"
                         onClick={handleVerify}
                     >
                         {loading ? (

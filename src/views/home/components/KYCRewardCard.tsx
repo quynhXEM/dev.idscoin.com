@@ -10,7 +10,7 @@ import { Select, SelectContent, SelectItem, SelectValue, SelectTrigger } from "@
 import { useAppMetadata } from "@/commons/AppMetadataContext"
 import { useNotification } from "@/commons/NotificationContext"
 import { Badge } from "@/components/ui/badge"
-import { Gift } from "lucide-react"
+import { Gift, XIcon } from "lucide-react"
 import { Label } from "@/components/ui/label"
 import { formatNumber } from "@/libs/utils"
 import { Separator } from "@/components/ui/separator"
@@ -189,11 +189,13 @@ export function KYCRewardCard() {
             onClick={(e) => e.stopPropagation()}
           >
             <CardHeader>
-              <CardTitle className="">
-                <div className="flex items-center text-white text-xl">
+              <CardTitle className="flex items-center text-white text-xl justify-between">
+                <div className="flex items-center">
                   <Gift className="w-5 h-5 mr-2 text-cyan-400 " />
                   {tKyc("commission_modal_title")}
                 </div>
+                <XIcon className="text-white cursor-pointer scale-90 hover:scale-105" onClick={() => setShowChainModal(false)} />
+
                 <CardDescription className="text-gray-400">{tKyc("commission_modal_description")}</CardDescription>
               </CardTitle>
             </CardHeader>

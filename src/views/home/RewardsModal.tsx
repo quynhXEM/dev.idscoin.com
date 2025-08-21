@@ -7,7 +7,7 @@ import {
   CardContent,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Gift, Loader2 } from "lucide-react";
+import { Gift, Loader2, XIcon } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { useUserWallet } from "@/commons/UserWalletContext";
 import { roundToFirstSignificantDecimal, formatNumber } from "@/libs/utils";
@@ -176,9 +176,12 @@ const RewardsModal: React.FC<RewardsModalProps> = ({
         onClick={(e) => e.stopPropagation()}
       >
         <CardHeader>
-          <CardTitle className="flex items-center text-white">
-            <Gift className="w-5 h-5 mr-2 text-cyan-400" />
-            {t("rewards.rewardsDetails")}
+          <CardTitle className="flex items-center text-white justify-between">
+            <div className="flex items-center">
+              <Gift className="w-5 h-5 mr-2 text-cyan-400" />
+              {t("rewards.rewardsDetails")}
+            </div>
+            <XIcon className="text-white cursor-pointer scale-90 hover:scale-105" onClick={onClose} />
           </CardTitle>
           <CardDescription className="text-gray-400">
             {t("rewards.rewardsDescription")}
@@ -332,9 +335,9 @@ const RewardsModal: React.FC<RewardsModalProps> = ({
                         +
                         {roundToFirstSignificantDecimal(
                           Number(item.amount) *
-                            Number(item.stake_apy) /
-                            100 /
-                            365
+                          Number(item.stake_apy) /
+                          100 /
+                          365
                         )}{" "}
                         {t("staking.ids")}/day
                       </div>
@@ -363,7 +366,7 @@ const RewardsModal: React.FC<RewardsModalProps> = ({
           <div className="flex space-x-3">
             <Button
               disabled={isloading}
-              className="flex-1 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-700 hover:to-blue-700 cursor-pointer"
+              className="flex-1 w-full bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-700 hover:to-blue-700 cursor-pointer"
               onClick={handleClaimRewards}
             >
               {isloading ? (
@@ -374,14 +377,6 @@ const RewardsModal: React.FC<RewardsModalProps> = ({
               {t("rewards.claimIds", {
                 amount: account?.stake?.stake_dont_claw,
               })}
-            </Button>
-            <Button
-              variant="outline"
-              disabled={isloading}
-              className="flex-1 border-gray-700 text-gray-300 hover:bg-gray-800 hover:text-gray-200 bg-transparent cursor-pointer"
-              onClick={() => onClose()}
-            >
-              {t("rewards.close")}
             </Button>
           </div>
         </CardContent>

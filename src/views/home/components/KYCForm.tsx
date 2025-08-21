@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Shield, FileText, Calendar, CreditCard, Camera, User, Info } from "lucide-react"
+import { Shield, FileText, Calendar, CreditCard, Camera, User, Info, XIcon } from "lucide-react"
 import { ImageUpload } from "../ImageUpload"
 import { useUserWallet } from "@/commons/UserWalletContext"
 import { useNotification } from "@/commons/NotificationContext"
@@ -138,8 +138,11 @@ export function KYCForm({ isOpen, onClose }: KYCFormProps) {
                         <div className="w-10 h-10 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
                             <Shield className="w-5 h-5 text-white" />
                         </div>
-                        <div>
-                            <CardTitle className="text-white text-xl">{t("title")}</CardTitle>
+                        <div className="w-full">
+                            <CardTitle className="text-white text-xl flex items-center justify-between">
+                                {t("title")}
+                                <XIcon className="text-white cursor-pointer scale-90 hover:scale-105" onClick={() => onClose(false)} />
+                            </CardTitle>
                             <CardDescription className="text-gray-400">
                                 {t("description")}
                             </CardDescription>
@@ -263,17 +266,8 @@ export function KYCForm({ isOpen, onClose }: KYCFormProps) {
                         {/* Submit Buttons */}
                         <div className="flex flex-col sm:flex-row gap-3 pt-4">
                             <Button
-                                type="button"
-                                variant="outline"
-                                className="flex-1 border-gray-700 text-gray-300 hover:bg-gray-800 hover:text-gray-200 bg-transparent"
-                                onClick={() => onClose(false)}
-                                disabled={isSubmitting}
-                            >
-                                {t("cancel")}
-                            </Button>
-                            <Button
                                 type="submit"
-                                className="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold"
+                                className="flex-1 w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold"
                                 disabled={!isFormValid() || isSubmitting}
                             >
                                 {isSubmitting ? (

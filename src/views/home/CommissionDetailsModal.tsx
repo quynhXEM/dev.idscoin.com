@@ -7,7 +7,7 @@ import {
   CardContent,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Gift, HandCoins, Loader2 } from "lucide-react";
+import { Gift, HandCoins, Loader2, XIcon } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { useNotification } from "@/commons/NotificationContext";
 import { timeFormat, formatNumber, roundDownDecimal } from "@/libs/utils";
@@ -48,14 +48,14 @@ const CommissionDetailsModal: React.FC<CommissionDetailsModalProps> = ({
   const [showChainModal, setShowChainModal] = useState(false);
   const [selectedChain, setSelectedChain] = useState<string>("");
   const [txnCommicsion, setTxnCommicsion] = useState<any[]>([]);
-  
+
   const handleCommicsion = async () => {
     if (txnCommicsion.length === 0) return;
     setLoading(true);
     try {
       const amount =
         Number(account?.commission?.all) +
-          Number(account?.commission?.withdraw) || 0;
+        Number(account?.commission?.withdraw) || 0;
 
       const clamCommission = await fetch("/api/directus/request", {
         method: "POST",
@@ -172,9 +172,12 @@ const CommissionDetailsModal: React.FC<CommissionDetailsModalProps> = ({
         onClick={(e) => e.stopPropagation()}
       >
         <CardHeader>
-          <CardTitle className="flex items-center text-white text-xl">
-            <Gift className="w-5 h-5 mr-2 text-cyan-400 " />
-            {t("referral.details")}
+          <CardTitle className="flex items-center text-white text-xl justify-between">
+            <div className="flex items-center">
+              <Gift className="w-5 h-5 mr-2 text-cyan-400 " />
+              {t("referral.details")}
+            </div>
+            <XIcon className="text-white cursor-pointer scale-90 hover:scale-105" onClick={onClose} />
           </CardTitle>
           <CardDescription className="text-gray-400">
             {t("referral.detailsCommicsionDescription")}
@@ -277,7 +280,7 @@ const CommissionDetailsModal: React.FC<CommissionDetailsModalProps> = ({
               <span className="font-semibold text-white">
                 {formatNumber(roundDownDecimal(
                   Number(account?.commission?.all) +
-                    Number(account?.commission?.withdraw))
+                  Number(account?.commission?.withdraw))
                 )}{" "}
                 USDT
               </span>
@@ -314,8 +317,8 @@ const CommissionDetailsModal: React.FC<CommissionDetailsModalProps> = ({
                 loading ||
                 txnCommicsion.length === 0 ||
                 Number(account?.commission?.all) +
-                  Number(account?.commission?.withdraw) ==
-                  0
+                Number(account?.commission?.withdraw) ==
+                0
               }
               className="flex-2 border-gray-700 text-gray-300 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-700 hover:to-blue-700 hover:text-gray-200 cursor-pointer"
               onClick={() => setShowChainModal(true)}
@@ -329,17 +332,9 @@ const CommissionDetailsModal: React.FC<CommissionDetailsModalProps> = ({
                 amount:
                   roundDownDecimal(
                     Number(account?.commission?.all) +
-                      Number(account?.commission?.withdraw)
+                    Number(account?.commission?.withdraw)
                   ) || 0,
               })}
-            </Button>
-            <Button
-              variant="outline"
-              disabled={loading}
-              className="flex-1 border-gray-700 text-gray-300 hover:bg-gray-800 hover:text-gray-200 bg-transparent cursor-pointer"
-              onClick={() => onClose()}
-            >
-              {t("referral.close")}
             </Button>
           </div>
         </CardContent>
@@ -358,8 +353,9 @@ const CommissionDetailsModal: React.FC<CommissionDetailsModalProps> = ({
             onClick={(e) => e.stopPropagation()}
           >
             <CardHeader>
-              <CardTitle className="text-white text-xl">
+              <CardTitle className="flex items-center text-white text-xl justify-between">
                 {t("vip.selectChain")}
+                <XIcon className="text-white cursor-pointer scale-90 hover:scale-105" onClick={() => setShowChainModal(false)} />
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-6">
@@ -393,15 +389,8 @@ const CommissionDetailsModal: React.FC<CommissionDetailsModalProps> = ({
               </div>
               <div className="flex space-x-3">
                 <Button
-                  variant="outline"
-                  className="flex-1 border-gray-700 text-gray-300 hover:bg-gray-800 hover:text-gray-200 bg-transparent cursor-pointer"
-                  onClick={() => setShowChainModal(false)}
-                >
-                  {t("vip.cancel")}
-                </Button>
-                <Button
                   disabled={!selectedChain}
-                  className="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 cursor-pointer"
+                  className="flex-1 w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 cursor-pointer"
                   onClick={() => {
                     if (onSelectChain && selectedChain)
                       onSelectChain(selectedChain);

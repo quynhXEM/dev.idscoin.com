@@ -16,7 +16,7 @@ import {
   SelectContent,
   SelectItem,
 } from "@/components/ui/select";
-import { DollarSign, Loader2 } from "lucide-react";
+import { DollarSign, Loader2, XIcon } from "lucide-react";
 import { useUserWallet } from "@/commons/UserWalletContext";
 import { useAppMetadata } from "@/commons/AppMetadataContext";
 
@@ -98,8 +98,8 @@ const VipUpgradeModal: React.FC<VipUpgradeModalProps> = ({
       tokenAddress:
         usdt_payment_wallets[vipSelectedChain].token_address,
       chainId: Number(vipSelectedChain),
-    }).then((txHash) => txHash ? ({ ok: true, result: txHash }) : ({ ok: false, result: {code : 2330} }))
-    .catch((error) => ({ ok: false, result: error }));
+    }).then((txHash) => txHash ? ({ ok: true, result: txHash }) : ({ ok: false, result: { code: 2330 } }))
+      .catch((error) => ({ ok: false, result: error }));
 
     if (!txn.ok) {
       errorNotiTransaction(txn.result);
@@ -187,13 +187,16 @@ const VipUpgradeModal: React.FC<VipUpgradeModalProps> = ({
         onClick={(e) => e.stopPropagation()}
       >
         <CardHeader>
-          <CardTitle className="flex items-center text-white text-2xl">
-            <img
-              src={`${process.env.NEXT_PUBLIC_API_URL}/assets/${icon}/ids-coin.svg`}
-              alt="logo"
-              className="w-6 h-6 rounded-full mr-2"
-            />
-            {t("vip.upgrade")}
+          <CardTitle className="flex items-center text-white text-xl justify-between">
+            <div className="flex items-center">
+              <img
+                src={`${process.env.NEXT_PUBLIC_API_URL}/assets/${icon}/ids-coin.svg`}
+                alt="logo"
+                className="w-6 h-6 rounded-full mr-2"
+              />
+              {t("vip.upgrade")}
+            </div>
+            <XIcon className="text-white cursor-pointer scale-90 hover:scale-105" onClick={onClose} />
           </CardTitle>
           <CardDescription className="text-gray-400">
             {t("vip.becomeVip")}
@@ -272,16 +275,8 @@ const VipUpgradeModal: React.FC<VipUpgradeModalProps> = ({
 
           <div className="flex space-x-3">
             <Button
-              variant="outline"
               disabled={isloading}
-              className="flex-1 border-gray-700 text-gray-300 hover:bg-gray-800 hover:text-gray-200 bg-transparent cursor-pointer"
-              onClick={onClose}
-            >
-              {t("vip.cancel")}
-            </Button>
-            <Button
-              disabled={isloading}
-              className="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 cursor-pointer"
+              className="flex-1 w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 cursor-pointer"
               onClick={handleUpgradeVip}
             >
               {isloading ? (
