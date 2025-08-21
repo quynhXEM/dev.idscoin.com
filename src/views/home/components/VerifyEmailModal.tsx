@@ -185,8 +185,8 @@ export const VerifyEmailModal = ({
                     message: t("verifyEmail.sent_success"),
                     type: "info"
                 });
-                // Bắt đầu đếm ngược 120 giây cho gửi email
-                setEmailCountdown(120);
+                // Bắt đầu đếm ngược 60 giây cho gửi email
+                setEmailCountdown(60);
                 // Hiển thị thông báo hướng dẫn
                 setShowGuidance(true);
             }
