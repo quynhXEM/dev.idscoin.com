@@ -212,7 +212,7 @@ export const Verify = () => {
                                 {step.message}
                             </p>
                             {step.hash && (
-                                <a href={`https://a-scan.nobody.network/tx/${step.hash}`} target="_blank" className="text-xs text-gray-500 mt-1 break-all">
+                                <a href={`https://a-scan.nobody.network/tx/${step.hash}`} target="_blank" className="text-xs text-blue-500 mt-1 break-all font-bold">
                                     {t("view_detail")}
                                 </a>
                             )}

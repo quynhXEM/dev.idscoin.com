@@ -13,9 +13,10 @@ interface ImageUploadProps {
   description: string
   onImageChange: (file: File | null) => void
   accept?: string
+  children?: React.ReactNode
 }
 
-export function ImageUpload({ label, description, onImageChange, accept = "image/*" }: ImageUploadProps) {
+export function ImageUpload({ label, description, onImageChange, accept = "image/*", children }: ImageUploadProps) {
   const [dragActive, setDragActive] = useState(false)
   const [selectedImage, setSelectedImage] = useState<File | null>(null)
   const [previewUrl, setPreviewUrl] = useState<string | null>(null)
@@ -91,13 +92,12 @@ export function ImageUpload({ label, description, onImageChange, accept = "image
       <p className="text-gray-400 text-xs mb-3">{description}</p>
 
       <Card
-        className={`border-2 border-dashed transition-colors cursor-pointer ${
-          dragActive
-            ? "border-blue-500 bg-blue-900/20"
-            : selectedImage
-              ? "border-green-500 bg-green-900/20"
-              : "border-gray-600 bg-gray-800 hover:border-gray-500"
-        }`}
+        className={`border-2 border-dashed transition-colors cursor-pointer ${dragActive
+          ? "border-blue-500 bg-blue-900/20"
+          : selectedImage
+            ? "border-green-500 bg-green-900/20"
+            : "border-gray-600 bg-gray-800 hover:border-gray-500"
+          }`}
         onDragEnter={handleDrag}
         onDragLeave={handleDrag}
         onDragOver={handleDrag}
@@ -132,18 +132,20 @@ export function ImageUpload({ label, description, onImageChange, accept = "image
           ) : (
             <div className="text-center space-y-4">
               <div className="flex justify-center">
-                <div
-                  className={`w-16 h-16 rounded-full flex items-center justify-center ${
-                    dragActive ? "bg-blue-600" : "bg-gray-700"
-                  }`}
-                >
-                  {dragActive ? (
-                    <Upload className="w-8 h-8 text-white" />
-                  ) : (
-                    <ImageIcon className="w-8 h-8 text-gray-400" />
-                  )}
-                </div>
+                {children ? children :
+                  <div
+                    className={`w-16 h-16 rounded-full flex items-center justify-center ${dragActive ? "bg-blue-600" : "bg-gray-700"
+                      }`}
+                  >
+                    {dragActive ? (
+                      <Upload className="w-8 h-8 text-white" />
+                    ) : (
+                      <ImageIcon className="w-8 h-8 text-gray-400" />
+                    )}
+                  </div>
+                }
               </div>
+
 
               <div>
                 <p className="text-white font-medium mb-1">{dragActive ? t("drop_here") : t("drag_drop_here")}</p>

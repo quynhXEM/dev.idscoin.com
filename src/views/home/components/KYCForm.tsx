@@ -220,48 +220,28 @@ export function KYCForm({ isOpen, onClose }: KYCFormProps) {
 
                             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                                 {/* Front Image */}
-                                <div className="font-image-tooltip">                                <ImageUpload
+                                <ImageUpload
                                     label={t("front_image")}
                                     description={t("front_image_description")}
                                     onImageChange={(file) => setFormData({ ...formData, frontImage: file })}
+                                    children={<FontCardImage />}
                                 />
-                                </div>
-                                <Tooltip anchorSelect=".font-image-tooltip"
-                                    place="top"
-                                    className="text-wrap outline-none"
-                                    style={{ maxWidth: 270, zIndex: 100 }}>
-                                    <FontCardImage />
-                                </Tooltip>
 
                                 {/* Back Image */}
-                                <div className="back-image-tooltip">
-                                    <ImageUpload
-                                        label={t("back_image")}
-                                        description={t("back_image_description")}
-                                        onImageChange={(file) => setFormData({ ...formData, backImage: file })}
-                                    />
-                                </div>
-                                <Tooltip anchorSelect=".back-image-tooltip"
-                                    place="top"
-                                    className="text-wrap outline-none"
-                                    style={{ maxWidth: 270, zIndex: 100 }}>
-                                    <BackCardImage />
-                                </Tooltip>
+                                <ImageUpload
+                                    label={t("back_image")}
+                                    description={t("back_image_description")}
+                                    onImageChange={(file) => setFormData({ ...formData, backImage: file })}
+                                    children={<BackCardImage />}
+                                />
 
                                 {/* Selfie Image */}
-                                <div className="selfie-image-tooltip">
-                                    <ImageUpload
-                                        label={t("selfie_image")}
-                                        description={t("selfie_image_description")}
-                                        onImageChange={(file) => setFormData({ ...formData, selfieImage: file })}
-                                    />
-                                </div>
-                                <Tooltip anchorSelect=".selfie-image-tooltip"
-                                    place="top"
-                                    className="text-wrap outline-none"
-                                    style={{ maxWidth: 270, zIndex: 100 }}>
-                                    <KYCImage />
-                                </Tooltip>
+                                <ImageUpload
+                                    label={t("selfie_image")}
+                                    description={t("selfie_image_description")}
+                                    onImageChange={(file) => setFormData({ ...formData, selfieImage: file })}
+                                    children={<KYCImage />}
+                                />
                             </div>
                         </div>
 
