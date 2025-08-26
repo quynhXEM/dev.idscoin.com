@@ -134,7 +134,8 @@
       "withdrawCommicsion": "Withdrawn",
       "activeCommission": "Available",
       "noCommissionHistory": "No commission history.",
-      "verifyEmail": "Verify email address and get {amount} IDS"
+      "verifyEmail": "Verify email address and get {amount} IDS",
+      "verifyEmailTitle": "Verify email {email}"
     },
     "verifyEmail": {
       "wait_1_minute": "You have already requested email verification, please wait 1 minute to resend.",

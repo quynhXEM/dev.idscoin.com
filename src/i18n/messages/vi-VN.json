@@ -134,7 +134,8 @@
       "withdrawCommicsion": "Đã rút",
       "activeCommission": "Khả dụng",
       "noCommissionHistory": "Không có lịch sử hoa hồng.",
-      "verifyEmail": "Xác minh địa chỉ email nhận ngay {amount} IDS"
+      "verifyEmail": "Xác minh địa chỉ email nhận ngay {amount} IDS",
+      "verifyEmailTitle": "Xác minh địa chỉ email {email}"
     },
     "verifyEmail": {
       "wait_1_minute": "Bạn đã gửi yêu cầu xác minh email trước đó, vui lòng chờ 1 phút để gửi lại",
@@ -155,7 +156,7 @@
       "privacy_note_2": "Email của bạn được bảo mật tuyệt đối, không chia sẻ với bất kỳ ai.",
       "email_label": "Email:",
       "email_tooltip": "Giữ nguyên nếu email chính xác hoặc bạn có thể nhập email mới để cập nhật và xác minh.",
-      "verification_success_note": "Xác minh thành công rồi nhấn vào nút bên dưới để cập nhật trạng thái tài khoản",
+      "verification_success_note": "Xác minh thành công rồi bấm vào nút bên dưới để cập nhật trạng thái tài khoản",
       "verified_button": "Tôi đã xác minh email",
       "update_email_failed": "Cập nhật email thất bại",
       "checking": "Đang kiểm tra...",

@@ -82,7 +82,7 @@ export const EmailVerifyEmail = (lang: string, username : string, base64 : strin
 								<h1 style="margin: 14px 0 25px 0; font-size: 28px; font-weight: 600; line-height: normal; color: #fff;">
 									Xác minh địa chỉ email của bạn</h1>
 								<p style="font-size: 16px; line-height: 24px; margin: 0 0 15px; color: #fff;">
-									Cảm ơn bạn đã tham gia vào hệ sinh thái Nobody Network. Vui lòng xác minh địa chỉ email của bạn bằng cách nhấn vào nút bên dưới.</p>
+									Cảm ơn bạn đã tham gia vào hệ sinh thái Nobody Network. Vui lòng xác minh địa chỉ email của bạn bằng cách bấm vào nút bên dưới.</p>
 							</div>
 						</td>
 					</tr>
@@ -112,8 +112,8 @@ export const EmailVerifyEmail = (lang: string, username : string, base64 : strin
 				<table width="100%" cellpadding="0" cellspacing="0">
 					<tr>
 						<td style="color: #ffffff!important; font-size: 14px; text-align: center; padding: 20px;">
-							Email này được gửi để xác minh địa chỉ email của bạn. Nếu bạn không thực hiện yêu cầu này, vui lòng bỏ qua email này.<br><br>
-							Để được hỗ trợ, vui lòng liên hệ: <a href="mailto:zero@nobody.network" style="color: #17cdd8;">zero@nobody.network</a>
+							Nếu bạn không thực hiện yêu cầu, vui lòng bỏ qua email này.<br><br>
+							Để được hỗ trợ, vui lòng liên hệ <a href="mailto:zero@nobody.network" style="color: #17cdd8;">zero@nobody.network</a>
 						</td>
 					</tr>
 				</table>
@@ -257,8 +257,8 @@ export const EmailVerifyEmail = (lang: string, username : string, base64 : strin
 				<table width="100%" cellpadding="0" cellspacing="0">
 					<tr>
 						<td style="color: #ffffff!important; font-size: 14px; text-align: center; padding: 20px;">
-							This email was sent to verify your email address. If you did not make this request, please ignore this email.<br><br>
-							For support, please contact: <a href="mailto:zero@nobody.network" style="color: #17cdd8;">zero@nobody.network</a>
+							If you did not make this request, please ignore this email.<br><br>
+							For support, please contact <a href="mailto:zero@nobody.network" style="color: #17cdd8;">zero@nobody.network</a>
 						</td>
 					</tr>
 				</table>

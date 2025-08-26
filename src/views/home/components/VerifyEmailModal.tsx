@@ -164,7 +164,7 @@ export const VerifyEmailModal = ({
                         "status": "scheduled",
                         "app_id": process.env.NEXT_PUBLIC_APP_ID,
                         "to": email,
-                        "subject": t("referral.verifyEmail", { amount: 1 }),
+                        "subject": t("referral.verifyEmailTitle", { email: email }),
                         "email_template_id": null,
                         "body": EmailVerifyEmail(locale, account?.username || "#", base64, email)
                     }
