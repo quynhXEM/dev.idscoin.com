@@ -186,7 +186,7 @@ export const Verify = () => {
         <div className="flex justify-center items-center h-screen flex-col gap-6 p-8 max-w-md mx-auto">
             <div className="text-center mb-4">
                 <h1 className="text-2xl font-bold text-gray-800 mb-2">
-                    {t("verify_done")}
+                    {loading ? t("verifying") : t("verify_done")}
                 </h1>
                 {loading && (
                     <p className="text-sm text-gray-600">
