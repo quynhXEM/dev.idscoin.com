@@ -333,7 +333,8 @@
       "success_message": "Verification request has been submitted successfully",
       "error_title": "Error",
       "error_message": "Verification request failed",
-      "nid_document": "National ID Card (CMND)"
+      "nid_document": "National ID Card (CMND)",
+      "error_number_exist": "Document number already exists in the system"
     },
     "kyc_card": {
       "reward_description_verified": "Share referral link for friends to join. Just when they complete KYC and you will receive 1 USDT reward for each successful KYC.",

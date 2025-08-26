@@ -333,7 +333,8 @@
       "success_message": "Yêu cầu xác minh đã được gửi thành công",
       "error_title": "Lỗi",
       "error_message": "Yêu cầu xác minh thất bại",
-      "nid_document": "Chứng minh nhân dân (CMND)"
+      "nid_document": "Chứng minh nhân dân (CMND)",
+      "error_number_exist": "Số giấy tờ đã tồn tại trong hệ thống"
     },
     "kyc_card": {
       "reward_description_verified": "Chia sẻ link giới thiệu để bạn bè tham gia. Chỉ cần họ KYC và bạn sẽ nhận thưởng 1 USDT cho mỗi người mới KYC thành công.",

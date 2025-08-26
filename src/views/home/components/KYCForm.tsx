@@ -8,16 +8,17 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Shield, FileText, Calendar, CreditCard, Camera, User, Info, XIcon } from "lucide-react"
+import { Shield, FileText, CreditCard, Camera, User, Info, XIcon, ChevronDownIcon, Calendar1 } from "lucide-react"
 import { ImageUpload } from "../ImageUpload"
 import { useUserWallet } from "@/commons/UserWalletContext"
 import { useNotification } from "@/commons/NotificationContext"
 import { UploadImage } from "@/libs/upload"
 import { useTranslations } from "next-intl"
-import { Tooltip } from "react-tooltip"
 import { KYCImage } from "@/res/KYCImage"
 import { BackCardImage } from "@/res/BackCardImage"
 import { FontCardImage } from "@/res/FontCardImage"
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+import { Calendar } from "@/components/ui/calendar"
 
 interface KYCFormProps {
     isOpen: boolean
@@ -25,20 +26,29 @@ interface KYCFormProps {
 }
 
 export function KYCForm({ isOpen, onClose }: KYCFormProps) {
+    const formatDateToYYYYMMDD = (dateString: string) => {
+        if (!dateString) return ""
+        const date = new Date(dateString)
+        const year = date.getFullYear()
+        const month = String(date.getMonth() + 1).padStart(2, '0')
+        const day = String(date.getDate()).padStart(2, '0')
+        return `${year}-${month}-${day}`
+    }
+
     const [formData, setFormData] = useState({
         cardType: "NID",
         cardNumber: "",
-        expiryDate: "",
+        expiryDate: formatDateToYYYYMMDD(new Date().toISOString()),
         frontImage: null as File | null,
         backImage: null as File | null,
         selfieImage: null as File | null,
     })
     const { account, loadKYCStatus } = useUserWallet()
+    const [open, setOpen] = useState(false)
     const { notify } = useNotification()
     const [isSubmitting, setIsSubmitting] = useState(false)
     const t = useTranslations("home.kyc_form")
 
-    // Ngăn chặn cuộn và tương tác khi modal mở
     useEffect(() => {
         if (isOpen) {
             const originalOverflow = document.body.style.overflow;
@@ -63,9 +73,45 @@ export function KYCForm({ isOpen, onClose }: KYCFormProps) {
         return { font: font.results.id, back: back.results.id, selfie: selfie.results.id }
     }
 
+    const checkKYCNumber = async (number: string) => {
+        const check = await fetch("/api/directus/request", {
+            method: "POST",
+            body: JSON.stringify({
+                type: "readItems",
+                collection: "member_kyc",
+                params: {
+                    filter: {
+                        number: {
+                            _eq: number
+                        }
+                    },
+                    fields: ["id", "number"],
+                    limit: 1
+                }
+
+            })
+        }).then(data => data.json())
+            .then(data => data.result)
+
+        return check.length != 0
+    }
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
         // setIsSubmitting(true)
+        const isKYCNumber = await checkKYCNumber(formData.cardNumber)
+        if (isKYCNumber) {
+            notify({
+                title: t("error_title"),
+                message: t("error_number_exist"),
+                type: false
+            })
+            setFormData({
+                ...formData,
+                cardNumber: ""
+            })
+            return;
+        }
         try {
             if (!formData.frontImage || !formData.backImage || !formData.selfieImage) return;
             setIsSubmitting(true)
@@ -120,7 +166,6 @@ export function KYCForm({ isOpen, onClose }: KYCFormProps) {
         return (
             formData.cardType &&
             formData.cardNumber &&
-            formData.expiryDate &&
             formData.frontImage &&
             formData.backImage &&
             formData.selfieImage
@@ -128,7 +173,7 @@ export function KYCForm({ isOpen, onClose }: KYCFormProps) {
     }
 
     return (
-        <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4 overscroll-contain" onClick={() => onClose(false)} onWheel={(e) => e.preventDefault()} onTouchMove={(e) => e.preventDefault()} style={{ touchAction: 'none' }}>
+        <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4 overscroll-contain" onClick={() => onClose(false)} style={{ touchAction: 'none' }}>
             <Card
                 className="w-full max-w-4xl bg-gray-900 border-gray-800 max-h-[90vh] overflow-y-auto"
                 onClick={(e) => e.stopPropagation()}
@@ -166,6 +211,7 @@ export function KYCForm({ isOpen, onClose }: KYCFormProps) {
                                         {t("document_type")}
                                     </Label>
                                     <Select
+                                        disabled={true}
                                         value={formData.cardType}
                                         onValueChange={(value) => setFormData({ ...formData, cardType: value })}
                                     >
@@ -201,16 +247,28 @@ export function KYCForm({ isOpen, onClose }: KYCFormProps) {
                             {/* Expiry Date */}
                             <div className="space-y-2">
                                 <Label htmlFor="expiryDate" className="text-white font-semibold flex items-center gap-2">
-                                    <Calendar className="w-4 h-4 text-blue-400" />
+                                    <Calendar1 className="w-4 h-4 text-blue-400" />
                                     {t("expiry_date")}
                                 </Label>
-                                <Input
-                                    id="expiryDate"
-                                    value={formData.expiryDate}
-                                    placeholder={t("expiry_date_placeholder")}
-                                    onChange={(e) => setFormData({ ...formData, expiryDate: e.target.value })}
-                                    className="bg-gray-800 border-gray-700 text-white focus:border-blue-500 max-w-xs"
-                                />
+                                <Popover open={open} onOpenChange={setOpen}>
+                                    <PopoverTrigger asChild>
+                                        <Button variant='outline' id='date' className='w-full justify-between font-normal  bg-gray-800 hover:bg-gray-800 border-gray-700 text-white hover:text-white'>
+                                            {formData.expiryDate ? formatDateToYYYYMMDD(formData.expiryDate) : 'Pick a date'}
+                                            <ChevronDownIcon />
+                                        </Button>
+                                    </PopoverTrigger>
+                                    <PopoverContent className='w-auto overflow-hidden p-0' align='start'>
+                                        <Calendar
+                                            mode='single'
+                                            selected={formData.expiryDate ? new Date(formData.expiryDate) : new Date()}
+                                            onSelect={(date) => {
+                                                setFormData({ ...formData, expiryDate: formatDateToYYYYMMDD(date?.toISOString() || "") })
+                                                setOpen(false)
+                                            }}
+                                            captionLayout='dropdown'
+                                        />
+                                    </PopoverContent>
+                                </Popover>
                             </div>
                         </div>
 
