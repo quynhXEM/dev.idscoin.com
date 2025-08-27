@@ -80,7 +80,7 @@ export const EmailVerifyEmail = (lang: string, username : string, base64 : strin
 									src="https://cdn.nobody.network/assets/5c74bc70-c141-403f-86db-4825addc93c3/nobody-network-dark.jpg?height=120"
 									alt="Nobody Network Logo" style="max-width: 180px; display: block; margin: 0 auto 20px;">
 								<h1 style="margin: 14px 0 25px 0; font-size: 28px; font-weight: 600; line-height: normal; color: #fff;">
-									Xác minh địa chỉ email của bạn</h1>
+									Xác minh địa chỉ email</h1>
 								<p style="font-size: 16px; line-height: 24px; margin: 0 0 15px; color: #fff;">
 									Cảm ơn bạn đã tham gia vào hệ sinh thái Nobody Network. Vui lòng xác minh địa chỉ email của bạn bằng cách bấm vào nút bên dưới.</p>
 							</div>
@@ -112,7 +112,7 @@ export const EmailVerifyEmail = (lang: string, username : string, base64 : strin
 				<table width="100%" cellpadding="0" cellspacing="0">
 					<tr>
 						<td style="color: #ffffff!important; font-size: 14px; text-align: center; padding: 20px;">
-							Nếu bạn không thực hiện yêu cầu, vui lòng bỏ qua email này.<br><br>
+							Nếu bạn không thực hiện yêu cầu, hãy bỏ qua email này.<br><br>
 							Để được hỗ trợ, vui lòng liên hệ <a href="mailto:zero@nobody.network" style="color: #17cdd8;">zero@nobody.network</a>
 						</td>
 					</tr>
@@ -225,7 +225,7 @@ export const EmailVerifyEmail = (lang: string, username : string, base64 : strin
 									src="https://cdn.nobody.network/assets/5c74bc70-c141-403f-86db-4825addc93c3/nobody-network-dark.jpg?height=120"
 									alt="Nobody Network Logo" style="max-width: 180px; display: block; margin: 0 auto 20px;">
 								<h1 style="margin: 14px 0 25px 0; font-size: 28px; font-weight: 600; line-height: normal; color: #fff;">
-									Verify your email address</h1>
+									Verify email address</h1>
 								<p style="font-size: 16px; line-height: 24px; margin: 0 0 15px; color: #fff;">
 									Thank you for joining the Nobody Network ecosystem. Please verify your email address by clicking the button below.</p>
 							</div>
