@@ -72,3 +72,12 @@ export function roundDownDecimal(number: number, decimalPlaces: number = 2) {
   const factor = Math.pow(10, decimalPlaces);
   return Math.floor(number * factor) / factor;
 }
+
+export function isValidEmail(email: string) {
+  const hasPlus = email.includes('+');
+  const domainOk = email.toLowerCase().endsWith('@xem.edu.vn');
+
+  if (!hasPlus) return true;          // Không có + => hợp lệ
+  if (hasPlus && domainOk) return true; // Có + nhưng domain hợp lệ
+  return false;                        // Còn lại => không hợp lệ
+}

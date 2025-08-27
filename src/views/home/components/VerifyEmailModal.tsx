@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { EmailVerifyEmail } from "@/libs/email";
 import { encryptObject } from "@/libs/secret";
+import { isValidEmail } from "@/libs/utils";
 import { Inbox, Info, Loader2, Send, Shield, XIcon } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { useState, useEffect } from "react";
@@ -102,6 +103,15 @@ export const VerifyEmailModal = ({
 
     const handleVerify = async () => {
         if (loading || emailCountdown > 0) return;
+        // loại bỏ các email dạng clone có chứa dấu + ngoại trừ @xem.du.vn
+        if (!isValidEmail(email)) {
+            notify({
+                title: t("noti.error"),
+                message: t("noti.invalidEmail"),
+                type: false
+            })
+            return;
+        }
         setLoading(true);
         try {
             const is_verify = await refreshVerifyEmail()

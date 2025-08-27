@@ -24,9 +24,10 @@ import {
   Loader2,
 } from "lucide-react";
 import { useUserWallet } from "@/commons/UserWalletContext";
-import { formatNumber } from "@/libs/utils";
+import { formatNumber, isValidEmail } from "@/libs/utils";
 import { VerifyEmail } from "./components/VefifyEmail";
 import { KYCRewardCard } from "./components/KYCRewardCard";
+import { useNotification } from "@/commons/NotificationContext";
 
 interface ReferralSectionProps {
   t: (key: string, params?: Record<string, string>) => string;
@@ -49,6 +50,7 @@ export function ReferralSection({
   const [isloading, setIsLoading] = useState<boolean>(false);
   const [isKYC, setIsKYC] = useState<boolean>(true);
   const [copied, setCopied] = useState(false);
+  const {notify} = useNotification()
 
   const copyReferralLink = async () => {
     try {
@@ -64,6 +66,14 @@ export function ReferralSection({
 
   const handleRegistration = async () => {
     if (!registrationEmail || !registrationUsername) return;
+    if (!isValidEmail(registrationEmail)) {
+      notify({
+          title: t("noti.error"),
+          message: t("noti.invalidEmail"),
+          type: false
+      })
+      return;
+  }
     setIsLoading(true);
     const update_info = await fetch("/api/directus/request", {
       method: "POST",

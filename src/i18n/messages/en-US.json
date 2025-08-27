@@ -301,7 +301,8 @@
       "clickHere": "Click here",
       "walletErrorReport": "to send an email to zero@nobody.network with the subject",
       "getSupport": "to get the fastest support.",
-      "withdrawConfirm": "Your withdrawal has been confirmed. The assets will be transferred to your wallet within 24 hours."
+      "withdrawConfirm": "Your withdrawal has been confirmed. The assets will be transferred to your wallet within 24 hours.",
+      "invalidEmail": "Don't use email subaddressing"
     },
     "kyc_form" : {
       "title": "Identity Verification (KYC)",
