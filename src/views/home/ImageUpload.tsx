@@ -107,11 +107,11 @@ export function ImageUpload({ label, description, onImageChange, accept = "image
         <CardContent className="p-6">
           {selectedImage && previewUrl ? (
             <div className="space-y-4">
-              <div className="relative">
+              <div className="relative flex justify-center">
                 <img
                   src={previewUrl || "/placeholder.svg"}
                   alt="Preview"
-                  className="w-full h-48 object-cover rounded-lg"
+                  className="w-48 h-48 object-contain rounded-lg"
                 />
                 <Button
                   onClick={(e) => {
