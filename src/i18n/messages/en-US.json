@@ -307,7 +307,7 @@
     "kyc_form" : {
       "title": "Identity Verification (KYC)",
       "description": "Complete verification to use full platform features",
-      "document_info": "Document Information",
+      "document_info": "Information on the National ID Card",
       "document_type": "Document Type *",
       "document_type_placeholder": "Select document type",
       "document_number": "Document Number *",

@@ -98,23 +98,23 @@ export function KYCForm({ isOpen, onClose }: KYCFormProps) {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
-        // setIsSubmitting(true)
-        const isKYCNumber = await checkKYCNumber(formData.cardNumber)
-        if (isKYCNumber) {
-            notify({
-                title: t("error_title"),
-                message: t("error_number_exist"),
-                type: false
-            })
-            setFormData({
-                ...formData,
-                cardNumber: ""
-            })
-            return;
-        }
         try {
             if (!formData.frontImage || !formData.backImage || !formData.selfieImage) return;
             setIsSubmitting(true)
+            const isKYCNumber = await checkKYCNumber(formData.cardNumber)
+            if (isKYCNumber) {
+                notify({
+                    title: t("error_title"),
+                    message: t("error_number_exist"),
+                    type: false
+                })
+                setFormData({
+                    ...formData,
+                    cardNumber: ""
+                })
+                setIsSubmitting(false)
+                return;
+            }
             // Upload Image
             const uploadImage = await upImage({
                 frontImage: formData.frontImage,
@@ -205,30 +205,6 @@ export function KYCForm({ isOpen, onClose }: KYCFormProps) {
                             </h3>
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                {/* Card Type */}
-                                <div className="space-y-2">
-                                    <Label htmlFor="cardType" className="text-white font-semibold">
-                                        {t("document_type")}
-                                    </Label>
-                                    <Select
-                                        disabled={true}
-                                        value={formData.cardType}
-                                        onValueChange={(value) => setFormData({ ...formData, cardType: value })}
-                                    >
-                                        <SelectTrigger className="w-full bg-gray-800 border-gray-700 text-white focus:border-blue-500">
-                                            <SelectValue placeholder={t("document_type_placeholder")} />
-                                        </SelectTrigger>
-                                        <SelectContent className="bg-gray-800 border-gray-700 text-white">
-                                            <SelectItem value="NID" className="text-white hover:bg-gray-700 focus:bg-gray-700 cursor-pointer focus:text-white">
-                                                <div className="flex items-center gap-2">
-                                                    <CreditCard className="w-4 h-4" />
-                                                    <span>{t("nid_document")}</span>
-                                                </div>
-                                            </SelectItem>
-                                        </SelectContent>
-                                    </Select>
-                                </div>
-
                                 {/* Card Number */}
                                 <div className="space-y-2">
                                     <Label htmlFor="cardNumber" className="text-white font-semibold">
@@ -242,34 +218,35 @@ export function KYCForm({ isOpen, onClose }: KYCFormProps) {
                                         className="bg-gray-800 border-gray-700 text-white placeholder:text-gray-400 focus:border-blue-500"
                                     />
                                 </div>
+                                {/* Expiry Date */}
+                                <div className="space-y-2">
+                                    <Label htmlFor="expiryDate" className="text-white font-semibold flex items-center gap-2">
+                                        <Calendar1 className="w-4 h-4 text-blue-400" />
+                                        {t("expiry_date")}
+                                    </Label>
+                                    <Popover open={open} onOpenChange={setOpen}>
+                                        <PopoverTrigger asChild>
+                                            <Button variant='outline' id='date' className='w-full justify-between font-normal  bg-gray-800 hover:bg-gray-800 border-gray-700 text-white hover:text-white'>
+                                                {formData.expiryDate ? formatDateToYYYYMMDD(formData.expiryDate) : 'Pick a date'}
+                                                <ChevronDownIcon />
+                                            </Button>
+                                        </PopoverTrigger>
+                                        <PopoverContent className='w-auto overflow-hidden p-0' align='start'>
+                                            <Calendar
+                                                mode='single'
+                                                selected={formData.expiryDate ? new Date(formData.expiryDate) : new Date()}
+                                                onSelect={(date) => {
+                                                    setFormData({ ...formData, expiryDate: formatDateToYYYYMMDD(date?.toISOString() || "") })
+                                                    setOpen(false)
+                                                }}
+                                                captionLayout='dropdown'
+                                            />
+                                        </PopoverContent>
+                                    </Popover>
+                                </div>
                             </div>
 
-                            {/* Expiry Date */}
-                            <div className="space-y-2">
-                                <Label htmlFor="expiryDate" className="text-white font-semibold flex items-center gap-2">
-                                    <Calendar1 className="w-4 h-4 text-blue-400" />
-                                    {t("expiry_date")}
-                                </Label>
-                                <Popover open={open} onOpenChange={setOpen}>
-                                    <PopoverTrigger asChild>
-                                        <Button variant='outline' id='date' className='w-full justify-between font-normal  bg-gray-800 hover:bg-gray-800 border-gray-700 text-white hover:text-white'>
-                                            {formData.expiryDate ? formatDateToYYYYMMDD(formData.expiryDate) : 'Pick a date'}
-                                            <ChevronDownIcon />
-                                        </Button>
-                                    </PopoverTrigger>
-                                    <PopoverContent className='w-auto overflow-hidden p-0' align='start'>
-                                        <Calendar
-                                            mode='single'
-                                            selected={formData.expiryDate ? new Date(formData.expiryDate) : new Date()}
-                                            onSelect={(date) => {
-                                                setFormData({ ...formData, expiryDate: formatDateToYYYYMMDD(date?.toISOString() || "") })
-                                                setOpen(false)
-                                            }}
-                                            captionLayout='dropdown'
-                                        />
-                                    </PopoverContent>
-                                </Popover>
-                            </div>
+
                         </div>
 
                         {/* Image Upload Section */}

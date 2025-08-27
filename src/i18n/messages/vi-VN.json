@@ -307,7 +307,7 @@
     "kyc_form": {
       "title": "Xác minh danh tính (KYC)",
       "description": "Hoàn thành xác minh để sử dụng đầy đủ tính năng platform",
-      "document_info": "Thông tin giấy tờ",
+      "document_info": "Thông tin trên CCCD",
       "document_type": "Loại giấy tờ *",
       "document_type_placeholder": "Chọn loại giấy tờ",
       "document_number": "Số giấy tờ *",
