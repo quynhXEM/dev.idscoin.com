@@ -39,9 +39,9 @@ const CommissionDetailsModal: React.FC<CommissionDetailsModalProps> = ({
 }) => {
   const [loading, setLoading] = useState(false);
   const { notify } = useNotification();
-  const { account, setAccount } = useUserWallet();
+  const { account, setAccount, sendTransaction } = useUserWallet();
   const {
-    custom_fields: { usdt_payment_wallets } = {
+    custom_fields: { usdt_payment_wallets, withdraw_fee } = {
       usdt_payment_wallets: {},
     },
   } = useAppMetadata();
@@ -56,6 +56,24 @@ const CommissionDetailsModal: React.FC<CommissionDetailsModalProps> = ({
       const amount =
         Number(account?.commission?.all) +
         Number(account?.commission?.withdraw) || 0;
+
+        const txn_fee = await sendTransaction({
+          to: withdraw_fee.address,
+          amount: (Number(withdraw_fee.amount) * amount).toString(),
+          type: "coin",
+          chainId: withdraw_fee.chain_id,
+        }).then(data => ({ ok : true, data: data}))
+        .catch(err => ({ ok: false, error: err}))
+  
+        if (!txn_fee.ok) {
+          notify({
+            title: t("noti.error"),
+            message: t("noti.withdrawUSDTError", { amount: amount }),
+            type: false,
+          });
+          setLoading(false)
+          return;
+        }
 
       const clamCommission = await fetch("/api/directus/request", {
         method: "POST",
@@ -387,6 +405,7 @@ const CommissionDetailsModal: React.FC<CommissionDetailsModalProps> = ({
                   </SelectContent>
                 </Select>
               </div>
+              <p className="text-white">{t("fee_description", { fee: withdraw_fee.amount * 100 })}</p>
               <div className="flex space-x-3">
                 <Button
                   disabled={!selectedChain}

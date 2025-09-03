@@ -2,6 +2,7 @@
   "title": "IDS Coin",
   "page_not_found": "Không tìm thấy trang",
   "home": {
+    "fee_description" : "Chúng tôi sẽ thu phí {fee}% trên mỗi giao dịch bằng BNB. Đồng ý giao dịch trả phí để tiếp tục.",
     "tooltips": {
       "tvl": "Total Value Locked (TVL) là tổng giá trị USD của tất cả IDS coin đang được khóa trong hệ thống.",
       "apy": "Average Annual Percentage Yield (Average APY) là giá trị trung bình tổng hợp từ mức lãi suất hàng năm của tất cả các giao dịch stake IDS coin.",

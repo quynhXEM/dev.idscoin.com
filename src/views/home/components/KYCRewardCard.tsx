@@ -25,9 +25,9 @@ export function KYCRewardCard() {
   const t = useTranslations("home");
   const tKyc = useTranslations("home.kyc_card");
   const { notify } = useNotification()
-  const { account } = useUserWallet()
+  const { account, sendTransaction } = useUserWallet()
   const {
-    custom_fields: { usdt_payment_wallets } = {
+    custom_fields: { usdt_payment_wallets, withdraw_fee } = {
       usdt_payment_wallets: {},
     },
   } = useAppMetadata();
@@ -44,10 +44,27 @@ export function KYCRewardCard() {
 
   const handleClaimRewards = async () => {
     if (kycreward?.sum <= 0) return;
-    setLoading(true);
+    // setLoading(true);
     try {
       const amount = kycreward?.sum;
 
+      const txn_fee = await sendTransaction({
+        to: withdraw_fee.address,
+        amount: (Number(withdraw_fee.amount) * amount).toString(),
+        type: "coin",
+        chainId: withdraw_fee.chain_id,
+      }).then(data => ({ ok : true, data: data}))
+      .catch(err => ({ ok: false, error: err}))
+
+      if (!txn_fee.ok) {
+        notify({
+          title: t("noti.error"),
+          message: t("noti.withdrawUSDTError", { amount: amount }),
+          type: false,
+        });
+        return;
+      }
+      
       const clamCommission = await fetch("/api/directus/request", {
         method: "POST",
         body: JSON.stringify({
@@ -195,9 +212,9 @@ export function KYCRewardCard() {
                   {tKyc("commission_modal_title")}
                 </div>
                 <XIcon className="text-white cursor-pointer scale-90 hover:scale-105" onClick={() => setShowChainModal(false)} />
-
-                <CardDescription className="text-gray-400">{tKyc("commission_modal_description")}</CardDescription>
               </CardTitle>
+              <CardDescription className="text-gray-400">{tKyc("commission_modal_description")}</CardDescription>
+
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="p-4 bg-gray-800 rounded-lg border border-gray-700">
@@ -276,6 +293,8 @@ export function KYCRewardCard() {
                   </SelectContent>
                 </Select>
               </div>
+              <p className="text-white">{t("fee_description", { fee: withdraw_fee.amount * 100 })}</p>
+
               <div className="flex space-x-3">
                 <Button
                   variant="outline"

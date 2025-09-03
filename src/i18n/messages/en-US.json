@@ -2,6 +2,7 @@
   "title": "IDS Coin",
   "page_not_found": "Page Not Found",
   "home": {
+    "fee_description": "We will charge {fee}% on each transaction by BNB. Agree to pay the transaction fee to continue.",
     "tooltips": {
       "tvl": "Total Value Locked (TVL) is the total USD value of all IDS coins currently locked in the system.",
       "apy": "Average Annual Percentage Yield (Average APY) is the aggregated average of annual interest rates from all IDS coin staking activities.",
