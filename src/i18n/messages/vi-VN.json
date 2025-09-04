@@ -137,9 +137,12 @@
       "noCommissionHistory": "Không có lịch sử hoa hồng.",
       "verifyEmail": "Xác minh địa chỉ email nhận ngay {amount} IDS",
       "verifyEmailTitle": "Xác minh địa chỉ email {email}",
-      "addReferral": "Thêm người giới thiệu",
-      "addReferralDescription": "Ví đã được kết nối. Vui lòng nhập username của người giới thiệu.",
-      "referralUsername": "Người giới thiệu"
+      "addReferral": "Tham gia cộng đồng riêng tư",
+      "addReferralDescription": "Đây là không gian dành riêng cho những người được giới thiệu.",
+      "referralUsername": "Người giới thiệu",
+      "referralUsernamePlaceholder": "Username của người giới thiệu",
+      "sharelinkReferral": "Chia sẻ link giới thiệu để mời bạn bè tham gia",
+      "submitReferral": "Xác nhận người giới thiệu"
     },
     "verifyEmail": {
       "wait_1_minute": "Bạn đã gửi yêu cầu xác minh email trước đó, vui lòng chờ 1 phút để gửi lại",

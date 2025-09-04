@@ -137,9 +137,12 @@
       "noCommissionHistory": "No commission history.",
       "verifyEmail": "Verify email address and get {amount} IDS",
       "verifyEmailTitle": "Verify email {email}",
-      "addReferral": "Add referral user",
-      "addReferralDescription": "Wallet is connected. Please enter the username of the referral user.",
-      "referralUsername": "Referral user"
+      "addReferral": "Join the private community",
+      "addReferralDescription": "This is a private space for referred members only.",
+      "referralUsername": "Referral user",
+      "referralUsernamePlaceholder": "Username of the referral user",
+      "sharelinkReferral": "Share referral link to invite friends to join",
+      "submitReferral": "Verify referrer"
     },
     "verifyEmail": {
       "wait_1_minute": "You have already requested email verification, please wait 1 minute to resend.",

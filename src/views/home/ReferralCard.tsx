@@ -53,7 +53,7 @@ export function ReferralSection({
   const [copied, setCopied] = useState(false);
   const [referrer_exist, setReferrer_exist] = useState<boolean>(false);
   const [ref_username, setRef_username] = useState<string | null>(null);
-  
+
   const { notify } = useNotification()
   const router = useRouter()
   const path = usePathname()
@@ -74,7 +74,20 @@ export function ReferralSection({
         },
       }),
     }).then(data => data.json())
-      .then(data => data.result.length != 0)
+      .then(async data => {
+        await fetch("/api/directus/request", {
+          method: "POST",
+          body: JSON.stringify({
+            type: "updateItem",
+            collection: "member",
+            id: account?.id,
+            items: {
+              referrer_id: data.result[0]?.id
+            }
+          })
+        });  
+        return data.result.length != 0
+      })
       .catch(err => false)
 
     setReferrer_exist(check_ref)
@@ -212,7 +225,7 @@ export function ReferralSection({
             <p className="text-2xl">{t("referral.createlink")}</p>
           </CardTitle>
           <CardDescription className="text-gray-400">
-            {t("referral.createlinkcommicsion")}
+            {t("referral.sharelinkReferral")}
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -235,7 +248,7 @@ export function ReferralSection({
                 <div className="relative mt-1">
                   <Input
                     id="registration-username"
-                    placeholder="username123"
+                    placeholder={t("referral.referralUsernamePlaceholder")}
                     value={ref_username || ""}
                     onChange={(e) =>
                       setRef_username(
@@ -254,7 +267,7 @@ export function ReferralSection({
                   setIsLoading(true)
                   const check = await checkRef(ref_username || "")
                   if (check) {
-                      router.replace(`/${ref_username}`)
+                    router.replace(`/${ref_username}`)
                   } else {
                     notify({
                       title: t("noti.notfound"),
@@ -271,7 +284,7 @@ export function ReferralSection({
                 ) : (
                   <UserPlus className="w-4 h-4 mr-2" />
                 )}
-                {t("referral.addReferral")}
+                {t("referral.submitReferral")}
               </Button>
             </div>
           </div>
