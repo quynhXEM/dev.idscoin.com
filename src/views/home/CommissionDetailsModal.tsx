@@ -241,7 +241,7 @@ const CommissionDetailsModal: React.FC<CommissionDetailsModalProps> = ({
             {t("referral.detailsCommicsionDescription")}
           </CardDescription>
         </CardHeader>
-        <CardContent className="relative space-y-3 pb-43">
+        <CardContent className=" space-y-3">
           {/* Current Status */}
           <h3 className="font-semibold text-white mb-3">
             {t("referral.currentStatus")}
@@ -346,7 +346,6 @@ const CommissionDetailsModal: React.FC<CommissionDetailsModalProps> = ({
               </div>
             )}
           </div>
-          <div className="absolute px-6 bottom-0 left-0 right-0">
             <Separator className="bg-gray-700 " />
             <div className="gap-2 pt-3">
               <div className="flex justify-between">
@@ -445,7 +444,6 @@ const CommissionDetailsModal: React.FC<CommissionDetailsModalProps> = ({
                 })}
               </Button>
             </div>
-          </div>
         </CardContent>
       </Card>
       {/* Modal chọn chain */}
