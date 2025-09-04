@@ -12,7 +12,7 @@ import { getBalance } from "@/libs/token";
 export const StakeHistory = () => {
   const t = useTranslations("home");
   const {
-    custom_fields: { ids_distribution_wallet },
+    custom_fields: { ids_stake_wallet },
   } = useAppMetadata();
   const [loadingAction, setLoadingAction] = useState<boolean>(false);
   const [itemLoading, setItemLoading] = useState<any>(null);
@@ -115,7 +115,7 @@ export const StakeHistory = () => {
         id: txn.result.id,
         items: {
           affect_balance: false,
-          external_ref: `${ids_distribution_wallet.explorer_url}/tx/${txnReturn.result}`,
+          external_ref: `${ids_stake_wallet.explorer_url}/tx/${txnReturn.result}`,
         },
       }),
     }).then((data) => data.json());
@@ -125,7 +125,7 @@ export const StakeHistory = () => {
         title: t("noti.success"),
         children: (
           <Link
-            href={`${ids_distribution_wallet.explorer_url}/tx/${txnReturn.result}`}
+            href={`${ids_stake_wallet.explorer_url}/tx/${txnReturn.result}`}
             target="_blank"
             rel="noopener noreferrer"
           >
@@ -157,8 +157,8 @@ export const StakeHistory = () => {
     setLoadingAction(false);
     const newBalance = await getBalance({
       address: wallet?.address || "",
-      chainId: ids_distribution_wallet.chain_id,
-      rpc: ids_distribution_wallet.rpc_url
+      chainId: ids_stake_wallet.chain_id,
+      rpc: ids_stake_wallet.rpc_url
     });
     setBalance({ids: newBalance})
   };

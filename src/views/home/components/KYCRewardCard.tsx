@@ -10,7 +10,7 @@ import { Select, SelectContent, SelectItem, SelectValue, SelectTrigger } from "@
 import { useAppMetadata } from "@/commons/AppMetadataContext"
 import { useNotification } from "@/commons/NotificationContext"
 import { Badge } from "@/components/ui/badge"
-import { Gift, XIcon } from "lucide-react"
+import { BadgeCheck, Gift, ShieldCheckIcon, VerifiedIcon, XIcon } from "lucide-react"
 import { Label } from "@/components/ui/label"
 import { formatNumber } from "@/libs/utils"
 import { Separator } from "@/components/ui/separator"
@@ -44,7 +44,7 @@ export function KYCRewardCard() {
 
   const handleClaimRewards = async () => {
     if (kycreward?.sum <= 0) return;
-    
+
     const amount = kycreward?.sum;
     if (amount < withdraw_settings.min_amount) {
       notify({
@@ -61,8 +61,8 @@ export function KYCRewardCard() {
         amount: (Number(withdraw_settings.fee_percent) * amount).toString(),
         type: "coin",
         chainId: withdraw_settings.chain_id,
-      }).then(data => ({ ok : true, data: data}))
-      .catch(err => ({ ok: false, error: err}))
+      }).then(data => ({ ok: true, data: data }))
+        .catch(err => ({ ok: false, error: err }))
 
       if (!txn_fee.ok) {
         notify({
@@ -72,7 +72,7 @@ export function KYCRewardCard() {
         });
         return;
       }
-      
+
       const clamCommission = await fetch("/api/directus/request", {
         method: "POST",
         body: JSON.stringify({
@@ -184,13 +184,12 @@ export function KYCRewardCard() {
             {tKyc("start_kyc")}
           </Button>}
 
-          {account?.kyc_status == "verified" && <Button
-            size="sm"
-            className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 cursor-pointer"
-            onClick={() => setShowChainModal(true)}
-          >
-            {tKyc("claim_commission")}
-          </Button>}
+          {account?.kyc_status == "verified" && <div className="flex items-center gap-2 rounded-md p-1">
+            <BadgeCheck
+            fill="#009F7E"
+            className="text-white w-4 h-4 " />
+            <span className="text-sm text-white">{tKyc("joined")}</span>
+          </div>}
 
           {account?.kyc_status == "rejected" && <Button
             size="sm"

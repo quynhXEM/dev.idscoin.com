@@ -7,10 +7,10 @@ import {
   CardContent,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Gift, HandCoins, Loader2, XIcon } from "lucide-react";
+import { BadgeCheck, Gift, HandCoins, Loader2, XIcon } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { useNotification } from "@/commons/NotificationContext";
-import { timeFormat, formatNumber, roundDownDecimal } from "@/libs/utils";
+import { timeFormat, formatNumber, roundDownDecimal, getFee } from "@/libs/utils";
 import { Separator } from "@/components/ui/separator";
 import { useAppMetadata } from "@/commons/AppMetadataContext";
 import { useUserWallet } from "@/commons/UserWalletContext";
@@ -41,19 +41,24 @@ const CommissionDetailsModal: React.FC<CommissionDetailsModalProps> = ({
   const { notify } = useNotification();
   const { account, setAccount, sendTransaction } = useUserWallet();
   const {
-    custom_fields: { usdt_payment_wallets, withdraw_settings } = {
+    custom_fields: { usdt_payment_wallets, withdraw_settings, master_wallet } = {
       usdt_payment_wallets: {},
     },
+    chains
   } = useAppMetadata();
   const [showChainModal, setShowChainModal] = useState(false);
   const [selectedChain, setSelectedChain] = useState<string>("");
   const [txnCommicsion, setTxnCommicsion] = useState<any[]>([]);
+  const [txn_data, setTXN_data] = useState({
+    f1: [],
+    kyc: []
+  });
 
   const handleCommicsion = async () => {
     if (txnCommicsion.length === 0) return;
     const amount =
-      Number(account?.commission?.all) +
-      Number(account?.commission?.withdraw) || 0;
+      Number((account as any)?.commission?.all) +
+      Number((account as any)?.commission?.withdraw) || 0;
 
     if (amount < withdraw_settings.min_amount) {
       notify({
@@ -65,11 +70,9 @@ const CommissionDetailsModal: React.FC<CommissionDetailsModalProps> = ({
     }
     setLoading(true);
     try {
-
-
       const txn_fee = await sendTransaction({
-        to: usdt_payment_wallets[selectedChain].address,
-        amount: (Number(withdraw_settings.fee_percent) * amount).toString(),
+        to: master_wallet?.address,
+        amount: getFee(selectedChain, chains, Number(withdraw_settings.fee_percent) * amount).toString(),
         type: "coin",
         chainId: Number(selectedChain),
       }).then(data => ({ ok: true, data: data }))
@@ -113,7 +116,7 @@ const CommissionDetailsModal: React.FC<CommissionDetailsModalProps> = ({
         return;
       }
 
-      setAccount((prev) => ({
+      setAccount((prev: any) => ({
         ...prev,
         commission: {
           ...prev.commission,
@@ -139,7 +142,7 @@ const CommissionDetailsModal: React.FC<CommissionDetailsModalProps> = ({
   };
 
   const getData = async () => {
-    const [txn_commicsion] = await Promise.all([
+    const [txn_f1, txn_kyc] = await Promise.all([
       await fetch("/api/directus/request", {
         method: "POST",
         body: JSON.stringify({
@@ -149,14 +152,43 @@ const CommissionDetailsModal: React.FC<CommissionDetailsModalProps> = ({
             filter: {
               member_id: account?.id,
               status: "completed",
-              type: "referral_bonus",
+              amount: {
+                "_gte": 0
+              },
+              type: {
+                "_in": ["referral_bonus"]
+              },
+            },
+            fields: ["*", "parent_id.*"],
+          },
+        }),
+      }).then((data) => data.json()),
+      await fetch("/api/directus/request", {
+        method: "POST",
+        body: JSON.stringify({
+          type: "readItems",
+          collection: "txn",
+          params: {
+            filter: {
+              member_id: account?.id,
+              status: "completed",
+              amount: {
+                "_gte": 0
+              },
+              type: {
+                "_in": ["referral_kyc_bonus"]
+              },
             },
             fields: ["*", "parent_id.*"],
           },
         }),
       }).then((data) => data.json()),
     ]);
-    setTxnCommicsion(txn_commicsion.result);
+    setTXN_data({
+      f1: txn_f1.result,
+      kyc: txn_kyc.result
+    })
+    setTxnCommicsion([...txn_f1.result, ...txn_kyc.result]);
   };
 
   useEffect(() => {
@@ -211,28 +243,31 @@ const CommissionDetailsModal: React.FC<CommissionDetailsModalProps> = ({
             {t("referral.detailsCommicsionDescription")}
           </CardDescription>
         </CardHeader>
-        <CardContent className="space-y-6">
+        <CardContent className="relative space-y-3 pb-43">
           {/* Current Status */}
+          <h3 className="font-semibold text-white mb-3">
+            {t("referral.currentStatus")}
+          </h3>
           <div className="p-4 bg-gray-800 rounded-lg border border-gray-700">
             <div className="flex items-center justify-between mb-3">
               <h3 className="font-semibold text-white">
-                {t("referral.currentStatus")}
+                {t("referral.vipUpgrade")}
               </h3>
               <Badge
-                variant={account?.isVip ? "default" : "secondary"}
+                variant={(account as any)?.isVip ? "default" : "secondary"}
                 className={
-                  account?.isVip
+                  (account as any)?.isVip
                     ? "bg-gradient-to-r from-blue-500 to-purple-500 text-white"
                     : "bg-gray-700 text-gray-300 hover:bg-gray-600 hover:text-gray-200"
                 }
               >
-                {account?.isVip ? "VIP" : "Miễn phí"}
+                {(account as any)?.isVip ? "VIP" : "Miễn phí"}
               </Badge>
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div className="text-center">
                 <div className="text-2xl font-bold text-emerald-400">
-                  {!account?.isVip ? "5%" : "50%"}
+                  {!(account as any)?.isVip ? "5%" : "50%"}
                 </div>
                 <div className="text-sm text-gray-400">
                   {t("referral.usdtRate")}
@@ -240,7 +275,7 @@ const CommissionDetailsModal: React.FC<CommissionDetailsModalProps> = ({
               </div>
               <div className="text-center">
                 <div className="text-2xl font-bold text-cyan-400">
-                  {txnCommicsion.length}
+                  {txn_data.f1.length}
                 </div>
                 <div className="text-sm text-gray-400">
                   {t("referral.vipUpgrades")}
@@ -249,121 +284,169 @@ const CommissionDetailsModal: React.FC<CommissionDetailsModalProps> = ({
             </div>
           </div>
 
-          {/* Commission History */}
-          <div>
-            <h3 className="font-semibold text-white mb-3">
-              {t("referral.commissionHistory")}
-            </h3>
-            <div className="space-y-3">
-              {txnCommicsion.length != 0 ? (
-                txnCommicsion.map((item, index) => (
-                  <div
-                    key={index}
-                    className="flex items-center justify-between p-3 bg-gray-800 rounded-lg border border-gray-700"
-                  >
-                    <div>
-                      <div className="font-medium text-white">
-                        {timeFormat(item.date_created)}
-                      </div>
-                      <div className="text-sm text-gray-400">
-                        {item.description}
-                      </div>
-                    </div>
-                    <div className="text-right">
-                      <div className="font-bold text-emerald-400">
-                        +${formatNumber(item.amount)}
-                      </div>
-                    </div>
-                  </div>
-                ))
-              ) : (
-                <div className="text-center text-gray-400 p-1">
-                  {t("referral.noCommissionHistory")}
-                </div>
-              )}
+          <div className="p-4 bg-gray-800 rounded-lg border border-gray-700">
+            <div className="flex items-center justify-between mb-3">
+              <h3 className="font-semibold text-white">
+                Xác thực KYC
+              </h3>
+              {account?.kyc_status == "verified" && <div className="flex items-center gap-2 rounded-md p-[1px] px-1 bg-gradient-to-r from-cyan-600 to-green-600">
+                <BadgeCheck
+                  fill="#009F7E"
+                  className="text-white w-4 h-4 " />
+                <span className="text-sm text-white">{t("kyc_card.joined")}</span>
+              </div>}
             </div>
-          </div>
-          <Separator className="bg-gray-700" />
-          <div className="gap-2">
-            <div className="flex justify-between">
-              <span className="text-gray-400 text-md">
-                {t("referral.totalCommicsion")}:
-              </span>
-              <span className="font-semibold text-white">
-                {formatNumber(account?.commission?.all)} USDT
-              </span>
-            </div>
-            <div className="flex justify-between">
-              <span className="text-gray-400 text-md">
-                {t("referral.withdrawCommicsion")}:
-              </span>
-              <span className="font-semibold text-blue-400">
-                {-formatNumber(Number(account?.commission?.withdraw) * -1)} USDT
-              </span>
-            </div>
-            <div className="flex justify-between">
-              <span className="text-gray-400 text-md">
-                {t("referral.activeCommission")}:
-              </span>
-              <span className="font-semibold text-white">
-                {formatNumber(roundDownDecimal(
-                  Number(account?.commission?.all) +
-                  Number(account?.commission?.withdraw))
-                )}{" "}
-                USDT
-              </span>
-            </div>
-          </div>
-
-          {!account?.isVip && (
-            <div className="p-4 bg-blue-900/20 rounded-lg border border-blue-700/50">
+            <div className="grid grid-cols-2 gap-4">
               <div className="text-center">
-                <div className="text-blue-300 font-semibold mb-2">
-                  {t("vip.tip")}
+                <div className="text-2xl font-bold text-emerald-400">
+                  1
                 </div>
-                <div className="text-sm text-blue-200 mb-3">
-                  {t("vip.upgrade50Tip")}
+                <div className="text-sm text-gray-400">
+                  {t("referral.usdtGift")}
                 </div>
-                <Button
-                  size="sm"
-                  className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 cursor-pointer"
-                  onClick={() => {
-                    onClose();
-                    setShowVipModal(true);
-                  }}
-                >
-                  {t("vip.upgradeVipNow")}
-                </Button>
+              </div>
+              <div className="text-center">
+                <div className="text-2xl font-bold text-cyan-400">
+                  {txn_data.kyc.length}
+                </div>
+                <div className="text-sm text-gray-400">
+                  {t("referral.kycf1upgrade")}
+                </div>
               </div>
             </div>
-          )}
+          </div>
 
-          <div className="flex justify-center gap-3">
-            <Button
-              variant="outline"
-              disabled={
-                loading ||
-                txnCommicsion.length === 0 ||
-                Number(account?.commission?.all) +
-                Number(account?.commission?.withdraw) ==
-                0
-              }
-              className="flex-2 border-gray-700 text-gray-300 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-700 hover:to-blue-700 hover:text-gray-200 cursor-pointer"
-              onClick={() => setShowChainModal(true)}
-            >
-              {loading ? (
-                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-              ) : (
-                <HandCoins className="w-4 h-4 mr-2" />
-              )}
-              {t("referral.clamCommicsion", {
-                amount:
-                  roundDownDecimal(
-                    Number(account?.commission?.all) +
-                    Number(account?.commission?.withdraw)
-                  ) || 0,
-              })}
-            </Button>
+          {/* Commission History */}
+          <h3 className="font-semibold text-white mb-3">
+            {t("referral.commissionHistory")}
+          </h3>
+          <div className="space-y-3 scroll-m-0 overflow-y-auto max-h-[300px]">
+            {txnCommicsion.length != 0 ? (
+              txnCommicsion.map((item, index) => (
+                <div
+                  key={index}
+                  className="flex items-center justify-between p-3 bg-gray-800 rounded-lg border border-gray-700"
+                >
+                  <div>
+                    <div className="font-medium text-white">
+                      {timeFormat(item.date_created)}
+                    </div>
+                    <div className="text-sm text-gray-400">
+                      {item.description}
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <div className="font-bold text-emerald-400">
+                      +${formatNumber(item.amount)}
+                    </div>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <div className="text-center text-gray-400 p-1">
+                {t("referral.noCommissionHistory")}
+              </div>
+            )}
+          </div>
+          <div className="absolute px-6 bottom-0 left-0 right-0">
+            <Separator className="bg-gray-700 " />
+            <div className="gap-2 pt-3">
+              <div className="flex justify-between">
+                <span className="text-gray-400 text-md">
+                  {t("referral.totalCommicsion")} F1:
+                </span>
+                <span className="font-semibold text-white">
+                  {formatNumber((account as any)?.commission?.f1)} USDT
+                </span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-gray-400 text-md">
+                  {t("referral.totalCommicsion")} KYC:
+                </span>
+                <span className="font-semibold text-white">
+                  {formatNumber((account as any)?.commission?.kyc)} USDT
+                </span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-gray-400 text-md">
+                  {t("referral.totalCommicsion")}:
+                </span>
+                <span className="font-semibold text-white">
+                  {formatNumber((account as any)?.commission?.all)} USDT
+                </span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-gray-400 text-md">
+                  {t("referral.withdrawCommicsion")}:
+                </span>
+                <span className="font-semibold text-blue-400">
+                  {-formatNumber(Number((account as any)?.commission?.withdraw) * -1)} USDT
+                </span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-gray-400 text-md">
+                  {t("referral.activeCommission")}:
+                </span>
+                <span className="font-semibold text-white">
+                  {formatNumber(roundDownDecimal(
+                    Number((account as any)?.commission?.all) +
+                    Number((account as any)?.commission?.withdraw))
+                  )}{" "}
+                  USDT
+                </span>
+              </div>
+            </div>
+
+            {!(account as any)?.isVip && (
+              <div className="p-4 bg-blue-900/20 rounded-lg border border-blue-700/50">
+                <div className="text-center">
+                  <div className="text-blue-300 font-semibold mb-2">
+                    {t("vip.tip")}
+                  </div>
+                  <div className="text-sm text-blue-200 mb-3">
+                    {t("vip.upgrade50Tip")}
+                  </div>
+                  <Button
+                    size="sm"
+                    className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 cursor-pointer"
+                    onClick={() => {
+                      onClose();
+                      setShowVipModal(true);
+                    }}
+                  >
+                    {t("vip.upgradeVipNow")}
+                  </Button>
+                </div>
+              </div>
+            )}
+
+            <div className="flex justify-center gap-3">
+              <Button
+                variant="outline"
+                disabled={
+                  loading ||
+                  txnCommicsion.length === 0 ||
+                  Number((account as any)?.commission?.all) +
+                  Number((account as any)?.commission?.withdraw) ==
+                  0
+                }
+                className="flex-2 border-gray-700 text-gray-300 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-700 hover:to-blue-700 hover:text-gray-200 cursor-pointer"
+                onClick={() => setShowChainModal(true)}
+              >
+                {loading ? (
+                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                ) : (
+                  <HandCoins className="w-4 h-4 mr-2" />
+                )}
+                {t("referral.clamCommicsion", {
+                  amount:
+                    roundDownDecimal(
+                      Number((account as any)?.commission?.all) +
+                      Number((account as any)?.commission?.withdraw)
+                    ) || 0,
+                })}
+              </Button>
+            </div>
           </div>
         </CardContent>
       </Card>
@@ -393,19 +476,18 @@ const CommissionDetailsModal: React.FC<CommissionDetailsModalProps> = ({
                     <SelectValue placeholder={t("vip.selectChain")} />
                   </SelectTrigger>
                   <SelectContent className="bg-gray-800 border-gray-700 text-white">
-                    {usdt_payment_wallets &&
-                      Object.entries(usdt_payment_wallets).map(
-                        ([key, value]) => {
-                          const v = value as { name: string };
+                    {chains &&
+                      chains?.map(
+                        (item: any) => {
                           return (
                             <SelectItem
-                              key={key}
-                              value={key}
+                              key={item.chain_id.id}
+                              value={item.chain_id.id.toString()}
                               className="text-white hover:bg-gray-700 focus:bg-gray-700"
                             >
                               <div className="flex items-center gap-2">
                                 <div className="font-semibold text-white">
-                                  {v.name}
+                                  {item.chain_id.name}
                                 </div>
                               </div>
                             </SelectItem>

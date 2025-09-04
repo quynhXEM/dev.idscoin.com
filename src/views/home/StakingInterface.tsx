@@ -52,7 +52,6 @@ export function StakingInterface({
   const {
     custom_fields: {
       usdt_payment_wallets,
-      ids_distribution_wallet,
       ids_stake_wallet,
     },
   } = useAppMetadata();
@@ -231,8 +230,8 @@ export function StakingInterface({
     // (fix) lấy coin xóa token address
     const newBalance = await getBalance({
       address: account?.wallet_address || "",
-      chainId: ids_distribution_wallet.chain_id,
-      rpc: ids_distribution_wallet.rpc_url
+      chainId: ids_stake_wallet.chain_id,
+      rpc: ids_stake_wallet.rpc_url
     });
     setBalance({ ids: newBalance })
   };
@@ -348,7 +347,7 @@ export function StakingInterface({
           type: "swap_out",
           affect_balance: false,
           description: `Swap: Received ${swapAmount} IDS`,
-          external_ref: `${ids_distribution_wallet.explorer_url}/tx/${txHashReceive}`,
+          external_ref: `${ids_stake_wallet.explorer_url}/tx/${txHashReceive}`,
           parent_id: SendTXN.result.id,
         },
       }),
@@ -387,8 +386,8 @@ export function StakingInterface({
     // (fix) lấy coin xóa token address
     const ids = await getBalance({
       address: account?.wallet_address || "",
-      chainId: ids_distribution_wallet.chain_id,
-      rpc: ids_distribution_wallet.rpc_url
+      chainId: ids_stake_wallet.chain_id,
+      rpc: ids_stake_wallet.rpc_url
     });
     setBalance({usdt: usdt, ids: ids })
   };

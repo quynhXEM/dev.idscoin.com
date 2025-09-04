@@ -46,7 +46,7 @@ const RewardsModal: React.FC<RewardsModalProps> = ({
   const { account, addNewMember, wallet } = useUserWallet();
   const { notify } = useNotification();
   const {
-    custom_fields: { ids_distribution_wallet },
+    custom_fields: { ids_stake_wallet },
   } = useAppMetadata();
 
   const handleClaimRewards = async () => {
@@ -112,7 +112,7 @@ const RewardsModal: React.FC<RewardsModalProps> = ({
           id: transaction.result.id,
           items: {
             affect_balance: false,
-            external_ref: `${ids_distribution_wallet.explorer_url}/tx/${txn.txHash}`,
+            external_ref: `${ids_stake_wallet.explorer_url}/tx/${txn.txHash}`,
           },
         }),
       }).then((data) => data.json());
@@ -134,7 +134,7 @@ const RewardsModal: React.FC<RewardsModalProps> = ({
         title: t("noti.success"),
         children: (
           <Link
-            href={`${ids_distribution_wallet.explorer_url}/tx/${txn.txHash}`}
+            href={`${ids_stake_wallet.explorer_url}/tx/${txn.txHash}`}
             target="_blank"
             rel="noopener noreferrer"
           >

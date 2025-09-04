@@ -2,8 +2,6 @@ import CryptoJS from "crypto-js";
 
 // Mã hóa object thành string sử dụng key
 export function encryptObject(obj: any): string {
-    console.log(process.env.NEXT_PUBLIC_SECRET_KEY);
-
     const json = JSON.stringify(obj);
     const ciphertext = CryptoJS.AES.encrypt(json, process.env.NEXT_PUBLIC_SECRET_KEY || "").toString();
     return ciphertext;
@@ -12,13 +10,9 @@ export function encryptObject(obj: any): string {
 // Giải mã string thành object sử dụng key
 export function decryptObject(str: string): any {
     try {
-        console.log(process.env.NEXT_PUBLIC_SECRET_KEY);
-        
         const bytes = CryptoJS.AES.decrypt(str, process.env.NEXT_PUBLIC_SECRET_KEY || "");
         const decrypted = bytes.toString(CryptoJS.enc.Utf8);
         if (!decrypted) throw new Error("Wrong key or corrupted data");
-        console.log(decrypted);
-        
         return decrypted;
     } catch (e) {
         console.log(e);

@@ -72,7 +72,7 @@ export function UserWalletProvider({ children }: { children: ReactNode }) {
   const {
     custom_fields: {
       usdt_payment_wallets,
-      ids_distribution_wallet,
+      ids_stake_wallet,
     },
   } = useAppMetadata();
   const t = useTranslations("home");
@@ -109,15 +109,11 @@ export function UserWalletProvider({ children }: { children: ReactNode }) {
     if (!wallet) return;
 
     const getWalletInfo = async () => {
-      const balanceids = await getBalance({ address: wallet.address, chainId: ids_distribution_wallet.chain_id, rpc: ids_distribution_wallet.rpc_url });
+      const balanceids = await getBalance({ address: wallet.address, chainId: ids_stake_wallet?.chain_id, rpc: ids_stake_wallet?.rpc_url });
       setBalance({ ids: balanceids });
     };
     getWalletInfo();
   }, [wallet]);
-
-  useEffect(() => {
-    console.log(balance);
-  }, [balance]);
 
   const disconnect = () => setWallet(null);
 
@@ -195,6 +191,8 @@ export function UserWalletProvider({ children }: { children: ReactNode }) {
           isVip: vipReponse ? true : false,
           commission: commission?.result || {
             all: 0,
+            vip: 0,
+            kyc: 0,
             day: 0,
             month: 0,
             withdraw: 0,
@@ -260,6 +258,8 @@ export function UserWalletProvider({ children }: { children: ReactNode }) {
         kyc_status: false,
         commission: {
           all: 0,
+          vip: 0,
+          kyc: 0,
           day: 0,
           month: 0,
           withdraw: 0,
