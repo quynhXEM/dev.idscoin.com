@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Card,
   CardContent,
@@ -28,6 +28,7 @@ import { formatNumber, isValidEmail } from "@/libs/utils";
 import { VerifyEmail } from "./components/VefifyEmail";
 import { KYCRewardCard } from "./components/KYCRewardCard";
 import { useNotification } from "@/commons/NotificationContext";
+import { usePathname, useRouter } from "@/i18n/navigation";
 
 interface ReferralSectionProps {
   t: (key: string, params?: Record<string, string>) => string;
@@ -50,7 +51,39 @@ export function ReferralSection({
   const [isloading, setIsLoading] = useState<boolean>(false);
   const [isKYC, setIsKYC] = useState<boolean>(true);
   const [copied, setCopied] = useState(false);
-  const {notify} = useNotification()
+  const [referrer_exist, setReferrer_exist] = useState<boolean>(false);
+  const [ref_username, setRef_username] = useState<string | null>(null);
+  
+  const { notify } = useNotification()
+  const router = useRouter()
+  const path = usePathname()
+
+  const checkRef = async (name: string) => {
+    const check_ref = await fetch("/api/directus/request", {
+      method: "POST",
+      body: JSON.stringify({
+        type: "readItems",
+        collection: "member",
+        params: {
+          filter: {
+            username: name,
+            status: "active",
+            app_id: process.env.NEXT_PUBLIC_APP_ID,
+          },
+          limit: 1
+        },
+      }),
+    }).then(data => data.json())
+      .then(data => data.result.length != 0)
+      .catch(err => false)
+
+    setReferrer_exist(check_ref)
+    return check_ref
+  }
+
+  useEffect(() => {
+    checkRef(path.split("/")[1])
+  }, [])
 
   const copyReferralLink = async () => {
     try {
@@ -68,12 +101,12 @@ export function ReferralSection({
     if (!registrationEmail || !registrationUsername) return;
     if (!isValidEmail(registrationEmail)) {
       notify({
-          title: t("noti.error"),
-          message: t("noti.invalidEmail"),
-          type: false
+        title: t("noti.error"),
+        message: t("noti.invalidEmail"),
+        type: false
       })
       return;
-  }
+    }
     setIsLoading(true);
     const update_info = await fetch("/api/directus/request", {
       method: "POST",
@@ -169,9 +202,96 @@ export function ReferralSection({
     );
   }
 
+  // Nếu đã có tài khoảng nhưng chưa có người giới thiệu 
+  if (!(account as any).username && !(account as any).isVip && !referrer_exist) {
+    return (
+      <Card className="bg-gray-900 border-gray-800">
+        <CardHeader>
+          <CardTitle className="flex items-center text-white">
+            <Share2 className="w-5 h-5 mr-2 text-blue-400" />
+            <p className="text-2xl">{t("referral.createlink")}</p>
+          </CardTitle>
+          <CardDescription className="text-gray-400">
+            {t("referral.createlinkcommicsion")}
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="p-6 bg-gray-800 rounded-lg border border-yellow-600/50">
+            <div className="text-center mb-4">
+              <UserPlus className="w-12 h-12 mx-auto text-yellow-500 mb-3" />
+              <h3 className="text-lg font-semibold text-white mb-2">
+                {t("referral.addReferral")}
+              </h3>
+              <p className="text-gray-400 text-sm">
+                {t("referral.addReferralDescription")}
+              </p>
+            </div>
+
+            <div className="space-y-4">
+              <div>
+                <Label htmlFor="registration-username" className="text-white font-semibold">
+                  {t("referral.referralUsername")}
+                </Label>
+                <div className="relative mt-1">
+                  <Input
+                    id="registration-username"
+                    placeholder="username123"
+                    value={ref_username || ""}
+                    onChange={(e) =>
+                      setRef_username(
+                        e.target.value.toLowerCase().replace(/[^a-z0-9]/g, "")
+                      )
+                    }
+                    className="pl-10 bg-gray-700 border-gray-600 text-white placeholder:text-gray-400 focus:border-yellow-500"
+                  />
+                  <User className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+                </div>
+              </div>
+
+              <Button
+                className="w-full bg-gradient-to-r from-yellow-600 to-orange-600 hover:from-yellow-700 hover:to-orange-700 cursor-pointer"
+                onClick={async () => {
+                  setIsLoading(true)
+                  const check = await checkRef(ref_username || "")
+                  if (check) {
+                      router.replace(`/${ref_username}`)
+                  } else {
+                    notify({
+                      title: t("noti.notfound"),
+                      message: t("noti.referralNotFound"),
+                      type: 'warning'
+                    })
+                  }
+                  setIsLoading(false)
+                }}
+                disabled={!ref_username || isloading}
+              >
+                {isloading ? (
+                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                ) : (
+                  <UserPlus className="w-4 h-4 mr-2" />
+                )}
+                {t("referral.addReferral")}
+              </Button>
+            </div>
+          </div>
+
+          <div className="p-4 bg-green-900/20 rounded-lg border border-green-700/50">
+            <div className="flex items-center gap-2 mb-2">
+              <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+              <span className="text-sm text-green-300 font-medium">
+                {t("referral.walletconnected")}
+              </span>
+            </div>
+            <p className="text-xs text-green-200">Địa chỉ: {wallet?.address}</p>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
   // Nếu đã kết nối ví và có account
   // 1. Nếu chưa đăng ký (chưa có username) và chưa vip => giao diện đăng ký
-  if (!(account as any).username && !(account as any).isVip) {
+  if (!(account as any).username && !(account as any).isVip && referrer_exist) {
     return (
       <Card className="bg-gray-900 border-gray-800">
         <CardHeader>

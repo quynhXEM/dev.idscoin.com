@@ -136,7 +136,10 @@
       "activeCommission": "Khả dụng",
       "noCommissionHistory": "Không có lịch sử hoa hồng.",
       "verifyEmail": "Xác minh địa chỉ email nhận ngay {amount} IDS",
-      "verifyEmailTitle": "Xác minh địa chỉ email {email}"
+      "verifyEmailTitle": "Xác minh địa chỉ email {email}",
+      "addReferral": "Thêm người giới thiệu",
+      "addReferralDescription": "Ví đã được kết nối. Vui lòng nhập username của người giới thiệu.",
+      "referralUsername": "Người giới thiệu"
     },
     "verifyEmail": {
       "wait_1_minute": "Bạn đã gửi yêu cầu xác minh email trước đó, vui lòng chờ 1 phút để gửi lại",
@@ -303,7 +306,9 @@
       "walletErrorReport": "để gửi email đến zero@nobody.network với tiêu đề là",
       "getSupport": "để được hỗ trợ nhanh nhất.",
       "withdrawConfirm": "Lệnh rút của bạn đã được ghi nhận. Tài sản sẽ được chuyển về ví của bạn trong vòng 24h.",
-      "invalidEmail": "Không sử dụng email subaddressing"
+      "invalidEmail": "Không sử dụng email subaddressing",
+      "referralNotFound": "Người giới thiệu không tồn tại",
+      "notfound": "Không tìm thấy"
     },
     "kyc_form": {
       "title": "Xác minh danh tính (KYC)",
