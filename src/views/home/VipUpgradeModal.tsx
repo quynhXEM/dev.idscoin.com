@@ -46,6 +46,43 @@ const VipUpgradeModal: React.FC<VipUpgradeModalProps> = ({
   } = useAppMetadata();
   const [isloading, setIsLoading] = useState<boolean>(false);
 
+  const renderTextWithLinks = (text: string): React.ReactNode => {
+    const linkify = (input: string, phrase: string, href: string) => {
+      const parts = input.split(phrase);
+      const nodes: React.ReactNode[] = [];
+      parts.forEach((part, index) => {
+        nodes.push(part);
+        if (index < parts.length - 1) {
+          nodes.push(
+            <a
+              key={`${phrase}-${index}`}
+              href={href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:underline text-blue-400"
+            >
+              {phrase}
+            </a>
+          );
+        }
+      });
+      return nodes;
+    };
+
+    // Thay SOC Connect
+    let nodes: React.ReactNode[] = linkify(text, "SOC Connect", "https://chat.nobody.network");
+    // Với các phần là string, tiếp tục thay Deep Zone
+    const finalNodes: React.ReactNode[] = [];
+    nodes.forEach((node, idx) => {
+      if (typeof node === "string") {
+        linkify(node, "Deep Zone", "https://deepzone.nobody.network/profile/nobody.network").forEach((n) => finalNodes.push(n));
+      } else {
+        finalNodes.push(node);
+      }
+    });
+    return finalNodes;
+  };
+
   // Ngăn chặn cuộn và tương tác khi modal mở
   useEffect(() => {
     if (show) {
@@ -121,7 +158,7 @@ const VipUpgradeModal: React.FC<VipUpgradeModalProps> = ({
           affect_balance: false,
           description: "Upgrade VIP Account via Web3",
           external_ref: `${getChain(vipSelectedChain).explorer_url}/tx/${txn.result}`,
-        },  
+        },
       }),
     })
       .then((data) => data.json())
@@ -182,7 +219,7 @@ const VipUpgradeModal: React.FC<VipUpgradeModalProps> = ({
       style={{ touchAction: 'none' }}
     >
       <Card
-        className="w-full max-w-md mx-4 bg-gray-900 border-gray-800"
+        className="w-full max-w-lg mx-4 bg-gray-900 border-gray-800"
         onClick={(e) => e.stopPropagation()}
       >
         <CardHeader>
@@ -212,6 +249,16 @@ const VipUpgradeModal: React.FC<VipUpgradeModalProps> = ({
               </div>
             </div>
           </div>
+          <div className="flex flex-col justify-center gap-3s text-white">
+            <h3 className="font-semibold text-white ">
+              {t("referral.privilege")}:
+            </h3>
+            <p>- {renderTextWithLinks(t("referral.privilege_note_1"))}</p>
+            <p>- {renderTextWithLinks(t("referral.privilege_note_2"))}</p>
+            <p>- {renderTextWithLinks(t("referral.privilege_note_3"))}</p>
+            <p>- {renderTextWithLinks(t("referral.privilege_note_4"))}</p>
+            <p>- {renderTextWithLinks(t("referral.privilege_note_5"))}</p>
+          </div>
 
           <div>
             <Label className="text-white font-semibold">
@@ -226,20 +273,20 @@ const VipUpgradeModal: React.FC<VipUpgradeModalProps> = ({
               </SelectTrigger>
               <SelectContent className="bg-gray-800 border-gray-700 text-white">
                 {chains.map((item: any) => {
-                    return (
-                      <SelectItem
-                        key={item.chain_id.id}
-                        value={item.chain_id.id}
-                        className="text-white hover:bg-gray-700 focus:bg-gray-700"
-                      >
-                        <div className="flex items-center gap-2">
-                          <div className="font-semibold text-white">
-                            {item.chain_id.name}
-                          </div>
+                  return (
+                    <SelectItem
+                      key={item.chain_id.id}
+                      value={item.chain_id.id}
+                      className="text-white hover:bg-gray-700 focus:bg-gray-700"
+                    >
+                      <div className="flex items-center gap-2">
+                        <div className="font-semibold text-white">
+                          {item.chain_id.name}
                         </div>
-                      </SelectItem>
-                    );
-                  }
+                      </div>
+                    </SelectItem>
+                  );
+                }
                 )}
               </SelectContent>
             </Select>

@@ -146,7 +146,13 @@
       "referralUsername": "Referral user",
       "referralUsernamePlaceholder": "Username of the referral user",
       "sharelinkReferral": "Share referral link to invite friends to join",
-      "submitReferral": "Verify referrer"
+      "submitReferral": "Verify referrer",
+      "privilege": "Privileges",
+      "privilege_note_1": "Right to connect your Telegram account to SOC Connect.",
+      "privilege_note_2": "Right to connect your Messenger account to SOC Connect.",
+      "privilege_note_3": "Receive 10 IDS when joining the Global group on SOC Connect.",
+      "privilege_note_4": "1:1 chat with blockchain & AI experts for any consultation.",
+      "privilege_note_5": "Get access to information very early, before it is made public on Deep Zone."
     },
     "verifyEmail": {
       "wait_1_minute": "You have already requested email verification, please wait 1 minute to resend.",
@@ -181,8 +187,8 @@
     },
     "vip": {
       "upgrade": "Upgrade VIP",
-      "upgrade50": "Earn 50% commission instead of 5%",
-      "upgrade100": "Upgrade $100",
+      "upgrade50": "Earn 50% commission instead of 5% and more exclusive benefits for VIP",
+      "upgrade100": "Upgrade VIP",
       "becomeVip": "Become a VIP member to earn higher commissions",
       "upgradeCost": "$100",
       "upgradeOneTime": "One-time upgrade fee",
@@ -319,7 +325,7 @@
       "notfound": "Not found",
       "withdrawMin": "The minimum withdrawal amount is {amount}"
     },
-    "kyc_form" : {
+    "kyc_form": {
       "title": "Identity Verification (KYC)",
       "description": "Complete verification to use full platform features",
       "document_info": "Information on the National ID Card",

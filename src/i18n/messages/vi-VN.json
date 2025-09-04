@@ -146,7 +146,13 @@
       "referralUsername": "Người giới thiệu",
       "referralUsernamePlaceholder": "Username của người giới thiệu",
       "sharelinkReferral": "Chia sẻ link giới thiệu để mời bạn bè tham gia",
-      "submitReferral": "Xác nhận người giới thiệu"
+      "submitReferral": "Xác nhận người giới thiệu",
+      "privilege": "Quyền lợi",
+      "privilege_note_1": "Quyền kết nối tài khoản Telegram vào SOC Connect.",
+      "privilege_note_2": "Quyền kết nối tài khoản Messenger vào SOC Connect.",
+      "privilege_note_3": "Nhận 10 IDS khi tham gia vào nhóm Global trên SOC Connect.",
+      "privilege_note_4": "Chat 1:1 với chuyên gia blockchain & AI tư vấn mọi vấn đề.",
+      "privilege_note_5": "Nhận được các thông tin rất sớm, trước khi thông tin được public trên Deep Zone"
     },
     "verifyEmail": {
       "wait_1_minute": "Bạn đã gửi yêu cầu xác minh email trước đó, vui lòng chờ 1 phút để gửi lại",
@@ -181,8 +187,8 @@
     },
     "vip": {
       "upgrade": "Nâng cấp VIP",
-      "upgrade50": "Nhận 50% hoa hồng thay vì 5%",
-      "upgrade100": "Nâng cấp $100",
+      "upgrade50": "Nhận 50% hoa hồng thay vì 5% và nhiều đặc quyền dành riêng cho VIP",
+      "upgrade100": "Nâng cấp VIP",
       "becomeVip": "Trở thành thành viên VIP để nhận hoa hồng cao hơn",
       "upgradeCost": "$100",
       "upgradeOneTime": "Phí nâng cấp một lần",
