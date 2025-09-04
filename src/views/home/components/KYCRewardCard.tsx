@@ -25,11 +25,9 @@ export function KYCRewardCard() {
   const t = useTranslations("home");
   const tKyc = useTranslations("home.kyc_card");
   const { notify } = useNotification()
-  const { account, sendTransaction } = useUserWallet()
+  const { account, sendTransaction, getChain } = useUserWallet()
   const {
-    custom_fields: { usdt_payment_wallets, withdraw_settings } = {
-      usdt_payment_wallets: {},
-    },
+    custom_fields: { master_wallet, withdraw_settings, usdt_address } , chains
   } = useAppMetadata();
 
   const getKYCReward = async () => {
@@ -83,10 +81,10 @@ export function KYCRewardCard() {
             app_id: process.env.NEXT_PUBLIC_APP_ID || "7d503b72-7d20-44c4-a48f-321b031a17b5",
             member_id: account?.id,
             amount: -amount,
-            currency: `USDT ${usdt_payment_wallets[selectedChain].name}`,
+            currency: `USDT ${getChain(selectedChain).name}`,
             type: "referral_kyc_bonus",
             affect_balance: true,
-            description: `Withdraw ${amount} USDT ${usdt_payment_wallets[selectedChain].name} referral kyc bonus`,
+            description: `Withdraw ${amount} USDT ${getChain(selectedChain).name} referral kyc bonus`,
           },
         }),
       }).then((data) => data.json());
@@ -278,19 +276,16 @@ export function KYCRewardCard() {
                     <SelectValue placeholder={t("vip.selectChain")} />
                   </SelectTrigger>
                   <SelectContent className="bg-gray-800 border-gray-700 text-white">
-                    {usdt_payment_wallets &&
-                      Object.entries(usdt_payment_wallets).map(
-                        ([key, value]) => {
-                          const v = value as { name: string };
+                    {chains.map((item : any) => {
                           return (
                             <SelectItem
-                              key={key}
-                              value={key}
+                              key={item.chain_id.id}
+                              value={item.chain_id.id}
                               className="text-white hover:bg-gray-700 focus:bg-gray-700"
                             >
                               <div className="flex items-center gap-2">
                                 <div className="font-semibold text-white">
-                                  {v.name}
+                                  {item.chain_id.name}
                                 </div>
                               </div>
                             </SelectItem>

@@ -23,16 +23,14 @@ import { getBalance } from "@/libs/token";
 export default function IDSStakingPlatform() {
   const t = useTranslations("home");
   const {
-    custom_fields: { usdt_payment_wallets },
+    custom_fields: { usdt_address }, chains
   } = useAppMetadata();
   const [showVipModal, setShowVipModal] = useState(false);
   const [showCommissionModal, setShowCommissionModal] = useState(false);
   const [showRewardsModal, setShowRewardsModal] = useState(false);
   const [showInfoModal, setShowInfoModal] = useState(false);
   const [vipSelectedChain, setVipSelectedChain] = useState("56");
-  const { connectWallet, isConnected, wallet, disconnect, setLoading, balance, setBalance } =
-    useUserWallet();
-
+  const { connectWallet, isConnected, wallet, disconnect, setLoading, balance, setBalance, getChain } = useUserWallet();
   const [showNotificationModal, setShowNotificationModal] = useState(false);
   const [notificationData, setNotificationData] = useState({
     title: "",
@@ -72,12 +70,10 @@ export default function IDSStakingPlatform() {
       const usdt = await getBalance({
         address: wallet.address,
         chainId: Number(vipSelectedChain),
-        tokenAddress: usdt_payment_wallets[
-          vipSelectedChain as keyof typeof usdt_payment_wallets
+        tokenAddress: usdt_address[
+          vipSelectedChain as keyof typeof usdt_address
         ].token_address,
-        rpc: usdt_payment_wallets[
-          vipSelectedChain as keyof typeof usdt_payment_wallets
-        ].rpc_url
+        rpc: getChain(vipSelectedChain).rpc_url
       });
       setBalance({usdt: usdt })
     }

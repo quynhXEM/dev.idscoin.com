@@ -60,6 +60,7 @@ export type WalletContextType = {
   setLoading: (loading: boolean) => void;
   refreshVerifyEmail: () => Promise<boolean>;
   loadKYCStatus: () => Promise<void>;
+  getChain: (chainId: number|string) => any;
 };
 
 const UserWalletContext = createContext<WalletContextType | undefined>(
@@ -71,10 +72,11 @@ export function UserWalletProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState<boolean>(false);
   const {
     custom_fields: {
-      usdt_payment_wallets,
       ids_stake_wallet,
     },
+    chains
   } = useAppMetadata();
+
   const t = useTranslations("home");
   const [balance, setBalanceState] = useState<{ ids: string; usdt: string }>({
     ids: "0",
@@ -117,6 +119,10 @@ export function UserWalletProvider({ children }: { children: ReactNode }) {
 
   const disconnect = () => setWallet(null);
 
+  // Lấy thông tin chain
+  const getChain = (chainId: number|string) => {
+    return chains.find((chain: any) => chain.chain_id.id == chainId)?.chain_id;
+  }
   // Lỗi thêm 2 ví cùng lúc ( khôgn có ví, co người giới thiệu)
   const addNewMember = async (wallet: WalletInfo) => {
     if (isCreatingMemberRef.current) return; // Ngăn gọi lặp
@@ -421,7 +427,7 @@ export function UserWalletProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  const connectWallet = async () => {
+  const connectWallet = async (chain_id? : any) => {
     // if (typeof window === "undefined" || !(window as any).ethereum) {
     //   notify({
     //     title: t("noti.web3Error"),
@@ -541,44 +547,39 @@ export function UserWalletProvider({ children }: { children: ReactNode }) {
       // Chuyển mạng nếu cần
       if (chainId) {
         const currentChain = await provider.request({ method: "eth_chainId" });
-        if (parseInt(currentChain, 16) !== chainId) {
+        const targetChainIdHex = ((): string => {
+          try {
+            const meta = getChain(chainId);
+            if (meta?.id && typeof meta.id === "string" && meta.id.startsWith("0x")) {
+              return meta.id;
+            }
+          } catch {}
+          return "0x" + Number(chainId).toString(16);
+        })();
+
+        if (parseInt(currentChain, 16) !== Number(chainId)) {
           try {
             await provider.request({
               method: "wallet_switchEthereumChain",
               params: [
                 {
-                  chainId:
-                    usdt_payment_wallets[
-                      chainId as keyof typeof usdt_payment_wallets
-                    ]?.chainId || "0x" + chainId.toString(16),
+                  chainId: targetChainIdHex,
                 },
               ],
             });
           } catch (switchError: any) {
+            console.log(switchError);
+            
             if (
               switchError.code === 4902 &&
-              usdt_payment_wallets[
-              chainId as keyof typeof usdt_payment_wallets
-              ]
+              getChain(chainId)
             ) {
-              // Nếu chưa có mạng, thêm mạng vào MetaMask
-              await provider.request({
-                method: "wallet_addEthereumChain",
-                params: [
-                  usdt_payment_wallets[
-                  chainId as keyof typeof usdt_payment_wallets
-                  ],
-                ],
-              });
               // Sau khi thêm, thử lại chuyển mạng
               await provider.request({
                 method: "wallet_switchEthereumChain",
                 params: [
                   {
-                    chainId:
-                      usdt_payment_wallets[
-                        chainId as keyof typeof usdt_payment_wallets
-                      ]?.chainId,
+                    chainId: targetChainIdHex,
                   },
                 ],
               });
@@ -685,7 +686,8 @@ export function UserWalletProvider({ children }: { children: ReactNode }) {
         addNewMember,
         setLoading,
         refreshVerifyEmail,
-        loadKYCStatus
+        loadKYCStatus,
+        getChain
       }}
     >
       {children}

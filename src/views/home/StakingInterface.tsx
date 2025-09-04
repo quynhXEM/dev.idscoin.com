@@ -47,13 +47,15 @@ export function StakingInterface({
   const [isloadding, setIsloadding] = useState(false);
   const [stakeAmount, setStakeAmount] = useState("");
   const [lockPeriod, setLockPeriod] = useState("360");
-  const [selectedChain, setSelectedChain] = useState("56");
+  const [selectedChain, setSelectedChain] = useState("");
   const [swapAmount, setSwapAmount] = useState("");
   const {
     custom_fields: {
-      usdt_payment_wallets,
       ids_stake_wallet,
+      usdt_address,
+      master_wallet
     },
+    chains
   } = useAppMetadata();
   const {
     connectWallet,
@@ -64,19 +66,18 @@ export function StakingInterface({
     setBalance,
     account,
     setAccount,
-    loading
+    loading,
+    getChain
   } = useUserWallet();
 
   const getBalanceSelectChain = async () => {
     const usdt = await getBalance({
       address: wallet?.address || "",
       chainId: Number(selectedChain),
-      tokenAddress: usdt_payment_wallets[
-        selectedChain as keyof typeof usdt_payment_wallets
-      ].token_address,
-      rpc: usdt_payment_wallets[
-        selectedChain as keyof typeof usdt_payment_wallets
-      ].rpc_url
+      tokenAddress: usdt_address[
+        selectedChain as keyof typeof usdt_address
+      ],
+      rpc: getChain(selectedChain).rpc_url
     });
     setBalance({ usdt: usdt })
   }
@@ -106,10 +107,7 @@ export function StakingInterface({
       setNotificationData({
         title: t("noti.error"),
         message: t("noti.web3ChainNotFound", {
-          chain:
-            usdt_payment_wallets[
-              selectedChain as keyof typeof usdt_payment_wallets
-            ].name,
+          chain: getChain(selectedChain).name,
         }),
         type: false,
       });
@@ -117,10 +115,7 @@ export function StakingInterface({
       setNotificationData({
         title: t("noti.error"),
         message: t("noti.web3ChainDifferent", {
-          chain:
-            usdt_payment_wallets[
-              selectedChain as keyof typeof usdt_payment_wallets
-            ].name,
+          chain: getChain(selectedChain).name,
         }),
         type: false,
       });
@@ -259,16 +254,14 @@ export function StakingInterface({
     setIsloadding(true);
     // Yêu cầu gửi token
     const txHash = await sendTransaction({
-      to: usdt_payment_wallets[
-        selectedChain as keyof typeof usdt_payment_wallets
-      ].address,
+      to: master_wallet?.address,
       amount: swapAmount,
       type: "token",
       chainId: Number(selectedChain),
       tokenAddress:
-        usdt_payment_wallets[
-          selectedChain as keyof typeof usdt_payment_wallets
-        ].token_address,
+        usdt_address[
+          selectedChain as keyof typeof usdt_address
+        ],
     }).then(result => result ? ({ ok: true, result }) : ({ ok: false, result: { code: 2330 } }))
       .catch(err => ({ ok: false, result: err }))
 
@@ -288,11 +281,11 @@ export function StakingInterface({
           app_id: process.env.NEXT_PUBLIC_APP_ID,
           member_id: account?.id,
           amount: swapAmount,
-          currency: `USDT ${usdt_payment_wallets[selectedChain].name}`,
+          currency: `USDT ${getChain(selectedChain).name}`,
           type: "swap_in",
           affect_balance: false,
           description: `Swap: Sent ${swapAmount} USDT`,
-          external_ref: `${usdt_payment_wallets[selectedChain].explorer_url}/tx/${txHash.result}`,
+          external_ref: `${ getChain(selectedChain).explorer_url}/tx/${txHash.result}`,
         },
       }),
     }).then((data) => data.json());
@@ -379,9 +372,9 @@ export function StakingInterface({
     const usdt = await getBalance({
       address: wallet?.address || account?.wallet_address || "",
       chainId: Number(selectedChain),
-      tokenAddress: usdt_payment_wallets[
-        selectedChain as keyof typeof usdt_payment_wallets
-      ].token_address
+      tokenAddress: usdt_address[
+        selectedChain as keyof typeof usdt_address
+      ],
     });
     // (fix) lấy coin xóa token address
     const ids = await getBalance({
@@ -569,12 +562,11 @@ export function StakingInterface({
                     <SelectValue placeholder={t("staking.selectChain")} />
                   </SelectTrigger>
                   <SelectContent className="bg-white border-gray-800">
-                    {Object.entries(usdt_payment_wallets).map(
-                      ([key, value]) => (
-                        <SelectItem disabled={isloadding || loading} key={key} value={key}>
+                    {chains.map((item: any) => (
+                        <SelectItem disabled={isloadding || loading} key={item.chain_id.id} value={item.chain_id.id}>
                           <div className="flex items-center gap-2">
                             <div className="font-semibold">
-                              {value?.name || "--"}
+                              {item.chain_id?.name || "--"}
                             </div>
                           </div>
                         </SelectItem>

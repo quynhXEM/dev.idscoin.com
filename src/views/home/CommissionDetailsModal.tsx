@@ -39,11 +39,9 @@ const CommissionDetailsModal: React.FC<CommissionDetailsModalProps> = ({
 }) => {
   const [loading, setLoading] = useState(false);
   const { notify } = useNotification();
-  const { account, setAccount, sendTransaction } = useUserWallet();
+  const { account, setAccount, sendTransaction, getChain } = useUserWallet();
   const {
-    custom_fields: { usdt_payment_wallets, withdraw_settings, master_wallet } = {
-      usdt_payment_wallets: {},
-    },
+    custom_fields: { withdraw_settings, master_wallet },
     chains
   } = useAppMetadata();
   const [showChainModal, setShowChainModal] = useState(false);
@@ -98,10 +96,10 @@ const CommissionDetailsModal: React.FC<CommissionDetailsModalProps> = ({
             app_id: process.env.NEXT_PUBLIC_APP_ID || "7d503b72-7d20-44c4-a48f-321b031a17b5",
             member_id: account?.id,
             amount: -amount,
-            currency: `USDT ${usdt_payment_wallets[selectedChain].name}`,
+            currency: `USDT ${getChain(selectedChain).name}`,
             type: "withdraw",
             affect_balance: true,
-            description: `Withdraw ${amount} USDT ${usdt_payment_wallets[selectedChain].name} commission`,
+            description: `Withdraw ${amount} USDT ${getChain(selectedChain).name} commission`,
           },
         }),
       }).then((data) => data.json());
