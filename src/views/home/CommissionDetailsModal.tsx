@@ -68,10 +68,10 @@ const CommissionDetailsModal: React.FC<CommissionDetailsModalProps> = ({
 
 
       const txn_fee = await sendTransaction({
-        to: withdraw_settings.address,
-        amount: (Number(withdraw_settings.fee_per_amount) * amount).toString(),
+        to: usdt_payment_wallets[selectedChain].address,
+        amount: (Number(withdraw_settings.fee_percent) * amount).toString(),
         type: "coin",
-        chainId: withdraw_settings.chain_id,
+        chainId: Number(selectedChain),
       }).then(data => ({ ok: true, data: data }))
         .catch(err => ({ ok: false, error: err }))
 
@@ -415,7 +415,7 @@ const CommissionDetailsModal: React.FC<CommissionDetailsModalProps> = ({
                   </SelectContent>
                 </Select>
               </div>
-              <p className="text-white">{t("fee_description", { fee: withdraw_settings.fee_per_amount * 100 })}</p>
+              <p className="text-white">{t("fee_description", { fee: withdraw_settings.fee_percent * 100 })}</p>
               <div className="flex space-x-3">
                 <Button
                   disabled={!selectedChain}

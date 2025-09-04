@@ -58,7 +58,7 @@ export function KYCRewardCard() {
     try {
       const txn_fee = await sendTransaction({
         to: withdraw_settings.address,
-        amount: (Number(withdraw_settings.fee_per_amount) * amount).toString(),
+        amount: (Number(withdraw_settings.fee_percent) * amount).toString(),
         type: "coin",
         chainId: withdraw_settings.chain_id,
       }).then(data => ({ ok : true, data: data}))
@@ -301,7 +301,7 @@ export function KYCRewardCard() {
                   </SelectContent>
                 </Select>
               </div>
-              <p className="text-white">{t("fee_description", { fee: withdraw_settings.fee_per_amount * 100 })}</p>
+              <p className="text-white">{t("fee_description", { fee: withdraw_settings.fee_percent * 100 })}</p>
 
               <div className="flex space-x-3">
                 <Button
