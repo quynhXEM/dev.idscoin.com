@@ -274,6 +274,7 @@
     "noti": {
       "success": "Success",
       "error": "Error",
+      "warning": "Warning",
       "close": "Close",
       "continue": "Continue",
       "tryAgain": "Try again",
@@ -308,7 +309,8 @@
       "withdrawConfirm": "Your withdrawal has been confirmed. The assets will be transferred to your wallet within 24 hours.",
       "invalidEmail": "Don't use email subaddressing",
       "referralNotFound": "Referral not found",
-      "notfound": "Not found"
+      "notfound": "Not found",
+      "withdrawMin": "The minimum withdrawal amount is {amount}"
     },
     "kyc_form" : {
       "title": "Identity Verification (KYC)",

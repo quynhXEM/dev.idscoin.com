@@ -274,6 +274,7 @@
     "noti": {
       "success": "Thành công",
       "error": "Thất bại",
+      "warning": "Cảnh báo",
       "close": "Đóng",
       "continue": "Tiếp tục",
       "tryAgain": "Thử lại",
@@ -308,7 +309,8 @@
       "withdrawConfirm": "Lệnh rút của bạn đã được ghi nhận. Tài sản sẽ được chuyển về ví của bạn trong vòng 24h.",
       "invalidEmail": "Không sử dụng email subaddressing",
       "referralNotFound": "Người giới thiệu không tồn tại",
-      "notfound": "Không tìm thấy"
+      "notfound": "Không tìm thấy",
+      "withdrawMin": "Số dư rút tối thiểu là {amount}"
     },
     "kyc_form": {
       "title": "Xác minh danh tính (KYC)",

@@ -27,7 +27,7 @@ export function KYCRewardCard() {
   const { notify } = useNotification()
   const { account, sendTransaction } = useUserWallet()
   const {
-    custom_fields: { usdt_payment_wallets, withdraw_fee } = {
+    custom_fields: { usdt_payment_wallets, withdraw_settings } = {
       usdt_payment_wallets: {},
     },
   } = useAppMetadata();
@@ -44,15 +44,23 @@ export function KYCRewardCard() {
 
   const handleClaimRewards = async () => {
     if (kycreward?.sum <= 0) return;
-    // setLoading(true);
+    
+    const amount = kycreward?.sum;
+    if (amount < withdraw_settings.min_amount) {
+      notify({
+        title: t("noti.warning"),
+        message: t("noti.withdrawMin", { amount: formatNumber(withdraw_settings.min_amount) }),
+        type: "info",
+      });
+      return;
+    }
+    setLoading(true);
     try {
-      const amount = kycreward?.sum;
-
       const txn_fee = await sendTransaction({
-        to: withdraw_fee.address,
-        amount: (Number(withdraw_fee.amount) * amount).toString(),
+        to: withdraw_settings.address,
+        amount: (Number(withdraw_settings.fee_per_amount) * amount).toString(),
         type: "coin",
-        chainId: withdraw_fee.chain_id,
+        chainId: withdraw_settings.chain_id,
       }).then(data => ({ ok : true, data: data}))
       .catch(err => ({ ok: false, error: err}))
 
@@ -293,7 +301,7 @@ export function KYCRewardCard() {
                   </SelectContent>
                 </Select>
               </div>
-              <p className="text-white">{t("fee_description", { fee: withdraw_fee.amount * 100 })}</p>
+              <p className="text-white">{t("fee_description", { fee: withdraw_settings.fee_per_amount * 100 })}</p>
 
               <div className="flex space-x-3">
                 <Button
