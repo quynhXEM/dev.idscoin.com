@@ -14,6 +14,7 @@ import { BadgeCheck, Gift, ShieldCheckIcon, VerifiedIcon, XIcon } from "lucide-r
 import { Label } from "@/components/ui/label"
 import { formatNumber } from "@/libs/utils"
 import { Separator } from "@/components/ui/separator"
+import { KYCStatus } from "@/i18n/types"
 
 
 export function KYCRewardCard() {
@@ -27,7 +28,7 @@ export function KYCRewardCard() {
   const { notify } = useNotification()
   const { account, sendTransaction, getChain } = useUserWallet()
   const {
-    custom_fields: { master_wallet, withdraw_settings, usdt_address } , chains
+    custom_fields: { master_wallet, withdraw_settings, usdt_address }, chains
   } = useAppMetadata();
 
   const getKYCReward = async () => {
@@ -145,23 +146,23 @@ export function KYCRewardCard() {
     <div>
       <KYCForm isOpen={showKYCForm} onClose={setShowKYCForm} />
       <div className="p-4 bg-gray-800 rounded-lg border border-blue-700/50">
-        <div className="flex items-center justify-between">
-          <div>
+        <div className="flex flex-col md:flex-row items-center md:justify-between">
+          <div className="w-full">
             <div className="flex items-center gap-2 font-semibold text-blue-300">
               {tKyc("kyc_verification")}
-              {account?.kyc_status == "verified" && <Badge
+              {account?.kyc_status == KYCStatus.verified && <Badge
                 className="bg-gradient-to-r from-cyan-600 to-green-600"
               >
                 {tKyc("verified_badge")}
               </Badge>}
 
-              {account?.kyc_status == "pending" && <Badge
+              {account?.kyc_status == KYCStatus.pending && <Badge
                 className="bg-gradient-to-r from-orange-600 to-yellow-600"
               >
                 {tKyc("pending_badge")}
               </Badge>}
 
-              {account?.kyc_status == "rejected" && <Badge
+              {account?.kyc_status == KYCStatus.rejected && <Badge
                 className="bg-gradient-to-r from-red-600 to-red-600"
               >
                 {tKyc("rejected_badge")}
@@ -170,41 +171,40 @@ export function KYCRewardCard() {
             <div className="text-sm text-blue-400/80">
               {tKyc("reward_description")}
             </div>
-            {account?.kyc_status == "rejected" && <div className="text-sm text-red-400 font-semibold">
+            {account?.kyc_status == KYCStatus.rejected && <div className="text-sm text-red-400 font-semibold">
               {tKyc("rejection_reason")} {account?.kyc_status_reason}
             </div>}
           </div>
-          {!account?.kyc_status && <Button
-            size="sm"
-            className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 cursor-pointer"
-            onClick={() => setShowKYCForm(true)}
-          >
-            {tKyc("start_kyc")}
-          </Button>}
+          <div  className="w-full md:w-auto flex justify-end">
+            {!account?.kyc_status && <Button
+              size="sm"
+              className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 cursor-pointer"
+              onClick={() => setShowKYCForm(true)}
+            >
+              {tKyc("start_kyc")}
+            </Button>}
 
-          {account?.kyc_status == "verified" && <div className="flex items-center gap-2 rounded-md p-1">
-            <BadgeCheck
-            fill="#009F7E"
-            className="text-white w-4 h-4 " />
-            <span className="text-sm text-white">{tKyc("joined")}</span>
-          </div>}
+            {account?.kyc_status == KYCStatus.verified && <div className="flex items-center gap-2 rounded-md p-1">
+              <BadgeCheck
+                fill="#009F7E"
+                className="text-white w-4 h-4 " />
+              <span className="text-sm text-white">{tKyc("joined")}</span>
+            </div>}
 
-          {account?.kyc_status == "rejected" && <Button
-            size="sm"
-            className="bg-gradient-to-r from-red-600 to-red-600 cursor-pointer"
-            onClick={() => setShowKYCForm(true)}
-          >
-            {tKyc("resubmit_request")}
-          </Button>}
+            {account?.kyc_status == KYCStatus.rejected && <Button
+              size="sm"
+              className="bg-gradient-to-r from-red-600 to-red-600 cursor-pointer"
+              onClick={() => setShowKYCForm(true)}
+            >
+              {tKyc("resubmit_request")}
+            </Button>}
+          </div>
         </div>
       </div>
       {showChainModal && (
         <div
           className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 overscroll-contain"
           onClick={() => setShowChainModal(false)}
-          onWheel={(e) => e.preventDefault()}
-          onTouchMove={(e) => e.preventDefault()}
-          style={{ touchAction: 'none' }}
         >
           <Card
             className="w-full max-w-md mx-4 bg-gray-900 border-gray-800"
@@ -276,22 +276,22 @@ export function KYCRewardCard() {
                     <SelectValue placeholder={t("vip.selectChain")} />
                   </SelectTrigger>
                   <SelectContent className="bg-gray-800 border-gray-700 text-white">
-                    {chains.map((item : any) => {
-                          return (
-                            <SelectItem
-                              key={item.chain_id.id}
-                              value={item.chain_id.id}
-                              className="text-white hover:bg-gray-700 focus:bg-gray-700"
-                            >
-                              <div className="flex items-center gap-2">
-                                <div className="font-semibold text-white">
-                                  {item.chain_id.name}
-                                </div>
-                              </div>
-                            </SelectItem>
-                          );
-                        }
-                      )}
+                    {chains.map((item: any) => {
+                      return (
+                        <SelectItem
+                          key={item.chain_id.id}
+                          value={item.chain_id.id}
+                          className="text-white hover:bg-gray-700 focus:bg-gray-700"
+                        >
+                          <div className="flex items-center gap-2">
+                            <div className="font-semibold text-white">
+                              {item.chain_id.name}
+                            </div>
+                          </div>
+                        </SelectItem>
+                      );
+                    }
+                    )}
                   </SelectContent>
                 </Select>
               </div>

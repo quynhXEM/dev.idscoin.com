@@ -85,7 +85,7 @@ export function ReferralSection({
               referrer_id: data.result[0]?.id
             }
           })
-        });  
+        });
         return data.result.length != 0
       })
       .catch(err => false)
@@ -442,8 +442,8 @@ export function ReferralSection({
           <VerifyEmail />
           <KYCRewardCard />
           <div className="p-4 bg-gray-800 rounded-lg border border-blue-700/50">
-            <div className="flex items-center justify-between">
-              <div>
+            <div className="flex flex-col md:flex-row items-center md:justify-between">
+              <div className="w-full">
                 <div className="font-semibold text-blue-300">
                   {t("vip.upgrade")}
                 </div>
@@ -451,13 +451,15 @@ export function ReferralSection({
                   {t("vip.upgrade50")}
                 </div>
               </div>
-              <Button
-                size="sm"
-                className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 cursor-pointer"
-                onClick={onShowVipModal}
-              >
-                {t("vip.upgrade100")}
-              </Button>
+              <div className="w-full md:w-auto flex justify-end">
+                <Button
+                  size="sm"
+                  className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 cursor-pointer"
+                  onClick={onShowVipModal}
+                >
+                  {t("vip.upgrade100")}
+                </Button>
+              </div>
             </div>
           </div>
 
