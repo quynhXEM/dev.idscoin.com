@@ -214,9 +214,6 @@ const VipUpgradeModal: React.FC<VipUpgradeModalProps> = ({
     <div
       className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 overscroll-contain"
       onClick={onClose}
-      onWheel={(e) => e.preventDefault()}
-      onTouchMove={(e) => e.preventDefault()}
-      style={{ touchAction: 'none' }}
     >
       <Card
         className="w-full max-w-lg max-h-[72vh] mx-4 bg-gray-900 border-gray-800"

@@ -221,9 +221,6 @@ const CommissionDetailsModal: React.FC<CommissionDetailsModalProps> = ({
     <div
       className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 overscroll-contain"
       onClick={() => onClose()}
-      onWheel={(e) => e.preventDefault()}
-      onTouchMove={(e) => e.preventDefault()}
-      style={{ touchAction: 'none' }}
     >
       <Card
         className="w-full max-w-lg mx-4 bg-gray-900 border-gray-800 max-h-[72vh] overflow-y-auto"
