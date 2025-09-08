@@ -172,7 +172,7 @@ const RewardsModal: React.FC<RewardsModalProps> = ({
       style={{ touchAction: 'none' }}
     >
       <Card
-        className="w-full max-w-lg mx-4 bg-gray-900 border-gray-800 max-h-[90vh] overflow-y-auto"
+        className="w-full max-w-lg mx-4 bg-gray-900 border-gray-800 max-h-[72vh] "
         onClick={(e) => e.stopPropagation()}
       >
         <CardHeader>
@@ -187,7 +187,7 @@ const RewardsModal: React.FC<RewardsModalProps> = ({
             {t("rewards.rewardsDescription")}
           </CardDescription>
         </CardHeader>
-        <CardContent className="space-y-6">
+        <CardContent className="space-y-6 overflow-y-auto">
           {/* Current Rewards Status */}
           <div className="p-4 bg-gray-800 rounded-lg border border-gray-700">
             <div className="flex items-center justify-between mb-3">

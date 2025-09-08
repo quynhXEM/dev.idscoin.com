@@ -219,7 +219,7 @@ const VipUpgradeModal: React.FC<VipUpgradeModalProps> = ({
       style={{ touchAction: 'none' }}
     >
       <Card
-        className="w-full max-w-lg mx-4 bg-gray-900 border-gray-800"
+        className="w-full max-w-lg max-h-[72vh] mx-4 bg-gray-900 border-gray-800"
         onClick={(e) => e.stopPropagation()}
       >
         <CardHeader>
@@ -238,7 +238,7 @@ const VipUpgradeModal: React.FC<VipUpgradeModalProps> = ({
             {t("vip.becomeVip")}
           </CardDescription>
         </CardHeader>
-        <CardContent className="space-y-4">
+        <CardContent className="space-y-4 overflow-y-auto">
           <div className="bg-gray-800 p-4 rounded-lg border border-blue-700/50">
             <div className="text-center">
               <div className="text-2xl font-bold text-blue-400 mb-2">

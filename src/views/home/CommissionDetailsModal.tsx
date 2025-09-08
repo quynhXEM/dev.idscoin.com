@@ -226,7 +226,7 @@ const CommissionDetailsModal: React.FC<CommissionDetailsModalProps> = ({
       style={{ touchAction: 'none' }}
     >
       <Card
-        className="w-full max-w-lg mx-4 bg-gray-900 border-gray-800 max-h-[90vh] overflow-y-auto"
+        className="w-full max-w-lg mx-4 bg-gray-900 border-gray-800 max-h-[72vh] overflow-y-auto"
         onClick={(e) => e.stopPropagation()}
       >
         <CardHeader>
@@ -241,7 +241,7 @@ const CommissionDetailsModal: React.FC<CommissionDetailsModalProps> = ({
             {t("referral.detailsCommicsionDescription")}
           </CardDescription>
         </CardHeader>
-        <CardContent className=" space-y-3">
+        <CardContent className=" space-y-3 overflow-y-auto">
           {/* Current Status */}
           <h3 className="font-semibold text-white mb-3">
             {t("referral.currentStatus")}
