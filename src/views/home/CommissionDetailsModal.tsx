@@ -223,7 +223,7 @@ const CommissionDetailsModal: React.FC<CommissionDetailsModalProps> = ({
       onClick={() => onClose()}
     >
       <Card
-        className="w-full max-w-lg mx-4 bg-gray-900 border-gray-800 max-h-[72vh] overflow-y-auto"
+        className="w-full max-w-lg mx-4 bg-gray-900 border-gray-800 max-h-[82vh] overflow-y-auto"
         onClick={(e) => e.stopPropagation()}
       >
         <CardHeader>

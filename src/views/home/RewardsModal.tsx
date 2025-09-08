@@ -170,7 +170,7 @@ const RewardsModal: React.FC<RewardsModalProps> = ({
       onClick={() => onClose()}
     >
       <Card
-        className="w-full max-w-lg mx-4 bg-gray-900 border-gray-800 max-h-[72vh] "
+        className="w-full max-w-lg mx-4 bg-gray-900 border-gray-800 max-h-[82vh] "
         onClick={(e) => e.stopPropagation()}
       >
         <CardHeader>
