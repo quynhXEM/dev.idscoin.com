@@ -216,7 +216,7 @@ const VipUpgradeModal: React.FC<VipUpgradeModalProps> = ({
       onClick={onClose}
     >
       <Card
-        className="w-full max-w-lg max-h-[82vh] mx-4 bg-gray-900 border-gray-800"
+        className="w-full max-w-lg max-h-[84vh] mx-4 bg-gray-900 border-gray-800"
         onClick={(e) => e.stopPropagation()}
       >
         <CardHeader>
