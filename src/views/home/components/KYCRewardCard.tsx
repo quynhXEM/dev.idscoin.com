@@ -178,7 +178,7 @@ export function KYCRewardCard() {
           <div  className="w-full md:w-auto flex justify-end">
             {!account?.kyc_status && <Button
               size="sm"
-              className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 cursor-pointer"
+              className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 cursor-pointer whitespace-nowrap"
               onClick={() => setShowKYCForm(true)}
             >
               {tKyc("start_kyc")}
@@ -188,12 +188,12 @@ export function KYCRewardCard() {
               <BadgeCheck
                 fill="#009F7E"
                 className="text-white w-4 h-4 " />
-              <span className="text-sm text-white">{tKyc("joined")}</span>
+              <span className="text-sm text-white whitespace-nowrap">{tKyc("joined")}</span>
             </div>}
 
             {account?.kyc_status == KYCStatus.rejected && <Button
               size="sm"
-              className="bg-gradient-to-r from-red-600 to-red-600 cursor-pointer"
+              className="bg-gradient-to-r from-red-600 to-red-600 cursor-pointer whitespace-nowrap" 
               onClick={() => setShowKYCForm(true)}
             >
               {tKyc("resubmit_request")}
