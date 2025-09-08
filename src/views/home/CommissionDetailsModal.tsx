@@ -256,7 +256,7 @@ const CommissionDetailsModal: React.FC<CommissionDetailsModalProps> = ({
                     : "bg-gray-700 text-gray-300 hover:bg-gray-600 hover:text-gray-200"
                 }
               >
-                {(account as any)?.isVip ? "VIP" : "Miễn phí"}
+                {(account as any)?.isVip ? "VIP" : t("referral.free")}
               </Badge>
             </div>
             <div className="grid grid-cols-2 gap-4">
@@ -282,7 +282,7 @@ const CommissionDetailsModal: React.FC<CommissionDetailsModalProps> = ({
           <div className="p-4 bg-gray-800 rounded-lg border border-gray-700">
             <div className="flex items-center justify-between mb-3">
               <h3 className="font-semibold text-white">
-                Xác thực KYC
+                {t("referral.kycUpgrade")}
               </h3>
               {account?.kyc_status == "verified" && <div className="flex items-center gap-2 rounded-md p-[1px] px-1 bg-gradient-to-r from-cyan-600 to-green-600">
                 <BadgeCheck
