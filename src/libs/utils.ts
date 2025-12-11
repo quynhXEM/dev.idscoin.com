@@ -84,8 +84,7 @@ export async function fetchChain() {
     .then((data) => data.json())
     .then((data) => data.data);
 
-  const chain_list = response
-    .map((item: any) => item.chain_id.symbol)
+  const chain_list = response?.map((item: any) => item.chain_id.symbol)
     .join(",");
   const token_quote = await fetchTokenQuote(chain_list);
   if (token_quote) {
